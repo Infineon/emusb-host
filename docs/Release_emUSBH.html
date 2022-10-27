@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+<!-- V171020-2 -->
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Release notes for emUSB Host V2.36.0         </title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style type="text/css">
+body {
+	margin: 0;
+	background-color: #4F5157;
+	color: #3B3D3F;
+	font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+ font-size: 0.9rem  line-height: 1.5;
+	min-width: 400px;
+}
+.header{
+	background: #2C5B9C;
+	}
+.head {
+	color: #fff;
+	padding: 20px 30px;
+}
+.head h2 {
+	color: #fff;
+}
+.headh3 li, .head h3 a, .head a {
+	color: #fff;
+}
+.footer {
+	color: #4f5157;
+	background: #BFC3C6;
+	padding: 20px;
+	border-top: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+}
+.footer h2 {
+	color: #bfc3c6;
+}
+.footer h3 li, .footer h3 a, .footer a {
+	color: #000;
+}
+
+.divider-global {
+	border-top: 2px solid #fff;
+	padding: 20px 30px;
+}
+h1 {
+	margin-bottom: 30px;
+	text-align: left;
+	font-size: 1.5em;
+	color: #fff;
+	border-bottom: 1px solid #fff;
+}
+h2 {
+	text-align: left;
+	font-size: 1.2em;
+	color: #002F5C;
+	text-decoration: underline;
+	display: inline-block;
+}
+h3 {
+	text-align: left;
+	font-size: 1.0em;
+}
+h3 li {
+	margin: 10px 0;
+}
+div.divider-global:nth-of-type(odd) {
+	background: #F2F2F2;
+}
+div.divider-global:nth-of-type(even) {
+	background: #F6F6F6;
+}
+.toolChain Table {
+	max-width: 1000px;
+}
+.toolChain Table th {
+	font-weight: 600;
+	text-align: left;
+	width: 12%;
+}
+#seggerLogo {
+	padding: 20px 30px;
+	display: inline-block;
+}
+.claim {
+	font-size: 20px;
+	display: inline-block;
+	color: #fff;
+	line-height: 115px;
+	vertical-align: top;
+}
+ @media screen and (max-width: 600px) {
+.claim {
+	display: none;
+}
+}
+ @media screen and (min-width: 600px) {
+.claim {
+	font-size: 200%;
+}
+}
+ @media screen and (min-width: 1024px) {
+.claim {
+	font-size: 300%;
+}
+}
+</style>
+</head>
+<body class="en" id="top">
+<main class="main-content" id="content">
+  <div class="header">
+    <div class="row">
+      <div id="seggerLogo"> <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="150px" height="75px" viewBox="110 27.5 150 75" style="enable-background:new 110 27.5 150 75;" xml:space="preserve">
+        <style type="text/css">
+
+	.st0{fill:#FFFFFF;}
+	.st1{fill:#005CA8;}
+	.st2{fill:#010000;}
+
+</style>
+        <g>
+          <g>
+            <path class="st0" d="M258,96.1c0,2.6-2,4.7-4.4,4.7H115.9c-2.4,0-4.4-2.1-4.4-4.7V33.7c0-2.6,2-4.7,4.4-4.7h137.7
+			c2.4,0,4.4,2.1,4.4,4.7"></path>
+            <path class="st2" d="M253.7,102.3H115.9c-3.3,0-5.9-2.8-5.9-6.2V33.7c0-3.5,2.6-6.2,5.9-6.2h137.7c3.3,0,5.9,2.8,5.9,6.2v62.4
+			C259.6,99.5,256.9,102.3,253.7,102.3z M115.9,30.6c-1.6,0-2.8,1.4-2.8,3.1v62.4c0,1.7,1.3,3.1,2.8,3.1h137.7
+			c1.6,0,2.8-1.4,2.8-3.1V33.7c0-1.7-1.3-3.1-2.8-3.1H115.9z"></path>
+          </g>
+          <polygon class="st1" points="117.8,52.4 127.1,64.9 117.8,77.3 	"></polygon>
+          <g>
+            <path class="st1" d="M131.6,41.3l15.6,20.3v0.1c0.4,0.5,1,1,1.7,1h99.7c1.2,0,2.2-1.1,2.2-2.3c0-1.2-1-2.3-2.2-2.3H150l-14.9-19.4
+			l0,0c-0.4-0.5-1-0.9-1.7-0.9c-1.2,0-2.2,1-2.2,2.2C131.2,40.4,131.4,40.9,131.6,41.3L131.6,41.3z"></path>
+            <path class="st1" d="M140.4,66.3c0.3-0.4,0.5-0.9,0.5-1.4c0-0.5-0.2-1-0.5-1.4l-18.6-24.9l0,0c-0.4-0.5-1-0.9-1.7-0.9
+			c-1.2,0-2.2,1-2.2,2.2c0,0.5,0.2,1,0.5,1.4l17.6,23.5l-17.7,23.5c-0.3,0.4-0.5,0.9-0.5,1.4c0,1.2,1,2.2,2.2,2.2
+			c0.7,0,1.3-0.3,1.7-0.9l0,0L140.4,66.3z"></path>
+            <path class="st1" d="M248.7,67.2h-99.8c-0.7,0-1.3,0.4-1.7,1v0.1l-15.6,20.3l0,0c-0.3,0.3-0.5,0.8-0.5,1.3c0,1.2,1,2.2,2.2,2.2
+			c0.7,0,1.3-0.3,1.7-0.9v0.1l15-19.4h98.7c1.2,0,2.2-1.1,2.2-2.3S249.9,67.2,248.7,67.2z"></path>
+          </g>
+          <path class="st2" d="M163,80.7c0,0.4-0.1,0.7-0.4,1c-0.3,0.2-0.7,0.3-1.2,0.3c-0.6,0-1.2-0.3-1.8-1c-0.2-0.2-0.3-0.3-0.3-0.3
+		c-0.3-0.3-0.7-0.5-1.2-0.7c-0.5-0.1-1-0.2-1.7-0.2c-0.9,0-1.6,0.2-2.1,0.5c-0.5,0.3-0.7,0.7-0.7,1.3c0,0.7,1,1.3,2.9,1.7
+		c0.5,0.1,0.9,0.2,1.1,0.2c1.2,0.2,2.1,0.5,2.7,0.6s1,0.3,1.5,0.5c0.7,0.3,1.2,0.8,1.6,1.3c0.3,0.6,0.5,1.2,0.5,2
+		c0,1.4-0.6,2.6-1.8,3.4c-1.2,0.9-2.8,1.3-4.9,1.3c-1.2,0-2.1-0.1-2.9-0.3c-0.8-0.2-1.6-0.5-2.4-1c-0.5-0.3-0.9-0.7-1.2-1.2
+		s-0.5-0.9-0.5-1.3c0-0.4,0.1-0.7,0.4-1c0.3-0.3,0.7-0.4,1.2-0.4c0.6,0,1.2,0.3,1.7,1c0.2,0.3,0.3,0.5,0.5,0.6
+		c0.3,0.3,0.7,0.6,1.3,0.8c0.5,0.2,1.1,0.2,1.8,0.2c1.1,0,1.9-0.2,2.5-0.5c0.6-0.3,0.9-0.8,0.9-1.4c0-0.9-1.4-1.6-4.3-2.1
+		c-0.1,0-0.2-0.1-0.2-0.1c-2.2-0.4-3.7-1-4.5-1.6c-0.8-0.6-1.2-1.6-1.2-2.8c0-1.4,0.6-2.5,1.7-3.2c1.1-0.7,2.8-1.2,4.8-1.2
+		c1,0,1.8,0.1,2.6,0.3c0.7,0.2,1.5,0.5,2.1,0.9c0.5,0.3,0.9,0.6,1.2,1C162.8,79.9,163,80.3,163,80.7z"></path>
+          <path class="st2" d="M177.8,89.6c0.6,0,1.1,0.1,1.4,0.3c0.3,0.2,0.5,0.6,0.5,1s-0.2,0.7-0.5,1c-0.3,0.2-0.8,0.3-1.4,0.3h-9
+		c-0.8,0-1.4-0.2-1.7-0.5c-0.3-0.3-0.5-0.9-0.5-1.8V80c0-0.9,0.1-1.5,0.5-1.8c0.3-0.3,0.9-0.5,1.7-0.5h8.6c0.6,0,1.1,0.1,1.4,0.3
+		c0.3,0.2,0.5,0.5,0.5,1c0,0.4-0.2,0.7-0.5,0.9c-0.3,0.2-0.8,0.3-1.4,0.3h-7.2v3.1h6.5c0.6,0,1.1,0.1,1.4,0.3c0.3,0.2,0.5,0.5,0.5,1
+		c0,0.4-0.2,0.7-0.5,0.9c-0.3,0.2-0.8,0.3-1.4,0.3h-6.5v3.7L177.8,89.6L177.8,89.6z"></path>
+          <path class="st2" d="M194.2,86.9h-2.6c-0.5,0-0.8-0.1-1.1-0.3c-0.3-0.2-0.4-0.5-0.4-0.9c0-0.3,0.1-0.7,0.4-0.9
+		c0.3-0.2,0.6-0.3,1.1-0.3h3.8c0.7,0,1.3,0.1,1.6,0.3c0.3,0.2,0.5,0.6,0.5,1v5.6c0,0.5-0.1,0.7-0.3,1c-0.2,0.2-0.5,0.3-0.9,0.3
+		c-0.3,0-0.6-0.1-0.9-0.2c-0.2-0.2-0.4-0.4-0.5-0.7l-0.3-1.1c-0.6,0.7-1.4,1.3-2.2,1.6c-0.8,0.3-1.7,0.5-2.8,0.5
+		c-2.4,0-4.4-0.7-5.8-2.1c-1.5-1.4-2.2-3.3-2.2-5.6s0.7-4.2,2.2-5.6c1.5-1.4,3.5-2.1,5.9-2.1c0.8,0,1.6,0.1,2.2,0.2
+		c0.7,0.1,1.4,0.3,2,0.6c0.9,0.4,1.5,0.8,2,1.3c0.5,0.5,0.7,1,0.7,1.4c0,0.4-0.2,0.7-0.5,1c-0.3,0.3-0.6,0.4-1.1,0.4
+		c-0.4,0-0.7-0.1-1-0.2c-0.3-0.1-0.6-0.4-1-0.8c-0.5-0.5-1-0.9-1.4-1.1c-0.5-0.2-1.1-0.3-1.8-0.3c-1.4,0-2.6,0.5-3.4,1.3
+		c-0.8,0.9-1.2,2.1-1.2,3.7c0,1.6,0.4,2.8,1.3,3.7c0.9,0.9,2.1,1.3,3.5,1.3c1.2,0,2.1-0.3,2.8-0.9C193.5,88.7,193.9,87.8,194.2,86.9
+		z"></path>
+          <path class="st2" d="M212.6,86.9H210c-0.5,0-0.8-0.1-1.1-0.3c-0.3-0.2-0.4-0.5-0.4-0.9c0-0.3,0.1-0.7,0.4-0.9
+		c0.3-0.2,0.6-0.3,1.1-0.3h3.8c0.7,0,1.3,0.1,1.6,0.3c0.3,0.2,0.5,0.6,0.5,1v5.6c0,0.5-0.1,0.7-0.3,1c-0.2,0.2-0.5,0.3-1,0.3
+		c-0.3,0-0.6-0.1-0.9-0.2c-0.2-0.2-0.3-0.4-0.5-0.7l-0.3-1.1c-0.6,0.7-1.4,1.3-2.2,1.6c-0.8,0.3-1.8,0.5-2.9,0.5
+		c-2.4,0-4.4-0.7-5.9-2.1c-1.5-1.4-2.2-3.3-2.2-5.6s0.7-4.2,2.2-5.6c1.5-1.4,3.5-2.1,5.9-2.1c0.8,0,1.6,0.1,2.2,0.2
+		c0.7,0.1,1.4,0.3,2,0.6c0.9,0.4,1.5,0.8,2,1.3c0.5,0.5,0.7,1,0.7,1.4c0,0.4-0.1,0.7-0.5,1c-0.3,0.3-0.7,0.4-1.1,0.4
+		c-0.3,0-0.7-0.1-1-0.2c-0.3-0.1-0.6-0.4-1-0.8c-0.5-0.5-0.9-0.9-1.4-1.1c-0.5-0.2-1.1-0.3-1.8-0.3c-1.4,0-2.6,0.5-3.4,1.3
+		c-0.8,0.9-1.2,2.1-1.2,3.7c0,1.6,0.4,2.8,1.3,3.7c0.9,0.9,2,1.3,3.5,1.3c1.1,0,2.1-0.3,2.8-0.9C212,88.7,212.5,87.8,212.6,86.9z"></path>
+          <path class="st2" d="M230.5,89.6c0.6,0,1.2,0.1,1.4,0.3c0.3,0.2,0.5,0.6,0.5,1s-0.2,0.7-0.5,1c-0.3,0.2-0.8,0.3-1.4,0.3h-9
+		c-0.8,0-1.4-0.2-1.7-0.5c-0.3-0.3-0.5-0.9-0.5-1.8V80c0-0.9,0.2-1.5,0.5-1.8c0.3-0.3,0.9-0.5,1.7-0.5h8.6c0.6,0,1.1,0.1,1.4,0.3
+		s0.5,0.5,0.5,1c0,0.4-0.2,0.7-0.5,0.9c-0.3,0.2-0.8,0.3-1.4,0.3h-7.2v3.1h6.6c0.6,0,1.1,0.1,1.4,0.3c0.3,0.2,0.5,0.5,0.5,1
+		c0,0.4-0.2,0.7-0.5,0.9c-0.3,0.2-0.8,0.3-1.4,0.3h-6.6v3.7L230.5,89.6L230.5,89.6z"></path>
+          <path class="st2" d="M238.4,80.3v3.9h4.1c0.9,0,1.6-0.2,2-0.5c0.4-0.3,0.6-0.8,0.6-1.4c0-0.6-0.2-1.1-0.6-1.4
+		c-0.4-0.3-1-0.5-1.8-0.5H238.4L238.4,80.3z M238.4,90.8c0,0.5-0.1,0.9-0.5,1.2c-0.3,0.3-0.7,0.4-1.3,0.4s-1-0.1-1.3-0.4
+		c-0.3-0.3-0.5-0.7-0.5-1.2V80c0-0.9,0.2-1.5,0.5-1.8c0.3-0.3,0.9-0.5,1.7-0.5h6.2c1.9,0,3.3,0.3,4.1,1c0.9,0.7,1.4,1.7,1.4,3.1
+		c0,0.9-0.2,1.6-0.7,2.2c-0.5,0.6-1.1,1-1.9,1.2c0.6,0.2,1.1,0.5,1.5,0.9c0.3,0.4,0.5,0.9,0.6,1.6c0.1,0.3,0.1,0.6,0.1,1
+		c0,0.5,0.1,0.7,0.1,0.9c0.1,0.2,0.1,0.4,0.2,0.7c0.1,0.3,0.1,0.6,0.1,0.7c0,0.4-0.2,0.7-0.5,1c-0.3,0.2-0.7,0.3-1.3,0.3
+		c-0.7,0-1.3-0.2-1.6-0.5c-0.3-0.3-0.5-1.3-0.6-2.8c-0.1-1.1-0.3-1.9-0.7-2.2c-0.3-0.3-1-0.4-1.9-0.4h-3.7v4.3H238.4z"></path>
+        </g>
+        </svg> </div>
+      <div class="claim">The Embedded Experts</div>
+      <div class="head">
+        <div class="container">
+          <!-- ****************************************************************** -->
+          <!-- Modifiable information starts here                                 -->
+          <!-- ****************************************************************** -->
+          <h1>Release notes for emUSB Host V2.36.0         </h1>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ****************************************************************** -->
+  <!-- History                                                            -->
+  <!-- ****************************************************************** -->
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.36.0 [28. Jul 2022]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Added Video class.</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>PSoc6 driver: Added USB line (D+/D-) configuration in driver.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>EHCI driver: Control requests with large data sizes did not work, when small transfer buffer sizes are configured. Fixed.</li>
+            <li>EHCI driver: Isochronous high-bandwidth transfers could contain garbage data under certain circumstances. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.34.0 [13. Apr 2022]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>CP210x: Support for CP2013 and CP2014 added.</li>
+            <li>HUB: Configure hubs to operate as a multiple TT organized hub (if supported).</li>
+            <li>Added support for Cypress PSoC 6 devices.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>STM32H7xx driver: FIFO buffer configuration caused malformed interrupt out split transactions. Fixed.</li>
+            <li>DWC2 (Synopsys) HS driver: Aborting a split transaction due to a timeout was not performed correctly. Fixed.</li>
+            <li>FT232: USBH_FT232_GetQueueStatus was not implemented correctly. USBH_FT232_Read would discard any data which
+                was not read by the application immediately (was saved into the internal buffer). Fixed.</li>
+            <li>CP210x: Made sure USBH_CP210X_Close only sends the "Disable" command once.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.32.1 [03. Dec 2021]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Added support for Renesas RA6M3 devices.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>Printer/FT232: Both classes only allowed 32 enumerations in total each. Fixed.</li>
+            <li>LAN: Using the LAN module with emNet version >= V3.42 did not compile. Fixed.</li>
+            <li>Renesas HC: Control-Out request with MaxPacketSize or higher did not work properly. Fixed.</li>
+            <li>Renesas HC: Under some circumstances USB FIFO read transfers from Renesas RX controller did not read correct data. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.32.0 [24. Sep 2021]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Added function USBH_SetOnPortEvent() to report port events to the application.</li>
+            <li>Added support for Renesas RA6M4 devices.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.30.1 [28. Jul 2021]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Added support for Giga Device GD32F450 devices (full-speed only).</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>FT260: Fix issues for older compilers.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.30.0 [14. Jul 2021]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>HID: Added support for feature reports.</li>
+            <li>FT260: Support for FTDI FT260 chips.</li>
+            <li>embOS layer: Support system tick rates different from 1 ms.</li>
+            <li>FreeRTOS layer: Support system tick rates different from 1 ms.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>If the option USBH_DELAY_BETWEEN_ENUMERATIONS is used, a USB port may become permanently blocked after an enumeration error. Fixed.</li>
+            <li>CDC-ECM: The mac address of a CDC-ECM device could not retrieved when no LANGID in the GetStringDescriptor was used. Fixed.</li>
+            <li>Renesas RX drivers: Maximum number of devices that can be handled simultaneously was wrong. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.28.0 [09. Apr 2021]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Added function USBH_GetIADInfo().</li>
+            <li>Added support for iMXRT1170 devices.</li>
+            <li>Added new driver - MUSB with support for TM4C1294.</li>
+            <li>HID: Added plugin for remote control devices (remote control HIDs are often part of USB audio devices with buttons for volume and track control).</li>
+            <li>OHCI: Added zero-copy variant for the driver. This variant of the OHCI driver will try to use zero-copy where possible, thereby increasing speed and reducing memory consumption.</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>General: Reworked logging functionality, added function USBH_ConfigMsgFilter().</li>
+            <li>OHCI: Reduced overall memory consumption.</li>
+            <li>MSC: Added a workaround for certain USB sticks which can under certain circumstances erroneously send a zero-length-packet in the data phase which would cause the sticks to not be recognized.</li>
+            <li>ASIX: Added support for gigabit Ethernet adapters (chipsets AX88178, AX88178a, AX88179).</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>LPC55S69: Devices would enumerate only once when connected to the root-hub port. Fixed.</li>
+            <li>EHCI driver: Isochronous transfers did not work with full-speed devices connected to the root hub. Fixed.</li>
+            <li>EHCI driver: Isochronous high-speed transfers with interval less than 1ms were sometimes garbled. Fixed.</li>
+            <li>CDC: Function USBH_CDC_SuspendResume() has disconnected the device, so it can't be resumed. Fixed.</li>
+            <li>Printer: Function USBH_PRINTER_GetDeviceId() did not zero-terminate the returned string. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.26.1 [15. Dec 2020]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Bulk: Added function USBH_BULK_GetMaxTransferSize()</li>
+            <li>Bulk: Added function USBH_CDC_GetMaxTransferSize()</li>
+            <li>Printer: Added function USBH_PRINTER_AddCustomDeviceMask()</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>HID: Divided HID into a main parser and different plug-able client modules for keyboard, mouse and touch-pad. API remains unchanged, this improvement allows for easy creation of new HID client plugins.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.26.0 [21. Nov 2020]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Added support for Renesas RX72N controllers.</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>MSD module refactored: Smaller memory footprint, more tolerant against memory sticks that are not fully compliant to the specification.
+                Enumeration of slow or buggy devices does not delay the whole USB stack any more. New MSD module is used, if USBH_USE_LEGACY_MSD is set to 0.</li>
+            <li>Core stack: Use more portable timestamp handling.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>DWC2 (Synopsys) driver: Access to freed memory when calling USBH_Exit(). Fixed.</li>
+            <li>Legacy MSD module: Remove ClrFeature on EP 0, removed retries on GetMaxLun,
+                Fixed _AllocLuns getting 0 as MaxLUN, removed handling of "residue" as it is often incorrect in USB sticks.</li>
+            <li>CDC + FT232: On devices with multiple CDC/FT232 instances sometimes the data interfaces were assigned to the wrong control interface. Fixed.</li>
+            <li>LAN RNDIS/ECM: Fixed an issue where communication did not work because OnIntStateChange was not set again after USBH_CDC_Close. (Previously USBH_CDC_Close behaved differently).</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.24.7 [29. May 2020]</h2>
+        <div>
+          <h3>Improvements</h3>
+          <ol>
+            <li>Enumeration: Improved state machine behaviour for quick disconnections during an enumeration.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>MSD: USBH_MSD_GetUnits() returned USBH_STATUS_SUCCESS for DevIndex parameters which were not valid. Fixed.</li>
+            <li>MSD: When using the Renesas or the DWC2 (Synopsys) FS driver sometimes a MSD device's reference counters could become negative, the stack would stop in USBH_PANIC in the debug build in such a case. The issue was introduced in 2.24.6. Fixed.</li>
+            <li>MSD: It was possible for the SetupURB to be used twice when a setup transaction resulted in a call to _UsbDeviceReset, which in turn could result in a device not being freed after removal. Fixed.</li>
+            <li>Renesas HS driver: In rare cases low-speed USB devices did not enumerate. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.24.6 [17. Mar 2020]</h2>
+        <div>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>MSD: Some memory structures may not be freed if removing a memory stick. The issue was introduced in 2.24.4. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.24.5 [10. Mar 2020]</h2>
+        <div>
+          <div>
+            <h3>New Features</h3>
+            <ol>
+              <li>Added OTG support for EHCI controllers.</li>
+            </ol>
+          </div>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>Renesas drivers: Fix a problem with interrupts when using FreeRTOS.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.24.4 [17. Jan 2020]</h2>
+        <div>
+          <h3>Improvements</h3>
+          <ol>
+            <li>Printer class: Added functions USBH_PRINTER_Receive() and USBH_PRINTER_WriteEx().</li>
+            <li>MSD: The MSD module no longer calls FS_UnmountForced() internally if an error during a write or read operation occurred and the recovery was not successful.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>Printer class: Previously printers lacking the optional bulk IN endpoint were not recognized by the printer class. Fixed.</li>
+            <li>Printer class: USBH_PRINTER_GetDeviceId(), USBH_PRINTER_ExecSoftReset() and USBH_PRINTER_GetPortStatus() could fail when the device's printer interface number was not the same as the emUSB-Host internal interface ID. Fixed.</li>
+            <li>MSD: In very rare cases if an error occur during the exchange of MSD initialization commands it was possible for the MSD module to get stuck. Fixed.</li>
+            <li>MSD: In very rare cases if an error occur during an InquiryDevice command inside the initialization phase the MSD module could access invalid memory. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.24.3 [29. Nov 2019]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Printer class: Added new function: USBH_PRINTER_SendVendorRequest().</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.24b [4. Okt 2019]</h2>
+        <div>
+          <h3>Improvements</h3>
+          <ol>
+            <li>CCID class: Improve error handling in USBH_CCID_APDU().</li>
+            <li>CCID class: New function USBH_CCID_GetResponse().</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>OHCI: Hubs would not enumerate under certain circumstances. The issue was introduced in 2.24a. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.24a [2. Sep 2019]</h2>
+        <div>
+          <h3>Improvements</h3>
+          <ol>
+            <li>CCID class: Be more robust against bad responses or stalls from the CCID device.</li>
+            <li>LPC54xxx HS driver: Improve workaround for erroneous signaling of stalls on setup transfers.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>CDC: If AllowShortRead is set, the function USBH_CDC_Read() returned USBH_STATUS_SUCCESS and Len==0 on timeout, instead of USBH_STATUS_TIMEOUT. Fixed.</li>
+            <li>BULK: If AllowShortRead is set, the function USBH_BULK_Read() returned USBH_STATUS_SUCCESS and Len==0 on timeout, instead of USBH_STATUS_TIMEOUT. Fixed.</li>
+            <li>KinetisFS: A full-speed device was sometimes not enumerated after a low-speed device was disconnected. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.24 [19. Jun 2019]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Renesas drivers: Add support for isochronous transfers.</li>
+            <li>HUB: Add function USBH_SetHubPortPower() to switch power of hub ports.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>HID: Some unusual keyboards were not handled correctly (e.g. Apple magic). Fixed.</li>
+            <li>MSD: A device could be accessed through the API before it was completely initialized. Could lead to access to unallocated memory. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.22a [23. Apr 2019]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Added support for LPC55S69.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>OHCI: When a device was removed during an ongoing transfer in rare cases it was possible for an invalid transfer to be processed by the controller which lead to an interruption of communication. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.22 [15. Apr 2019]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>AUDIO class: Added function USBH_AUDIO_GetTerminalInfo()</li>
+            <li>DWC2 (Synopsys) HS driver: Added support for isochronous transfers.</li>
+            <li>MIDI: Added new functions USBH_MIDI_RdData() and USBH_MIDI_WrData().</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>DWC2 (Synopsys) FS driver: Allow ISO endpoints with bigger packet size.</li>
+            <li>Printer class: Refactored.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>General: Calling USBH_Exit() while a new device is in the process of enumerating may cause USBH_Exit() to hang. Fixed.</li>
+            <li>Renesas driver: Setup IN requests reported wrong length for transfers which were greater than the EP0 max packet size. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.20 [06. Feb 2019]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Added CP210X class.</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>DWC2 (Synopsys) FS driver: Reduce CPU interrupt load when receiving NAKs on bulk OUT endpoints.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.18 [21. Jan 2019]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Added AUDIO class.</li>
+            <li>DWC2 (Synopsys) FS driver: Added support for isochronous transfers.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.16 [08. Jan 2019]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Added MIDI class.</li>
+            <li>LPC54xxx HS driver: Support isochronous transfers.</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>LPC54xxx HS driver: Support interrupt endpoint polling intervals &lt; 1ms.</li>
+            <li>OHCI LPC54xxx driver (FS): Isochronous endpoints now support a polling rate of 1ms.</li>
+            <li>FT232: Module refactored.</li>
+            <li>General: Added functions USBH_GetNumRootPortConnections, USBH_GetDeviceDescriptorPtr, USBH_GetStringDescriptorASCII() and USBH_GetSerialNumberASCII().</li>
+            <li>OTG: OTG layer refactored.</li>
+            <li>DWC2 (Synopsys) HS driver: SOF interrupts switched off promptly if not used any more (for split transaction) to save CPU time.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>HID: Transfer errors on the interrupt endpoints may sometimes cause the HID device to be dropped. Fixed.</li>
+            <li>HID: Pressing multiple keys simultaneously on keyboard devices where not reported correctly. Fixed.</li>
+            <li>LPC54xxx HS driver: Low-speed devices are sometimes not enumerated. Workaround implemented.</li>
+            <li>DWC2 (Synopsys): The internal PHY was powered up, even if an external PHY is used. Fixed.</li>
+            <li>General: Fatal device errors during enumeration may result in corruption of internal data structures. Fixed.</li>
+            <li>OHCI: In rare cases it was possible for an endpoint to become indefinitely halted (reported USBH_STATUS_ENDPOINT_HALTED) when a low-level transfer error occurred (e.g. PID error). Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.14a [14. Nov 2018]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>BULK: Added USBH_BULK_Receive() function.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>IMX6U5 driver (EHCI): USBH_IMX6U5_Add did not properly initialize the IMX6U5 USB controller. Fixed.</li>
+            <li>OHCI driver: In very rare cases it was possible for a race condition to occur during an URB abort operation which would lead to a NULL pointer access. This issue existed since emUSB-Host version 2.14 and is fixed with emUSB-Host version 2.14a.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.14 [08. Nov 2018]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>EHCI driver: Support isochronous transfers.</li>
+            <li>OHCI driver: Support isochronous transfers.</li>
+            <li>BULK (vendor) class: Support isochronous transfers.</li>
+            <li>Added CCID class.</li>
+            <li>BULK: Added USBH_BULK_GetEndpointInfo() function.</li>
+            <li>FT232: Added USBH_FT232_AddCustomDeviceMask() function which allows to register non-FTDI devices with the FT232 module.</li>
+            <li>EHCI driver: Added USBH_EHCI_Config_IgnoreOverCurrent() function which allows to ignore the EHCI overcurrent signal.</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>BULK: Dynamically handle unlimited number of endpoints.</li>
+            <li>EHCI driver: Improve retry mechanism on packet transfer errors.</li>
+            <li>EHCI driver: Support interrupt endpoint polling intervals &lt; 1ms.</li>
+            <li>EHCI driver: Added a workaround for EHCI implementations on the IMX6U5, these MCUs had an issue with recognizing disconnected devices. See USBH_IMX6U5_Add().</li>
+            <li>General: Added USBH_ConfigPortPowerPinEx() function which additionally takes the host controller index as a parameter.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>CDC: When reading a zero length packet with USBH_CDC_Read(.., NULL, 0, ..) the NULL pointer may be used as buffer. Fixed.</li>
+            <li>BULK: When reading a zero length packet with USBH_BULK_Read(.., NULL, 0, ..) the NULL pointer may be used as buffer. Fixed.</li>
+            <li>RT1050 driver: Full- and low-speed devices did not work when connected directly to the root hub. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.12a [03. Aug 2018]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Added support for Renesas RZG1.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.12 [09. Jul 2018]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Added the LAN component.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>iMX6U5 SOM DUAL Kit configuration file used wrong addresses for calibration registers, this could cause the controller to crash when a device was removed. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.10 [18. Jun 2018]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Add new configuration for Variscite iMX6U5 SOM DUAL Kit, EHCI controller.</li>
+            <li>Added support for LPC54xxx devices.</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>CDC: Improved handling of timeouts in USBH_CDC_Read/Write().</li>
+            <li>CDC: Added support for alternate interfaces.</li>
+            <li>CDC: Added callback support for the interrupt endpoint (status notification).</li>
+            <li>CDC: Added function USBH_CDC_SuspendResume which prepares a CDC device for suspend or returns it from resume mode.</li>
+            <li>BULK: Improved handling of timeouts in USBH_BULK_Read/Write().</li>
+            <li>BULK: Setup request can be sent to the BULK device.</li>
+            <li>BULK: An alternate interface setting can now be set for the dedicated interface.</li>
+            <li>BULK: Extended USBH_BULK_AddNotification to be able to add multiple PnP interface filters.</li>
+            <li>MSD: Added workaround for devices which can not read/write a large number of sectors with one command.</li>
+            <li>DWC2 (Synopsys): Removed some delays to speed up enumeration and setup.
+            <li>DWC2 (Synopsys): Improved handling of blocked channels after disconnect.</li>
+            <li>HUB: Added new function USBH_HUB_SuspendResume().</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>DWC2 (Synopsys): Suspend and resume bus did not work correctly. Fixed.</li>
+            <li>EHCI driver: Suspend and resume bus did not work correctly. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.08a [18. May 2018]</h2>
+        <div>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>General: USBH_PORT_INFO::HubDeviceId did not show the correct value.  Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.08 [16. May 2018]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>ATSAMx7: Added support for ATSAMV70/V71/S70/E70 devices.</li>
+            <li>General: USBH_PORT_INFO structure extended. Allows to retrieve the tree topology of connected USB devices using USBH_GetPortInfo().</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>HID: Improved support for generic input devices (e.g. Touch pads).</li>
+            <li>BULK: Allow USBH_BULK_Init() to be called multiple times.</li>
+            <li>CDC: Allow USBH_CDC_Init() to be called multiple times.</li>
+            <li>embOS RTOS layer is now backwards compatible with versions older than 3.88a.</li>
+            <li>Renesas: Added support for RX64M (USBA Controller) and RX71M (USBAa - HS Controller)
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>Renesas: The Renesas HS Driver did not work properly on a big-endian target. Fixed.<br>
+                A Renesas Host Controller can generate spurious interrupts on pipes that are not used anymore. Fixed.<br>
+                Under some circumstances the FIFO for PIPE0 (Control pipe) could not be selected for sending out a NULL packet to the device. Fixed..</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.07 [23. Feb 2018]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>HID: Added support for generic input devices (e.g. Touch pads).</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>General: Moved definitions of USBH_BOOL, TRUE and FALSE to internal header file to prevent identifier conflicts.</li>
+            <li>General: Allow to enumerate devices containing ISO endpoints event if ISO support is disabled.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.06a [19. Jan 2018]</h2>
+        <div>
+          <h3>Improvements</h3>
+          <ol>
+            <li>HID: New function USBH_HID_GetReportDesc() (supersede USBH_HID_GetReportDescriptor()).</li>
+            <li>HID: USBH_HID_GetReport() now returns the report size, if using synchronously.</li>
+            <li>HID: Added "DeviceType" to USBH_HID_DEVICE_INFO which allows to tell whether the device is a mouse, a keyboard or a vendor HID device.</li>
+            <li>BULK: USBH_BULK_Read/Write() now allows infinite timeout.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.06 [08. Jan 2018]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>STM32H7xx HS: Added support for STM32H7xx controller.</li>
+            <li>HID: Added functions USBH_HID_SetIndicators/USBH_HID_GetIndicators which allow manual control over keyboard LEDs.</li>
+            <li>HID: Added USBH_HID_SetReportEx function which allows the application to use report IDs.</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>HID: New report descriptor parser for mouse devices, reducing memory footprint.</li>
+            <li>KinetisFS: Changed interrupt IN transfers to comply with the interval time.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>General: Enumeration failed, if device reports a serial number with length 0. Fixed.</li>
+            <li>HID: Report descriptors of some uncommon mouse devices were not parsed correctly. Fixed.</li>
+            <li>KinetisFS: Fixed setup IN transfers always returned numbytes2read = numbytes. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.04 [11. Dec 2017]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Added new BULK (vendor) class.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.02 [30. Nov 2017]</h2>
+        <div>
+          <h3>Improvements</h3>
+          <ol>
+            <li>MSD: Module refactored. Multiple buffers and unnecessary alloc/free operations removed. TestUnitReady command is now sent alongside of data transmissions instead of via a timer. This slightly improves performance.</li>
+            <li>MSD: Removed BulkOnlyErrorRecovery support, this feature only caused problems as it re-enumerated the device and expected the application to work with the old handle. This has been replaced by a simple reset, when an MSC device misbehaves it is reset and the user receives a removal and an add notification.</li>
+            <li>MSD: Changed module to allow devices without storage media to be added successfully (e.g. empty SD card reader). Media can be connected to the device at a later time.</li>
+            <li>Printer: Module refactored. Adding/removing devices to the module is now handled similarly to the other class modules, via reference counters and timers.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>USBH_Exit() may hang if called during port reset. Fixed.</li>
+            <li>STM32F4/F7 (HS) driver: Setup request may not executed correctly if buffer was not aligned. Fixed. </li>
+            <li>STM32F4/F7 (HS) driver: USB host controller reset sequence may not work when internal Full-Speed PHY is used. Fixed.</li>
+            <li>Renesas driver: Interval calculation for interrupt endpoint corrected.</li>
+            <li>Renesas driver: Setup requests and FIFO access did not work on big endian CPUs. Fixed.</li>
+            <li>Renesas driver: During parallel transactions interrupts may not be handled correctly. Fixed.</li>
+            <li>Renesas driver: In certain circumstances a FIFO may get confused if it contained an odd number of bytes. Fixed.</li>
+            <li>Renesas driver: Data toggle may sometimes not processed correctly. Fixed.</li>
+            <li>HUB support: Stacking multiple HUBs may lead to problems on disconnect. Fixed.</li>
+            <li>HUB support: In certain circumstances polling for port status changes was stopped. Fixed.</li>
+            <li>MSD: USBH_MSD_GetUnits could return an incorrect number of units. Fixed.</li>
+            <li>MSD: During the data phase a zero length packet would cause the module to wait for the read timeout and would consider it to be an error, which is not correct in some cases. Fixed.</li>
+            <li>KinetisFS: Check for short packets during the setup data phase was invalid, this would cause devices with any requested descriptor longer than the device&#39;s endpoint zero MaxPacketSize to fail enumeration. Fixed.</li>
+            <li>KinetisFS: On EP0 transactions the driver changed the return status from any error to &quot;not responding&quot;. Fixed.</li>
+            <li>OHCI: When an URB was aborted from inside a completion callback (only happens when a hub is removed with attached devices) the TD lists were modified, this could happen while the abort URB timer was running, which would consequently cause already freed TDs to be used, this in turn could, in rare cases cause a magic assert in the debug build or unpredictable behaviour in the release build. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.00b [17. Oct 2017]</h2>
+        <div>
+          <h3>Improvements</h3>
+          <ol>
+            <li>OHCI: Improved control and bulk EP removal. Previously endpoint lists would be halted for EP removal which could block a new URB from executing for a short time. In cases where an URB is started from inside a timer routine (like in the MSD class) the URB would always timeout because the endpoint list was disabled and could not be re-enable as it was also done from inside a timer. With this version endpoint lists are no longer halted during removal.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>Keil RTX/CMSIS RTX v1 RTOS layers: Removed task lock/unlock from USBH_OS_SignalNetEvent. This could cause send/receive functions to fail under rare circumstances. Fixed.</li>
+            <li>EHCI: USB Interrupts were not disabled on USBH_Exit(), this could lead to a panic if a new device was connected while emUSB-Host was shut down. Fixed.</li>
+            <li>Synopsys: USB host controller reset sequence did not work for all MCUs of the STM32F4 family. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.00a [21. Sep 2017]</h2>
+        <div>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>MSD: 50ms timeout introduced in V2.00 caused communication problems with some USB sticks. Increased timeout for the TestUnitReady command back to 10s because some sticks seem to need this after data has been written onto them. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.00 [14. Sep 2017]</h2>
+        <div>
+          <h3>Improvements</h3>
+          <ol>
+            <li>General: Refactoring of root port processing, improving error and retry handling and increasing stability.</li>
+            <li>General: Refactoring of device enumeration processing, improving error and retry handling and increasing stability.</li>
+            <li>General: Refactoring of external HUB support, improving error and retry handling and increasing stability.</li>
+            <li>General: Clean-up main header files: Remove unused items, hide static functions and structures.</li>
+            <li>General: Parsing of USB descriptors improved for correct handling of USB devices with alternate settings.</li>
+            <li>General: USB ports are now powered down and disabled if over-current is detected. USBH_RestartEnumError() must be called to re-enable ports. Configuring the maximum number of devices and endpoints in USBH_X_Config() in not necessary any more. Code footprint reduced.</li>
+            <li>HID: Added InterfaceID to USBH_HID_KEYBOARD_DATA, USBH_HID_MOUSE_DATA and USBH_HID_DEVICE_INFO structures to distinguish multiple mouse / keyboard devices.</li>
+            <li>HID: If a HID device has multiple reports, USBH_HID_GetDeviceInfo/USBH_HID_GetNumDevices can now return size and ID of all reports.</li>
+            <li>HID: Code and RAM usage reduced, if no mouse device is handled (USBH_HID_SetOnMouseStateChange() not called).</li>
+            <li>HID: Removed obsolete function USBH_HID_GetReportDescriptorParsed(). Use USBH_HID_GetDeviceInfo/USBH_HID_GetNumDevices instead.</li>
+            <li>STM32 (DWC2) driver: Workaround for blocked channels implemented: If a channel is blocked after disconnecting a device from a root port, the USB controller is reset to recover the channel.</li>
+            <li>Renesas driver: Merged RX62 and RZ/A1 USB host driver to one driver and created sub modules to fit the different sub sets (on MCU base) of the controller.</li>
+            <li>Renesas driver: Code reworked with improvements in stability and memory usage</li>
+            <li>Renesas driver: Driver is available for RX11x, RX23x, RX62x, RX63x, RX64x, RX65x, RX71x, Synergy platform, RZ/A1.</li>
+            <li>HID, FT232 and Printer classes: These classes no longer open interfaces exclusively. This allows the user to additionally open the interfaces from the application (which is necessary for most information retrieval API functions).</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>General: USBH_Task may enter busy loop after ~2.5 hours of inactivity (no USB device connected), giving lower priority tasks no chance to run. Affected versions: V1.30d + V1.30e. Fixed.</li>
+            <li>General: When a certain USB speed type is not supported, the enumeration may cause a panic or data abort. Fixed.</li>
+            <li>HID: USBD_HID_SetReport function did not work on HID devices without OUT endpoint. Fixed.</li>
+            <li>HID: Report descriptors with size &gt; 255 were not handled correctly. Fixed.</li>
+            <li>STM32 (DWC2) driver: On MCU&#39;s using cached memory, setup requests with multiple packet input transfers may read corrupted data from a device. Fixed.</li>
+            <li>OHCI driver: Refactoring. Reworked interrupt endpoint list handling, in very rare cases it was possible for endpoints to be freed while the host controller was operating on them, resulting in a fatal error. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.30e [17. Jul 2017]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>STM32F4xx/F7xx HS: Added BSP and configuration files for the STM32F769 Discovery evaluation board.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>KinetisFS: Token busy flag was not cleared, which could lead to the warning message &quot;Token busy&quot; appearing continuously when a device was disconnected. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.30d [11. Jul 2017]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>STM32F7xx HS: Added support STM32F7xx high-speed controller.</li>
+            <li>STM32F4xx/F7xx HS: Added support for split transactions.</li>
+            <li>CDC: Added USBH_CDC_SetOnSerialStateChange(), USBH_CDC_CancelRead(), USBH_CDC_CancelWrite(). These function are not yet documented in this release.</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>HID: Added a simple report descriptor parser which retrieves the report size without allocating memory for the report usage fields. This drastically reduces memory usage when using functions USBH_HID_GetNumDevices and USBH_HID_GetDeviceInfo.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>STM32 FS: Transfers on interrupt IN EPs consisting of multiple packets were not handled correctly. Fixed.</li>
+            <li>STM32 FS: Transfers on control OUT EPs consisting of multiple packets were not handled correctly. Fixed.</li>
+            <li>STM32F4xx/F7xx HS: Transfers on interrupt EPs consisting of multiple packets were not handled correctly. Fixed.</li>
+            <li>STM32F4xx/F7xx HS: Aborting of BULK OUT transfers did not work. Fixed.</li>
+            <li>EHCI: On read requests &gt; 16 KB, short packets were not handled correctly. Fixed.</li>
+            <li>EHCI: Time for USB reset was sometimes not long enough. Fixed.</li>
+            <li>EHCI: USBH_Task may enter busy loop after 0x7FFFFFFF ms (~24.8 days) from system start-up, giving lower priority tasks no chance to run. Fixed.</li>
+            <li>CDC: USBH_CDC_ClrRts() did not work. Fixed.Program correction: CDC: Sending control line state could dereference a NULL pointer resulting in a crash. (Affected API was USBH_CDC_SetDtr, USBH_CDC_ClrDtr, USBH_CDC_SetRts, USBH_CDC_ClrRts, USBH_CDC_SetBreakOn, USBH_CDC_SetBreakOff, USBH_CDC_SetBreak). Fixed.</li>
+            <li>OHCI: Interval time for interrupt endpoints was always set to 32ms regardless of the value set by the device. Fixed.</li>
+            <li>OHCI: When a URB was canceled the next consecutive URB on the same endpoint could start with the wrong data toggle value. Fixed.</li>
+            <li>KinetisFS: When an URB was started, but it could not be completely initialized because the stack was out of memory the pendingURB pointer was not set to NULL, which could cause a crash later on as the stack would try to abort the invalid URB.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.30c [18. May 2017]</h2>
+        <div>
+          <h3>Improvements</h3>
+          <ol>
+            <li>CDC: Improved read speed with USBH_CDC_Read when the user is providing a buffer which is a multiple of MaxPacketSize.</li>
+            <li>EHCI: Added a workaround for a EHCI hardware bug which is present in some EHCI controllers which can cause communication breakdown in rare cases.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>Keil RTX/CMSIS RTX v1 RTOS layers: It was possible for the semaphore event counters to overflow which could cause an event to become lost. This could cause communication breakdown under load. Fixed.</li>
+            <li>General: Depending on timing it was possible for USBH_Exit to cause subsequent re-initialisation of the stack to fail. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.30b [25. Apr 2017]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>STM32F7xx: Added support STM32F7xx full speed controller.</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>STM32 HS/STM32F1 FS/OHCI/KinetisFS: Code reworked with a multitude of improvements to stability.</li>
+            <li>Memory module: New memory management for lower memory usage.</li>
+            <li>HUB support: Changed determining the MaxPacketSize for device that are initially enumerated.</li>
+            <li>HUB support: Reduced the number of AddEndpoint and ReleaseEndpoint calls.</li>
+            <li>OHCI: Added zero-copy support. Zero-copy is usable when the OHCI controller has full access to the transfer RAM and the device does not use cache.</li>
+            <li>CDC/FT232/HID: User callbacks (set via USBH_*_RegisterNotification) are no longer called for devices which did not pass initialisation phase (e.g. device was removed during initialisation).</li>
+            <li>HID: Events are no longer allocated during GetReport/SetReport, but are allocated one at HID_Open and freed at HID_Close. This improves performance.</li>
+            <li>CDC: Added USBH_CDC_SendEncapsulatedCommand and USBH_CDC_GetEncapsulatedResponse. These functions are not documented yet in this release.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>EHCI driver: USB channel was not stopped correctly when releasing an interrupt endpoint. Fixed.</li>
+            <li>EHCI driver: Interval parameter in interrupt endpoint descriptor was not considered correctly. Fixed.</li>
+            <li>HUB support: Errors on HUB ports were not handled correctly. Fixed.</li>
+            <li>HID: InputReportSize/OutputReportSize (retrieved via USBH_HID_GetDeviceInfo) were not set. Fixed.</li>
+            <li>HID: Fixed an issue where the user callback function pointers were only initialized when async was used. (otherwise when not using async the old value was used (NULL or a function pointer to an async routine)).</li>
+            <li>CDC: USBH_CDC_Write - pNumBytesWritten was not set correctly. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.30a [06. Mar 2017]</h2>
+        <div>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>STM32 (DWC2) driver: USB channel was sometimes blocked after detaching a low speed device. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.30 [02. Mar 2017]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>EHCI: Added support for MCUs with cache.</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>General: Changed USBH_GetNumDevicesConnected to work with HCIndex.</li>
+            <li>General: Class modules and generic code reworked to handle disconnection of devices and stack de-initialisation better. Eliminated the possibility of device objects not being removed when the stack is de-initialised.</li>
+            <li>General: Removed serial number from USBH_INTERFACE_INFO struct. Added new function USBH_GetInterfaceSerial().</li>
+            <li>General: Abort URBs are now always allowed through even if the device was removed (otherwise URBs could potentially remain pending forever).</li>
+            <li>General: Moved utility functions from core and class modules into a new file - USBH_Util.c</li>
+            <li>CDC: Allowed reading NULL packet with USBH_CDC_Read(). Added MaxPacketSize to CDC_DEVICE_INFO structure.</li>
+            <li>CDC: Return value of USBH_GetInterfaceDescriptor is now checked (caused an infinite loop when it was not checked and the function failed).</li>
+            <li>CDC: Fixed length check in the interrupt IN completion routine (caused serial state updates to fail).</li>
+            <li>CDC: Fixed a potential issue with _AbortEP, it was potentially possible for it to be stuck while waiting for a completed event. _AbortEP no longer waits for anything, the RemovalTimer restarts itself as long as the endpoint has a non-zero ref count.</li>
+            <li>CDC: Updated module to support any ACM protocol.</li>
+            <li>Memory module: _Size2Index did not take MIN_BLOCK_SIZE_SHIFT into account. Fixed.</li>
+            <li>EHCI/OHCI/STM32 FS: Code reworked with a multitude of improvements to stability.</li>
+            <li>CDC/FT232/MTP/MSD: Reworked to free device instances only from one spot (from the removal timer).</li>
+            <li>CDC/FT232/MTP/MSD: Where possible replaced USBH_MALLOC with USBH_TRY_MALLOC so that panic is not reported in debug builds, instead USBH_STATUS_RESOURCES is reported to the upper layer(s).</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>General: Host controller module could pass the virtual memory pointer to the free routine instead of the physical address. Fixed.</li>
+            <li>General: When a transfer memory pool was not set USBH_Free would try to free any passed address. Fixed.</li>
+            <li>CDC: USBH_CDC_ReadAsync() InUse was set wrongly. Fixed.</li>
+            <li>CDC: bRxCarrier and bTxCarrier were swapped. Fixed.</li>
+            <li>HUB: pEnumDevice and RefCounter were not set back correctly in error cases. This could cause an infinite loop. Fixed.</li>
+            <li>MSD: If the initialisation of the MSD device failed it was possible to receive a removal notification for the device without a previous add notification. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.20c [28. Sep 2016]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>General: Added the function USBH_SetOnSetPortPower() which allows to register a user callback through which the user is notified when port power is being enabled or disabled.</li>
+            <li>MSD: Added the function USBH_MSD_SetAheadBuffer() which allows to set your own buffer for the MSD read-ahead cache functionality.</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>General: When a driver is removed all ports which are handled by the driver are now turned off.</li>
+            <li>General: Sample applications no longer use the printf function and use USBH_Logf_Application instead. This has the advantage that all outputs can be configured in one place (USBH_ConfigIO.c)</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>CDC: USBH_CDC_Write returned the wrong number of bytes in the pNumBytesWritten parameter. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.20b [09. Jun 2016]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>MTP: Added functions USBH_MTP_CheckLock() and USBH_MTP_SetEventCallback().</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>MSD: The read-ahead cache is no longer a static buffer, but is allocated from the assigned emUSB-Host memory</li>
+            <li>General: Declared the driver API structures as const. This helps save a bit of RAM.</li>
+            <li>General: When there are no more instances available for a specific class a panic error is no longer issued, now a warning is issued instead.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>Core: When emUSB-Host is being de-initialized via USBH_Exit() it was possible for emUSB-Host to hang in certain conditions. Fixed.</li>
+            <li>CDC: It was possible for a reference counter to not be decremented when an endpoint was aborted, it could lead to the device reference remaining in memory even after it was removed. Fixed.</li>
+            <li>FreeRTOS layer: Did not work properly with multiple host controllers. Fixed.</li>
+            <li>EHCI: When disconnecting a hub which has devices connected to it a re-enumeration would not work. Fixed.</li>
+            <li>Hub module: When the timing between connecting and reconnecting a hub with connected devices was short enough it was possible for a device instance to remain in memory. Fixed.</li>
+            <li>MSD: The GetMaxLUN command returned an incorrect value when the MSD interface was not the first interface in a device.</li>
+            <li>STM32F2xx FS: Communication could break down when the device sends NAKs for a prolonged period of time. Fixed.</li>
+            <li>STM32F2xx FS: Fixed an issue (or rather a problem with the hardware) where when an URB was open and a device disconnected from the host the controller did not always produce a channel halted interrupt when the corresponding channels were halted which would lead to emUSB-Host leaving the device object with a positive refcount which in turn would lead to memory never being freed and made it impossible to de-initialize the host. Now a driver callback function handles this and completes all aborted URBs.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.20a [21. Jan 2016]</h2>
+        <div>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>CDC: USBH_CDC_ReadAsync used wrong buffer to initiate a read transfer. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.20 [08. Jan 2016]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>New Class driver MTP: Added support for Media Transfer Protocol.</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>CDC class: In case of a stall response to a read or write transfer, the endpoint is reset to default by performing a CLEAR_FEATURE_HALT_EP to the USB device.</li>
+            <li>CDC class: Improved device removal and freeing all resources.</li>
+            <li>CDC class: USBH_CDC_ReadAsync() uses the complete user buffer to store data received from USB device.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>Enumeration: Under some circumstances a disconnect of a USB device during the enumeration phase did not free the memory resources. Fixed.</li>
+            <li>MSD: ModeSense command was always sent with LUN zero instead of the real LUN. Fixed.</li>
+            <li>MSD: LUN which cannot be handled by the MSD module (CD-ROM LUNs) are now skipped during device information retrieval.</li>
+            <li>CDC, FT232: When calling USBH_CDC_Open()/USBH_FT232_Open() with an invalid index, the function could operate on a NULL pointer. Fixed.</li>
+            <li>HID: Mouse button states were interpreted as signed instead of unsigned.</li>
+            <li>Debug level: When setting the emUSB-Host stack to a different debug level and re-compile the stack, it could fail. Error was introduced with V1.16d. Fixed.</li>
+            <li>STM32F2xx: A panic will be shown when using FT232 driver with the above mentioned driver. Error was introduced with V1.16. Fixed.</li>
+            <li>General: Changed structure BUFFER structure to global USBH_BUFFER.</li>
+            <li>General: Updated bit-field data type from U32 to unsigned int.</li>
+            <li>General: Calling USBH_CloseInterface() with a NULL handle could cause a crash. Fixed.</li>
+            <li>CDC: Added new config flag option: USBH_CDC_DISABLE_INTERFACE_CHECK.</li>
+            <li>CDC: The reference counter was not decremented in case of an error, results in not removing the detached device instance.Fixed.</li>
+            <li>CDC: RingBuffer was not freed when the device was removed. Fixed.</li>
+            <li>CDC: Updated comments.</li>
+            <li>Core: Updated debug output information in USBH_Init().</li>
+            <li>Endpoint: Updated USBH_BD_EpUrbCompletion() debug output message.</li>
+            <li>EHCI: _AddEndpoint: On Error, do not reference the invalid EPInfo pointer.</li>
+            <li>EHCI: Updated all debug warn and warn messages to output EHCI prefix.</li>
+            <li>EHCI: The Virtual CPU address was written to the EHCI&#39;s frame list register instead of the physical address when using CPUs with virtual memory technology (ARM9, Cortex-A etc). Fixed.</li>
+            <li>KinetisFS driver: Setup packet was not handled properly. Fixed.</li>
+            <li>KinetisFS driver: Pass all Pipe number to functions that work with the Pipes.</li>
+            <li>KinetisFS driver: Reduced delay processing USB reset and attach events.</li>
+            <li>KinetisFS driver: Return an error in case there is no pipe available to process the desired transfer.</li>
+            <li>KinetisFS driver: USBH_KINETIS_FS_ReleaseEPx checked for BULK EPs when it was called for INT EP. Code was removed.</li>
+            <li>KinetisFS driver: Aborting an URB was not working properly. Fixed.</li>
+            <li>RX driver: Changed #ifdef __GNUC__ to #if (defined __GNUC__) &amp;&amp; (defined __RX_LITTLE_ENDIAN__) to avoid warnings with gnu compilers other than GNU RX (KPIT).</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.16e [29. Jul 2015]</h2>
+        <div>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>Debug level: When setting the emUSB-Host stack to a different debug level and re-compile the stack, it could fail. Error was introduced with V1.16d. Fixed.</li>
+            <li>STM32F2xx: A panic will be shown when using FT232 driver with the above mentioned driver. Error was introduced with V1.16. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.16d [17. Jun 2015]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>General: Added support for adding multiple instance of USB host drivers.</li>
+            <li>CDC class: Added USBH_SPEED to structure USBH_CDC_DEVICE_INFO. This structure is used by USBH_CDC_GetDeviceInfo().</li>
+            <li>Debug I/O: Added SEGGER&#39;s Real Timer Terminal as a possible configuration for terminal I/O.</li>
+            <li>Added the Renesas RZ/A1 driver.</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>Enumeration: Changed the enumeration sequence to be 100% compatible to the USB 2.0 specification. Previously the first device descriptor request and the second reset in the enumeration procedure have been skipped.</li>
+            <li>STM32F2 drivers: Added a check for a rare occurrence where an interrupt is triggered by the USB controller even though the interrupt is disabled.</li>
+            <li>CDC class: If an endpoint of a CDC device is in stall state, the class driver automatically put the endpoint back to normal state.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>Memory module: In very rare cases (where memory was allocated/freed, e.g. during enumeration) it was possible for the pNext pointer of MEM_POOL_FREE to be overwritten which caused unpredictable behaviour. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.16c [13. May 2015]</h2>
+        <div>
+          <h3>Improvements</h3>
+          <ol>
+            <li>CDC class driver: Added USBH_SPEED to the USBH_CDC_DEVICE_INFO structure, determining the USB speed of the connected device.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>CDC class driver: When sending control command (LINE_CODING, SERIAL_STATE) via EP0 the wrong interface was used to send the command. Fixed.</li>
+            <li>CDC class driver: Under some circumstances the serial serial completion routine for the interrupt endpoint was called with wrong data. Fixed.</li>
+            <li>EHCI driver: For control data transfers with no data stage (wLength = 0), an additional transfer descriptor was allocated and triggered even though it was not necessary. It may result that the next control transfers is canceled. Fixed.</li>
+            <li>EHCI driver: Disabling a USB port was not implemented. Fixed.</li>
+            <li>USB Hub: When using a high-speed controller and USB hubs (full-speed and high-speed) to communicate with full-speed or low-speed device (done with split transactions), the address of the hub was wrongly set. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.16b [09. Feb 2015]</h2>
+        <div>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>FT232 class driver: USBH_FT232_Exit did not zero out the global variables used by the FT232 module, which resulted in undefined behaviour during a re-initialization. Fixed.</li>
+            <li>STM32F2xx FS driver: Under special circumstances the interrupts were enabled multiple times, which resulted in a USBH_Panic message. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.16a [04. Feb 2015]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>EHCI driver: Added a new function USBH_EHCI_Config_SetM2MEndianMode()&quot;.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.16 [08. Dec 2014]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>CDC class: Added a new function USBH_CDC_SetConfigFlags()&quot;.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>STM32F2xx FS/HS driver: When a URB was aborted the driver would wrongly schedule the next URB. Fixed.</li>
+            <li>embOS layer: Changed USBH_OS_WaitEventTimed to make sure the function waits at least one millisecond. Previously it was possible that the function has been called with a timeout of one millisecond, and the timer interrupt would occur right after the function was called, which would result in an actual delay of a few microseconds. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.15b [29. Aug 2014]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Core: Added functions to allocate/free an URB.</li>
+            <li>CDC class: Added new functions to add/remove &quot;CDC compliant devices&quot;.</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>Renesas RX driver: Added DiCnt in order to make USBH_RX_xxxInterrupt() re-entrant.</li>
+            <li>Freescale Kinets FullSpeed driver: Added workaround for the reset USB controller reset, as the USB core reset bit does not work.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>MSD driver: It was possible that the MSC device is accessed by emUSBH through the API before it was ready. Fixed.</li>
+            <li>Device Enumeration: Size of the config descriptor was not retrieved correctly. StringDescriptor LangId was not set-up correctly. (U8 instead of U16)</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.14d [13. May 2014]</h2>
+        <div>
+          <h3>Improvements</h3>
+          <ol>
+            <li>OHCI driver: Replaced a while(1); loop which was called in case of a fatal error with USBH_PANIC.</li>
+            <li>Core: The default setup was increased to 2 sec instead of 500ms this allows buggy devices to enumerate properly.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>OHCI: The number of allocated transfer buffers did not match the number of configured endpoints. Fixed.</li>
+            <li>EHCI: When an async QH was reused to submit a new transfer, the QH was linked twice into async list of the EHCI controller. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.14c [28. Apr 2014]</h2>
+        <div>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>RX62N: Some STALL responses were not recognized when the low bit of the PID token was set. Fixed.</li>
+            <li>USBH_MSD_FS_Driver: When retrieving the device information of the device, the wrong return type was checked to recognize any error condition. Fixed.</li>
+            <li>EHCI: When retrieving a QTD, the wrong pointer was checked in case of an error condition. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.14b [01. Apr 2014]</h2>
+        <div>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>RX62N: Under some circumstances the USB interrupts could not be restored properly. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.14a [20. Mar 2014]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Added support function to retrieve port information of an interface/device.</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>RX600 driver: Reduced the interrupt disable/enable time. Driver disables the interrupt only in very critical situations.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>FT232: When reading less bytes than received by the FT232 device, the FT232 driver ran into a panic because the data could not stored in the ring buffer. Fixed.</li>
+            <li>STM32F2xx HS: Transfer error of bulk endpoints was not handled which results in re-calling the ISR task every time. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.12h [04. Mar 2014]</h2>
+        <div>
+          <h3>Improvements</h3>
+          <ol>
+            <li>Added support for Virtual to physical translation for the EHCI driver .</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>EHCI: Removing and adding a device could cause a NULL pointer de-reference. Fixed.</li>
+            <li>Control/Enumeration URB: When sending a control/setup packet, the data buffer could greater than specified in the setup packet which could cause the USB host driver to hang. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.12g [24. Feb 2014]</h2>
+        <div>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>RX62N: Always true condition led to wrong assumptions about the device status. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.12f [21. Feb 2014]</h2>
+        <div>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>Compiling: Compiling on a case sensitive file system could fail. Fixed.</li>
+            <li>EHCI driver: Releasing endpoint handles by removing a USB device was not handled properly. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.12e [10. Feb 2014]</h2>
+        <div>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>STM32F2xx FS driver: FIFO ram assignment is lost by the OTG_FS controller. Fixed.</li>
+            <li>STM32F2xx FS driver: BULK and control data transfer did not work properly. Fixed.</li>
+            <li>FT232 driver: When removing a FT232 device the ring buffer was not freed which results in a memory leak. Fixed.</li>
+            <li>CDC driver: When removing a CDC device the ring buffer/instance was not freed which results in a memory leak. Fixed.</li>
+            <li>MSD FS driver: The wrong unit number for the second, third etc MSD was assigned. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.12d [02. Dec 2013]</h2>
+        <div>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>OHCI driver: With the virtual-to-physical translation, transmitting zero-length-packets did not work properly. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.12c [18. Oct 2013]</h2>
+        <div>
+          <h3>Improvements</h3>
+          <ol>
+            <li>Added support for the second USB controller for the NXP LPC43xx (USB1).</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>EHCI driver: Full speed device were detected as high-speed devices. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.12b [27. Sep 2013]</h2>
+        <div>
+          <h3>Improvements</h3>
+          <ol>
+            <li>USB-Host Hub driver has been improved to handle low-speed devices efficiently.</li>
+            <li>The CDC class driver stability has been improved.</li>
+            <li>The Plug&amp;Play handling for the CDC class driver has been improved.</li>
+            <li>The Plug&amp;Play handling for the FT232 class driver has been improved.</li>
+            <li>The HID driver class now parses newer HID mouse&#39;s descriptors properly, reported movement values are now proportional to the physical movement.</li>
+            <li>OHCI driver can now handle memory mapping via virtual memory addresses.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>FT232 class driver: The FT232 latency time was retrieved as zero on enumeration. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.10g [31. Jan 2013]</h2>
+        <div>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>STM32 F2/F4 HS driver: When the internally full-speed was used, the data communication did not work properly. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.10f [19. Dec 2012]</h2>
+        <div>
+          <h3>Improvements</h3>
+          <ol>
+            <li>Reduced the CPU load when using the FT232 class driver with any ST32F host driver.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>USB CDC: USBH_CDC_Read() did not return the correct data. Fixed.</li>
+            <li>USB hub: When clearing a USB hub feature the wrong feature was generated. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.10e [28. Nov 2012]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Added PHY selection for ST STM32F2/F4 USB Highspeed host controller - Available modes are use external ULPI PHY or the internal FS PHY.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.10d [27. Sep 2012]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Added support for ST STM32F2/F4 USB Highspeed host controller.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.10c [16. Sep 2012]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Added support for Freescale Kinetis USB Fullspeed host controller.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.10b [11. Sep 2012]</h2>
+        <div>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>STM32 drivers: When enumeration times out the completion routine after sending a abort to the driver was not called. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.10a [26. Jun 2012]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Added support for CDC-ACM (serial port) devices.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.08d [14. Feb 2012]</h2>
+        <div>
+          <h3>Improvements</h3>
+          <ol>
+            <li>Improved MSD handling.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>RX62N/621: When disconnect, reconnect a USB device very quickly, wrong data could be sent to the reconnected device. OUT-FIFO clear was not executed as expected. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.08c [14. Dec 2011]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Added new configuration function (USBH_ConfigPowerOnGoodTime) in order to change the value after which time the device shall be enumerated after it has been attached/detected.</li>
+            <li>Added support for FTDI FT232 devices.</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>Changed the power good time value for Renesas RX driver to 150ms.</li>
+            <li>Changed the power good time value for Atmel AVR32 driver to 150ms.</li>
+            <li>Changed the power good time value for ST STM32F10x driver.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.08b [05. Dec 2011]</h2>
+        <div>
+          <h3>Improvements</h3>
+          <ol>
+            <li>Added support for big-endian support for Renesas RX driver.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.08a [14. Nov 2011]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Added new driver for Atmel AVR32 UCA/UCB series.</li>
+            <li>Added support for FTDI FT232 devices.</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>Improved De-initialization of emUSB Host.</li>
+            <li>Reduced RAM usage for Renesas RX driver.</li>
+            <li>Improved error handling of emUSBH MSD.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.06c [28. Oct 2011]</h2>
+        <div>
+          <h3>Improvements</h3>
+          <ol>
+            <li>Improved handling of Transcend USB sticks by using a read ahead cache.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>RX62N: When using the Renesas RX compiler, the compiler generate wrong access to USB register. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.06b [15. Jul 2011]</h2>
+        <div>
+          <h3>Improvements</h3>
+          <ol>
+            <li>Improved handling of when OS-resources are not available.</li>
+            <li>Improved speed of Renesas RX62N host controller.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>Renesas RX62 host driver: Interrupts requests were lately cleared which caused on heavy CPU usage that even interrupt requests were cleared which were not handled. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.06a [15. Jun 2011]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Added new driver for Renesas RX62 series.</li>
+            <li>Added callback to set the configuration during enumeration.</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>Changed most USB compile time switches to run-time switches such as ExternalHubSupport, MaxDevices, MaxEndPoints, ConfigureRootHub.</li>
+            <li>Reduced memory consumption of the OHCI and STM32 driver.</li>
+            <li>Improved handling of HID devices.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>HID: When connecting/disconnecting not all resources were freed. Fixed.</li>
+            <li>MSD: When a USB stick was plugged in and the device did not work properly, the system could hang when the USB stick was plugged out. Fixed.</li>
+            <li>Core: When more than 127 connects/disconnects were done, emUSBH reports an error that there were no free address available. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.02b [08. Nov 2010]</h2>
+        <div>
+          <h3>Improvements</h3>
+          <ol>
+            <li>Improved MSD compatibility.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.02a [09. Jul 2010]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Added Printer class.</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>Changed many compile-time switches to run-time switches.</li>
+            <li>Improved MSD compatibility.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 1.00a [09. Jun 2009]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Initial version.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  <!-- ****************************************************************** -->
+  <!-- Modifiable information ends here                                   -->
+  <!-- ****************************************************************** -->
+
+</main>
+<div class="footer">
+  <div class="container">
+    <div>
+      <p>Copyright 2003-2022 SEGGER Microcontroller GmbH. All rights reserved.<br>
+        For more information, please visit our website&nbsp;<a href="https://www.segger.com/" target="_blank">www.segger.com</a>&nbsp;or contact us via&nbsp;<a href="https://www.segger.com/ticket" target="_blank">www.segger.com/ticket</a>&nbsp;</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>
