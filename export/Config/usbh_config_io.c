@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Host version: V2.36.0                                  *
+*       emUSB-Host version: V2.36.1                                  *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -42,11 +42,10 @@ Licensor:                 SEGGER Microcontroller Systems LLC
 Licensed to:              Cypress Semiconductor Corp, 198 Champion Ct., San Jose, CA 95134, USA
 Licensed SEGGER software: emUSB-Host
 License number:           USBH-00303
-License model:            Cypress Services and License Agreement, signed June 9th/10th, 2009
-                          and Amendment Number One, signed June 28th, 2019 and July 2nd, 2019
-                          and Amendment Number Two, signed September 13th, 2021 and September 18th, 2021
+License model:            Cypress Services and License Agreement, signed November 17th/18th, 2010
+                          and Amendment Number One, signed December 28th, 2020 and February 10th, 2021
                           and Amendment Number Three, signed May 2nd, 2022 and May 5th, 2022
-Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4.
+Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4
 ----------------------------------------------------------------------
 Support and Update Agreement (SUA)
 SUA period:               2022-05-12 - 2024-05-19
@@ -65,11 +64,9 @@ Purpose     : I/O routines and configuration for emUSB-Host.
 */
 #include <stdio.h>
 #include "USBH.h"
-/* For printf() */
-#include "cy_retarget_io.h"
 
 #if defined (__CROSSWORKS_ARM)
-  #include "__putchar.h"
+    #include "__putchar.h"
 #endif
 
 /*********************************************************************
@@ -79,33 +76,56 @@ Purpose     : I/O routines and configuration for emUSB-Host.
 *       This section is normally the only section which requires
 *       changes on most embedded systems.
 */
-#ifndef   USE_RTT
-  #define USE_RTT    0    // SEGGER's Real Time Terminal: https://www.segger.com/jlink-real-time-terminal.html
+
+/* The standard output methods are enabled by default
+ * To disable an output in Debug mode or provide a custom
+ * output method, set USBH_DISABLE_STANDARD_OUTPUT=1 in DEFINES
+ * variable in the application project Makefile
+ */
+#if !defined (USBH_DISABLE_STANDARD_OUTPUT)
+    #define USBH_DISABLE_STANDARD_OUTPUT        (0U)
+#endif /* #if !defined USBH_DISABLE_STANDARD_OUTPUT */
+
+#if (USBH_DISABLE_STANDARD_OUTPUT == 0U)
+/* Select one of the standard output methods */
+
+/* Retarget-io middleware: https://github.com/Infineon/retarget-io */
+#ifndef   USE_RETARGET_IO
+    #define USE_RETARGET_IO                     (1U)
 #endif
 
-#ifndef   USE_DCC
-  #define USE_DCC    0
+/* SEGGER's Real Time Terminal: https://www.segger.com/jlink-real-time-terminal.html */
+#ifndef   USE_RTT
+    #define USE_RTT                             (0U)
 #endif
+
+/* The Debug Communication Channel (DCC): https://wiki.segger.com/DCC */
+#ifndef   USE_DCC
+    #define USE_DCC                             (0U)
+#endif
+
+#endif /* #if (USBH_DISABLE_STANDARD_OUTPUT == 0U) */
 
 #ifndef   SHOW_TIME
-  #define SHOW_TIME  1
+    #define SHOW_TIME                           (1U)
 #endif
 
 #ifndef   SHOW_TASK
-  #define SHOW_TASK  1
+    #define SHOW_TASK                           (1U)
+    #include "cyabs_rtos.h"
 #endif
 
-#if USE_RTT
-  #include "SEGGER_RTT.h"
-#endif
+#if (USE_RETARGET_IO == 1U)
+    #include "cy_retarget_io.h"
+#endif /* (USE_RETARGET_IO == 1U) */
 
-#if USE_DCC
-  #include "JLINKDCC.h"
-#endif
+#if (USE_RTT == 1U)
+    #include "SEGGER_RTT.h"
+#endif /* #if (USE_RTT == 1U) */
 
-#if SHOW_TASK
-  #include "cyabs_rtos.h"
-#endif
+#if (USE_DCC == 1U)
+    #include "JLINKDCC.h"
+#endif /* #if (USE_DCC == 1U) */
 
 /*********************************************************************
 *
@@ -120,25 +140,33 @@ Purpose     : I/O routines and configuration for emUSB-Host.
 *    s - Pointer to a string.
 */
 static void _puts(const char * s) {
-#if USE_RTT
-  SEGGER_RTT_WriteString(0, s);
-#else
-#if USE_DCC
-  char c;
+#if (USBH_DISABLE_STANDARD_OUTPUT == 1U)
+    /* Add the custom output method */
+    (void) s;
+#else /* Standard debug output methods */
+#if (USE_RETARGET_IO == 1U)
+    printf("%s", s);
+#elif (USE_RTT == 1U)
+    SEGGER_RTT_WriteString(0, s);
+#elif (USE_DCC == 1U)
+    char c;
 
-  for (;;) {
-    c = *s++;
-    if (c == 0) {
-      break;
+    for (;;)
+    {
+        c = *s++;
+        if (c == 0)
+        {
+            break;
+        }
+
+        JLINKDCC_SendChar(c);
     }
-
-    JLINKDCC_SendChar(c);
-  }
-
-#else
-  printf("%s", s);
-#endif
-#endif
+#else /* Unspecified debug output method */
+    #warning Unspecified debug output method. Select one of the available or set \
+             USBH_DISABLE_STANDARD_OUTPUT=1 in the defines variable \
+             of the application project Makefile
+#endif /* #if (USE_RETARGET_IO == 1U) */
+#endif /* #if (USBH_DISABLE_STANDARD_OUTPUT == 1U) */
 }
 
 /*********************************************************************
@@ -158,29 +186,29 @@ static void _puts(const char * s) {
 */
 #if SHOW_TIME
 static char * _WriteUnsigned(char * s, U32 v, int NumDigits) {
-  unsigned   Base;
-  unsigned   Div;
-  U32        Digit;
-  Digit    = 1;
-  Base     = 10;
-  //
-  // Count how many digits are required
-  //
-  while (((v / Digit) >= Base) || (NumDigits > 1)) {
-    NumDigits--;
-    Digit *= Base;
-  }
-  //
-  // Output digits
-  //
-  do {
-    Div = v / Digit;
-    v  -= Div * Digit;
-    *s++ = (char)('0' + Div);
-    Digit /= Base;
-  } while (Digit);
-  *s = 0;
-  return s;
+    unsigned   Base;
+    unsigned   Div;
+    U32        Digit;
+    Digit    = 1;
+    Base     = 10;
+
+    /* Count how many digits are required */
+    while (((v / Digit) >= Base) || (NumDigits > 1))
+    {
+        NumDigits--;
+        Digit *= Base;
+    }
+
+    /* Output digits */
+    do
+    {
+        Div = v / Digit;
+        v  -= Div * Digit;
+        *s++ = (char)('0' + Div);
+        Digit /= Base;
+    } while (Digit);
+    *s = 0;
+    return s;
 }
 #endif
 
@@ -192,34 +220,45 @@ static char * _WriteUnsigned(char * s, U32 v, int NumDigits) {
 *    Prints a time-stamp and the name of the task from which
 *    the function was executed.
 *
-*  Notes
-*    This function is only designed to work with embOS.
 */
 static void _ShowStamp(void) {
 #if SHOW_TIME
-  U32    Time;
-  char   ac[20];
-  char * sBuffer = &ac[0];
-  Time           = USBH_OS_GetTime32();
-  sBuffer        = _WriteUnsigned(sBuffer, Time / 1000, 0);
-  *sBuffer++     = ':';
-  sBuffer        = _WriteUnsigned(sBuffer, Time % 1000, 3);
-  *sBuffer++     = ' ';
-  *sBuffer++     = 0;
-  _puts(ac);
+    U32    Time;
+    char   ac[20];
+    char * sBuffer = &ac[0];
+    Time           = USBH_OS_GetTime32();
+    sBuffer        = _WriteUnsigned(sBuffer, Time / 1000, 0);
+    *sBuffer++     = ':';
+    sBuffer        = _WriteUnsigned(sBuffer, Time % 1000, 3);
+    *sBuffer++     = ' ';
+    *sBuffer++     = 0;
+    _puts(ac);
 #endif
 
 #if SHOW_TASK
 {
-  const char * s = NULL;
-  TaskHandle_t task_hadle = xTaskGetCurrentTaskHandle();
-  s = pcTaskGetName(task_hadle);
-  if (s == NULL)
-  {
-    s = "ERROR: Unknow task name";
-  }
-  _puts(s);
-  _puts(" - ");
+    const char * s = NULL;
+    cy_rslt_t result;
+    cy_thread_t current_thread_handle;
+    result = cy_rtos_thread_get_handle(&current_thread_handle);
+    if (CY_RSLT_SUCCESS == result)
+    {
+        result = cy_rtos_thread_get_name(&current_thread_handle, &s);
+        if (CY_RSLT_SUCCESS != result)
+        {
+            s = "ERROR: Unknown task name";
+        }
+    }
+    else
+    {
+        s = "ERROR: Unknown task name";
+    }
+
+    if (s)
+    {
+        _puts(s);
+        _puts(" - ");
+    }
 }
 #endif
 }
@@ -251,14 +290,14 @@ void USBH_Panic(const char * s) {
 /*
  * USBH_OS_DisableInterrupt();
  */
-#if USBH_DEBUG > 1
-  _puts("*** Fatal error, System halted: ");
-  _puts(s);
-  _puts("\r\n");
+#if (USBH_DEBUG > 1)
+    _puts("*** Fatal error, System halted: ");
+    _puts(s);
+    _puts("\r\n");
 #else
-  (void)s;
+    (void)s;
 #endif
-  USBH_HALT;
+    USBH_HALT;
 }
 
 /*********************************************************************
@@ -281,9 +320,9 @@ void USBH_Log(const char * s) {
 /*
  * USBH_OS_DisableInterrupt();
  */
-  _ShowStamp();
-  _puts(s);
-  _puts("\r\n");
+    _ShowStamp();
+    _puts(s);
+    _puts("\r\n");
 /* Uncomment to exit critical section.
  * FreeRTOS API functions must not be called from within a critical
  * section. As a retarget-io uses mutex, the printf() can not be used
@@ -314,10 +353,10 @@ void USBH_Warn(const char * s) {
 /*
  * USBH_OS_DisableInterrupt();
  */
-  _ShowStamp();
-  _puts("*** Warning *** ");
-  _puts(s);
-  _puts("\r\n");
+    _ShowStamp();
+    _puts("*** Warning *** ");
+    _puts(s);
+    _puts("\r\n");
 /* Uncomment to exit critical section.
  * FreeRTOS API functions must not be called from within a critical
  * section. As a retarget-io uses mutex, the printf() can not be used
@@ -347,7 +386,7 @@ void USBH_Puts(const char * s) {
 /*
  * USBH_OS_DisableInterrupt();
  */
-  _puts(s);
+    _puts(s);
 /* Uncomment to exit critical section.
  * FreeRTOS API functions must not be called from within a critical
  * section. As a retarget-io uses mutex, the printf() can not be used

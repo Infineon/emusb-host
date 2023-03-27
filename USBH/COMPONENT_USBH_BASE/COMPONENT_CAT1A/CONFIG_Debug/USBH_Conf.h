@@ -21,7 +21,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Host version: V2.36.0                                  *
+*       emUSB-Host version: V2.36.1                                  *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -46,11 +46,10 @@ Licensor:                 SEGGER Microcontroller Systems LLC
 Licensed to:              Cypress Semiconductor Corp, 198 Champion Ct., San Jose, CA 95134, USA
 Licensed SEGGER software: emUSB-Host
 License number:           USBH-00303
-License model:            Cypress Services and License Agreement, signed June 9th/10th, 2009
-                          and Amendment Number One, signed June 28th, 2019 and July 2nd, 2019
-                          and Amendment Number Two, signed September 13th, 2021 and September 18th, 2021
+License model:            Cypress Services and License Agreement, signed November 17th/18th, 2010
+                          and Amendment Number One, signed December 28th, 2020 and February 10th, 2021
                           and Amendment Number Three, signed May 2nd, 2022 and May 5th, 2022
-Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4.
+Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4
 ----------------------------------------------------------------------
 Support and Update Agreement (SUA)
 SUA period:               2022-05-12 - 2024-05-18

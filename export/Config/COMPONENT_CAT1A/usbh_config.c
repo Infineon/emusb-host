@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Host version: V2.36.0                                  *
+*       emUSB-Host version: V2.36.1                                  *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -42,11 +42,10 @@ Licensor:                 SEGGER Microcontroller Systems LLC
 Licensed to:              Cypress Semiconductor Corp, 198 Champion Ct., San Jose, CA 95134, USA
 Licensed SEGGER software: emUSB-Host
 License number:           USBH-00303
-License model:            Cypress Services and License Agreement, signed June 9th/10th, 2009
-                          and Amendment Number One, signed June 28th, 2019 and July 2nd, 2019
-                          and Amendment Number Two, signed September 13th, 2021 and September 18th, 2021
+License model:            Cypress Services and License Agreement, signed November 17th/18th, 2010
+                          and Amendment Number One, signed December 28th, 2020 and February 10th, 2021
                           and Amendment Number Three, signed May 2nd, 2022 and May 5th, 2022
-Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4.
+Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4
 ----------------------------------------------------------------------
 Support and Update Agreement (SUA)
 SUA period:               2022-05-12 - 2024-05-19
@@ -83,6 +82,13 @@ Purpose     : emUSB-Host configuration file for PSoC6
 #define USBH_INTERRUPT_NUM                      (usb_interrupt_med_IRQn)
 #endif /* #if (COMPONENT_CM0P) */
 
+/* The define pin, which controls the power distribution to a USB device
+ * through VBUS line. The default value of the pin number is selected
+ * only for the CY8CKIT-062-WIFI-BT kit and must be modified for other
+ * boards.
+ */
+#define USBH_POWER_CONTROL_PIN                  (P13_2)
+
 
 /*********************************************************************
 *
@@ -92,6 +98,8 @@ Purpose     : emUSB-Host configuration file for PSoC6
 */
 /* Memory area used by the stack */
 static U32 memory_pool[USBH_ALLOC_SIZE / 4U];
+
+static bool vbus_control_pin_is_init = false;
 
 /* Define categories of debug log messages that should be printed.
  * For possible categories, see USBH_MCAT_... definitions in USBH.h
@@ -119,6 +127,54 @@ static void isr(void)
 
 /*********************************************************************
 *
+*       on_port_power_control
+*
+*  Function description
+*    A callback set by USBH_SetOnSetPortPower() is called when the
+*    port power is changed.
+*
+*/
+static void on_port_power_control(U32 HostControllerIndex, U8 Port, U8 PowerOn) {
+    USBH_USE_PARA(HostControllerIndex);
+    USBH_USE_PARA(Port);
+
+    if (PowerOn != 0u)
+    {
+        cyhal_gpio_write(USBH_POWER_CONTROL_PIN, true);
+    }
+    else
+    {
+        cyhal_gpio_write(USBH_POWER_CONTROL_PIN, false);
+    }
+}
+
+
+/*********************************************************************
+*
+*       init_power_control_pin
+*
+*  Function description
+*    Initializes the pin, which controls the power distribution to a
+*    USB device through VBUS line.
+*
+*/
+void init_power_control_pin()
+{
+    if (!vbus_control_pin_is_init)
+    {
+        cy_rslt_t result;
+        result = cyhal_gpio_init(USBH_POWER_CONTROL_PIN, CYHAL_GPIO_DIR_OUTPUT,
+                                 CYHAL_GPIO_DRIVE_PULLUP, false);
+        CY_ASSERT(CY_RSLT_SUCCESS == result);
+        (void) result; /* To avoid the compiler warning in Release mode */
+
+        vbus_control_pin_is_init = true;
+    }
+}
+
+
+/*********************************************************************
+*
 *       USBH_X_Config
 *
 *  Function description
@@ -129,6 +185,8 @@ static void isr(void)
 */
 void USBH_X_Config(void)
 {
+    init_power_control_pin();
+
     /* Assigning memory */
     USBH_AssignMemory((void *) &memory_pool, USBH_ALLOC_SIZE);
 
@@ -146,6 +204,7 @@ void USBH_X_Config(void)
 
     /* Add driver */
     (void) USBH_Cypress_PSoC_Add();
+    USBH_SetOnSetPortPower(on_port_power_control);
 
     /* Install the interrupt service routine */
     cy_rslt_t result;

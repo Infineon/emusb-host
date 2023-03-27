@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Release notes for emUSB Host V2.36.0         </title>
+<title>Release notes for emUSB Host V2.36.1         </title>
 <meta name="robots" content="noindex,nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style type="text/css">
@@ -184,7 +184,7 @@ div.divider-global:nth-of-type(even) {
           <!-- ****************************************************************** -->
           <!-- Modifiable information starts here                                 -->
           <!-- ****************************************************************** -->
-          <h1>Release notes for emUSB Host V2.36.0         </h1>
+          <h1>Release notes for emUSB Host V2.36.1         </h1>
         </div>
       </div>
     </div>
@@ -192,6 +192,22 @@ div.divider-global:nth-of-type(even) {
   <!-- ****************************************************************** -->
   <!-- History                                                            -->
   <!-- ****************************************************************** -->
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.36.1 [15. Nov 2022]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>PSoc6 driver: New macro to configure interrupt level.</li>
+            <li>Added BSP and configuration files for the ST STM32H735G-DK evaluation board.</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>CDC: Removed unnecessary DEC_REF_CNT, which caused a warning with USBH_REF_TRACE enabled.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
     <div class="divider-global">
       <div class="container">
         <h2>Version 2.36.0 [28. Jul 2022]</h2>
@@ -1121,7 +1137,7 @@ div.divider-global:nth-of-type(even) {
             <li>General: Changed structure BUFFER structure to global USBH_BUFFER.</li>
             <li>General: Updated bit-field data type from U32 to unsigned int.</li>
             <li>General: Calling USBH_CloseInterface() with a NULL handle could cause a crash. Fixed.</li>
-            <li>CDC: Added new config flag option: USBH_CDC_DISABLE_INTERFACE_CHECK.</li>
+            <li>CDC: Added new configflag option: USBH_CDC_DISABLE_INTERFACE_CHECK.</li>
             <li>CDC: The reference counter was not decremented in case of an error, results in not removing the detached device instance.Fixed.</li>
             <li>CDC: RingBuffer was not freed when the device was removed. Fixed.</li>
             <li>CDC: Updated comments.</li>

@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Host version: V2.36.0                                  *
+*       emUSB-Host version: V2.36.1                                  *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -42,11 +42,10 @@ Licensor:                 SEGGER Microcontroller Systems LLC
 Licensed to:              Cypress Semiconductor Corp, 198 Champion Ct., San Jose, CA 95134, USA
 Licensed SEGGER software: emUSB-Host
 License number:           USBH-00303
-License model:            Cypress Services and License Agreement, signed June 9th/10th, 2009
-                          and Amendment Number One, signed June 28th, 2019 and July 2nd, 2019
-                          and Amendment Number Two, signed September 13th, 2021 and September 18th, 2021
+License model:            Cypress Services and License Agreement, signed November 17th/18th, 2010
+                          and Amendment Number One, signed December 28th, 2020 and February 10th, 2021
                           and Amendment Number Three, signed May 2nd, 2022 and May 5th, 2022
-Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4.
+Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4
 ----------------------------------------------------------------------
 Support and Update Agreement (SUA)
 SUA period:               2022-05-12 - 2024-05-19
@@ -55,7 +54,7 @@ Contact to extend SUA:    sales@segger.com
 
 File    : SEGGER.h
 Purpose : Global types etc & general purpose utility functions.
-Revision: $Rev: 22733 $
+Revision: $Rev: 31583 $
 */
 
 #ifndef SEGGER_H            // Guard against multiple inclusion
@@ -125,9 +124,15 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
   #define SEGGER_USE_PARA(Para) (void)Para  // This works for most compilers.
 #endif
 
-#define SEGGER_ADDR2PTR(Type, Addr)  (/*lint -e(923) -e(9078)*/((Type*)((PTR_ADDR)(Addr))))    // Allow cast from address to pointer.
-#define SEGGER_PTR2ADDR(p)           (/*lint -e(923) -e(9078)*/((PTR_ADDR)(p)))                // Allow cast from pointer to address.
-#define SEGGER_PTR2PTR(Type, p)      (/*lint -e(740) -e(826) -e(9079) -e(9087)*/((Type*)(p)))  // Allow cast from one pointer type to another (ignore different size).
+#define SEGGER_ADDR2PTR(Type, Addr)  (/*lint -e(923) -e(9078)*/((Type*)((PTR_ADDR)(Addr))))                    // Allow cast from address to pointer.
+#define SEGGER_PTR2ADDR(p)           (/*lint -e(923) -e(9078)*/((PTR_ADDR)(p)))                                // Allow cast from pointer to address.
+#define SEGGER_PTR2PTR(Type, p)      (/*lint -e(740) -e(826) -e(9079) -e(9087)*/((Type*)((void*)(p))))         // Allow cast from one pointer type to another (ignore different size).
+                                                                                                               // Cast into void* first as some architectures/compilers might output
+                                                                                                               // a warning when casting from potentially unaligned types like U8 to
+                                                                                                               // higher aligned types (e.g. CC-RL compiler).
+#define SEGGER_CONSTPTR2PTR(Type, p)  (/*lint -e(740) -e(826) -e(9079) -e(9087)*/((Type*)((void const*)(p))))  // Allow cast from one pointer type to another (ignore different size).
+                                                                                                               // Same as SEGGER_PTR2PTR() but for const source pointers so the const
+                                                                                                               // modifier is not removed during the cast and causes a warning.
 #define SEGGER_PTR_DISTANCE(p0, p1)  (SEGGER_PTR2ADDR(p0) - SEGGER_PTR2ADDR(p1))
 
 /*********************************************************************
@@ -191,6 +196,84 @@ typedef struct {
   int (*pfGetUID)        (U8 abUID[16]);  // Optional,  pfGetUID
 } SEGGER_BSP_API;
 
+typedef enum {
+  SEGGER_PARSE_IP_STATUS_OK = 0,              // O.K., address successfully parsed.
+  SEGGER_PARSE_IP_STATUS_ERROR,               // Other error (parameter error; not an IPv4/6 address but a domain ?).
+  SEGGER_PARSE_IP_STATUS_INVALID_CHAR,        // Error, invalid character found (valid characters are upper/lower '0'-'f' and ':' for IPv6).
+  SEGGER_PARSE_IP_STATUS_NUM_CHARS_IN_BLOCK,  // Error, too many characters in address block.
+  SEGGER_PARSE_IP_STATUS_INVALID_COMP,        // Error, illegal number of colons in a row (":::") in IPv6 address.
+  SEGGER_PARSE_IP_STATUS_START_SINGLE_COLON,  // Error, address starts with a single colon.
+  SEGGER_PARSE_IP_STATUS_END_SINGLE_COLON,    // Error, address ends with a single colon.
+  SEGGER_PARSE_IP_STATUS_MULTIPLE_COMP,       // Error, zero compression used more than once.
+  SEGGER_PARSE_IP_STATUS_TOO_LONG,            // Error, too many characters in address.
+  SEGGER_PARSE_IP_STATUS_TOO_SHORT,           // Error, not enough characters in address.
+  SEGGER_PARSE_IP_STATUS_SEPARATOR_ERROR      // Too many or not enough '.' or ':' found in address or in an unexpected position.
+} SEGGER_PARSE_IP_STATUS;
+
+typedef enum {
+  SEGGER_PARSE_IP_TYPE_OTHER = 0,  // IP address not parsed, host name ?
+  SEGGER_PARSE_IP_TYPE_IPV4,       // Parsed address is an IPv4 address.
+  SEGGER_PARSE_IP_TYPE_IPV6        // Parsed address is an IPv6 address.
+} SEGGER_PARSE_IP_TYPE;
+
+/*********************************************************************
+*
+*       Macros
+*
+*  Pre-selection for various stdlib functions via macro to be able to
+*  switch between implementations across various SEGGER products from
+*  a central point.
+*
+*  Decisions whether to use a stdlib routine or not as the default
+*  might depend upon knowledge of standard librarie internals.
+*
+**********************************************************************
+*/
+
+#ifndef   SEGGER_MEMCPY
+  #define SEGGER_MEMCPY       memcpy
+#endif
+
+#ifndef   SEGGER_MEMSET
+  #define SEGGER_MEMSET       memset
+#endif
+
+#ifndef   SEGGER_ATOI
+  #define SEGGER_ATOI         SEGGER_atoi
+#endif
+
+#ifndef   SEGGER_ISALNUM
+  #define SEGGER_ISALNUM      SEGGER_isalnum
+#endif
+
+#ifndef   SEGGER_ISALPHA
+  #define SEGGER_ISALPHA      SEGGER_isalpha
+#endif
+
+#ifndef   SEGGER_STRLEN
+  #define SEGGER_STRLEN       SEGGER_strlen
+#endif
+
+#ifndef   SEGGER_TOLOWER
+  #define SEGGER_TOLOWER      SEGGER_tolower
+#endif
+
+#ifndef   SEGGER_STRCASECMP
+  #define SEGGER_STRCASECMP   SEGGER_strcasecmp
+#endif
+
+#ifndef   SEGGER_STRNCASECMP
+  #define SEGGER_STRNCASECMP  SEGGER_strncasecmp
+#endif
+
+#ifndef   SEGGER_SNPRINTF
+  #define SEGGER_SNPRINTF     SEGGER_snprintf
+#endif
+
+#ifndef   SEGGER_VSNPRINTF
+  #define SEGGER_VSNPRINTF    SEGGER_vsnprintf
+#endif
+
 /*********************************************************************
 *
 *       Utility functions
@@ -246,7 +329,8 @@ void SEGGER_BSP_SeedUID (void);
 //
 // Other API.
 //
-void SEGGER_VERSION_GetString(char acText[8], unsigned Version);
+void                   SEGGER_VERSION_GetString(char acText[8], unsigned Version);
+SEGGER_PARSE_IP_STATUS SEGGER_ParseIP          (const char* sHost, U8* pBuffer, unsigned BufferSize, SEGGER_PARSE_IP_TYPE* pType);
 
 #if defined(__cplusplus)
 }                /* Make sure we have C-declarations in C++ programs */
