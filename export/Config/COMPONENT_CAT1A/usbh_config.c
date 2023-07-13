@@ -3,7 +3,7 @@
 *                        The Embedded Experts                        *
 **********************************************************************
 *                                                                    *
-*       (c) 2003 - 2022     SEGGER Microcontroller GmbH              *
+*       (c) 2003 - 2023     SEGGER Microcontroller GmbH              *
 *                                                                    *
 *       www.segger.com     Support: www.segger.com/ticket            *
 *                                                                    *
@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Host version: V2.36.1                                  *
+*       emUSB-Host version: V2.36.3                                  *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -52,7 +52,7 @@ SUA period:               2022-05-12 - 2024-05-19
 Contact to extend SUA:    sales@segger.com
 ----------------------------------------------------------------------
 File        : usbh_config.c
-Purpose     : emUSB-Host configuration file for PSoC6
+Purpose     : emUSB-Host configuration file for CAT1A device
 ---------------------------END-OF-HEADER------------------------------
 */
 
@@ -204,6 +204,7 @@ void USBH_X_Config(void)
 
     /* Add driver */
     (void) USBH_Cypress_PSoC_Add();
+
     USBH_SetOnSetPortPower(on_port_power_control);
 
     /* Install the interrupt service routine */

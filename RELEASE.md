@@ -4,9 +4,8 @@ Please refer to the [README.md](./README.md) and the [emUSB-Host API Reference G
 
 ## What's Included?
 
-* Updated the emUSB-Host stack to 2.36.1
-* Extended the support of RTOS
-* Improved the Debug Message Output experience
+* Provided support for CAT3 devices
+* Updated the emUSB-Device stack to 2.36.3
 * Other minor improvements
 
 To view the full list of changes, refer to [Changelog section](https://infineon.github.io/emusb-host/html/index.html#section_emusb_host_changelog).
@@ -31,14 +30,18 @@ This version of the emUSB-Host was validated for the compatibility with the foll
 
 | Software and Tools                                      | Version |
 | :---                                                    | :----:  |
-| ModusToolbox Software Environment                       | 3.0.0   |
-| MTB CAT1 Peripheral Driver Library                      | 3.2.0   |
-| Hardware Abstraction Layer                              | 2.3.0   |
-| RTOS Abstraction                                        | 1.7.0   |
+| ModusToolbox Software Environment                       | 3.1.0   |
+| MTB CAT1 Peripheral Driver Library                      | 3.4.0   |
+| MTB CAT3 XMC Library                                    | 4.2.0   |
+| Hardware Abstraction Layer                              | 2.4.0   |
+| RTOS Abstraction                                        | 1.7.1   |
 | Retarget IO                                             | 1.4.0   |
-| GCC Compiler                                            | 10.3.1  |
+| Retarget IO (CAT3)                                      | 1.0.0   |
+| GCC Compiler                                            | 11.3.1  |
 | IAR Compiler                                            | 9.3.1   |
 | ARM Compiler 6                                          | 6.16    |
+
+**_NOTE:_** CAT3 device family supports only GCC_ARM compiler
 
 ## More information
 

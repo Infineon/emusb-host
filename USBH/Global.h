@@ -3,7 +3,7 @@
 *                        The Embedded Experts                        *
 **********************************************************************
 *                                                                    *
-*       (c) 2003 - 2022     SEGGER Microcontroller GmbH              *
+*       (c) 2003 - 2023     SEGGER Microcontroller GmbH              *
 *                                                                    *
 *       www.segger.com     Support: www.segger.com/ticket            *
 *                                                                    *
@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Host version: V2.36.1                                  *
+*       emUSB-Host version: V2.36.3                                  *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -58,7 +58,7 @@ Purpose : Global types
           merge the files. In order to use Segger code, the types
           U8, U16, U32, I8, I16, I32 need to be defined in Global.h;
           additional definitions do not hurt.
-Revision: $Rev: 22731 $
+Revision: $Rev: 32989 $
 */
 
 #ifndef GLOBAL_H            // Guard against multiple inclusion
@@ -89,7 +89,7 @@ Revision: $Rev: 22731 $
     // Microsoft VC6 and newer.
     // Older versions exist (_MSC_VER <= 1200) but are
     // not even officially listed by Microsoft and might
-    // not not work with these defines.
+    // not work with these defines.
     //
     #define U64   unsigned __int64
     #define U128  unsigned __int128

@@ -3,7 +3,7 @@
 *                        The Embedded Experts                        *
 **********************************************************************
 *                                                                    *
-*       (c) 2003 - 2022     SEGGER Microcontroller GmbH              *
+*       (c) 2003 - 2023     SEGGER Microcontroller GmbH              *
 *                                                                    *
 *       www.segger.com     Support: www.segger.com/ticket            *
 *                                                                    *
@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Host version: V2.36.1                                  *
+*       emUSB-Host version: V2.36.3                                  *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -51,7 +51,6 @@ Support and Update Agreement (SUA)
 SUA period:               2022-05-12 - 2024-05-19
 Contact to extend SUA:    sales@segger.com
 ----------------------------------------------------------------------
-File        : USBH.h
 Purpose     : API of the USB host stack
 -------------------------- END-OF-HEADER -----------------------------
 */
@@ -71,7 +70,7 @@ Purpose     : API of the USB host stack
 *
 **********************************************************************
 */
-#define USBH_VERSION   23601 // Format: Mmmrr. Example: 22404 is 2.24.4
+#define USBH_VERSION   23603 // Format: Mmmrr. Example: 22404 is 2.24.4
 
 /*********************************************************************
 *
@@ -121,6 +120,7 @@ typedef enum {
   USBH_STATUS_BUSY                             = 0x29,     // The endpoint, interface or device has pending requests and
                                                            // therefore the operation can not be executed.
   USBH_STATUS_NO_CHANNEL                       = 0x2A,     // Transfer request can't be processed, because there is no free channel in the USB controller.
+  USBH_STATUS_DEVICE_SUSPENDED                 = 0x2B,     // The device was detached from the host.
 
   USBH_STATUS_INVALID_DESCRIPTOR               = 0x30,     // A device provided an invalid descriptor.
 
@@ -282,9 +282,6 @@ typedef enum {
 #define USBH_MTYPE_DEVICE        ((1UL <<  9) | USBH_MTYPE_LEGACY_FLAG)
 #define USBH_MTYPE_RHUB          ((1UL << 10) | USBH_MTYPE_LEGACY_FLAG)
 #define USBH_MTYPE_HUB           ((1UL << 11) | USBH_MTYPE_LEGACY_FLAG)
-#define USBH_MTYPE_MSD           ((1UL << 12) | USBH_MTYPE_LEGACY_FLAG)
-#define USBH_MTYPE_MSD_INTERN    ((1UL << 13) | USBH_MTYPE_LEGACY_FLAG)
-#define USBH_MTYPE_MSD_PHYS      ((1UL << 14) | USBH_MTYPE_LEGACY_FLAG)
 #define USBH_MTYPE_HID           ((1UL << 15) | USBH_MTYPE_LEGACY_FLAG)
 #define USBH_MTYPE_PRINTER_CLASS ((1UL << 16) | USBH_MTYPE_LEGACY_FLAG)
 #define USBH_MTYPE_CDC           ((1UL << 17) | USBH_MTYPE_LEGACY_FLAG)
@@ -535,6 +532,11 @@ typedef struct {
   U8                CurrentConfiguration; // Currently selected configuration, zero-based: 0...(NumConfigurations-1)
   U8                HCIndex;              // Index of the host controller the device is connected to.
   U8                AlternateSetting;     // The current alternate setting for this interface.
+  U8                iManufacturer;        // String descriptor index for the device manufacturer name (0 if not available).
+  U8                iProduct;             // String descriptor index for the device product name (0 if not available).
+  U8                iSerialNumber;        // String descriptor index for the device serial number (0 if not available).
+  U8                iConfiguration;       // String descriptor index for this configuration's description (0 if not available).
+  U8                iInterface;           // String descriptor index for this interface's description (0 if not available).
 } USBH_INTERFACE_INFO;
 
 /*********************************************************************
@@ -627,6 +629,20 @@ typedef struct {
   U8                iFunction;        // Index of string descriptor describing this function.
 } USBH_IAD_INFO;
 
+/*********************************************************************
+*
+*       USBH_LPM_INFO
+*
+*  Description
+*    Information about the LPM capabilities of an USB device.
+*/
+typedef struct {
+  U8   IsLPMCapable;              // Is != 0 if the device supports LPM.
+  U8   HasBESL;                   // Is != 0 ff the device uses BESL and alternate HIRD
+  I8   RecommendedBaselineBESL;   // Recommended baseline BESL value (>= 0) if provided by the device. Otherwise = -1.
+  I8   RecommendedDeepBESL;       // Recommended deep BESL value (>= 0) if provided by the device. Otherwise = -1.
+} USBH_LPM_INFO;
+
 
 /*********************************************************************
 *
@@ -658,6 +674,7 @@ void        USBH_ConfigMaxNumEndpoints    (U8 MaxNumBulkEndpoints, U8 MaxNumIntE
 void        USBH_ConfigSupportExternalHubs(U8 OnOff);
 void        USBH_ConfigPortPowerPin       (U8 SetHighIsPowerOn);
 USBH_STATUS USBH_ConfigPortPowerPinEx     (U32 HCIndex, U8 SetHighIsPowerOn);
+USBH_STATUS USBH_ConfigOvercurrentDetection(U32 HCIndex, U32 OvercurrentDetectionMode);
 void        USBH_ConfigPowerOnGoodTime    (unsigned PowerGoodTime);
 void        USBH_Exit                     (void);
 void        USBH_Init                     (void);
@@ -740,6 +757,8 @@ USBH_STATUS USBH_GetFrameNumber                     (USBH_INTERFACE_HANDLE hInte
 USBH_STATUS USBH_GetInterfaceIdByHandle             (USBH_INTERFACE_HANDLE hInterface, USBH_INTERFACE_ID * pInterfaceId);
 unsigned    USBH_GetNumAlternateSettings            (USBH_INTERFACE_HANDLE hInterface);
 USBH_STATUS USBH_GetInterfaceCurrAltSetting         (USBH_INTERFACE_HANDLE hInterface, unsigned * pCurAltSetting);
+USBH_STATUS USBH_GetDeviceCapabilityDesc            (USBH_INTERFACE_ID InterfaceID, U8 Type, unsigned BuffSize, U8 * pBuffer, unsigned * pSize);
+USBH_STATUS USBH_GetLPMCapability                   (USBH_INTERFACE_ID InterfaceID, USBH_LPM_INFO *pLPMCaps);
 
 const USBH_DEVICE_DESCRIPTOR * USBH_GetDeviceDescriptorPtr(USBH_INTERFACE_HANDLE hInterface);
 

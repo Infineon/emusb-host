@@ -3,7 +3,7 @@
 *                        The Embedded Experts                        *
 **********************************************************************
 *                                                                    *
-*       (c) 2003 - 2022     SEGGER Microcontroller GmbH              *
+*       (c) 2003 - 2023     SEGGER Microcontroller GmbH              *
 *                                                                    *
 *       www.segger.com     Support: www.segger.com/ticket            *
 *                                                                    *
@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Host version: V2.36.1                                  *
+*       emUSB-Host version: V2.36.3                                  *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -51,7 +51,6 @@ Support and Update Agreement (SUA)
 SUA period:               2022-05-12 - 2024-05-19
 Contact to extend SUA:    sales@segger.com
 ----------------------------------------------------------------------
-File        : USBH_MSD.h
 Purpose     : MSD API of the USB host stack
 -------------------------- END-OF-HEADER -----------------------------
 */
@@ -64,10 +63,6 @@ Purpose     : MSD API of the USB host stack
 
 #if defined(__cplusplus)
   extern "C" {                 // Make sure we have C-declarations in C++ programs
-#endif
-
-#ifndef USBH_USE_LEGACY_MSD
-  #define USBH_USE_LEGACY_MSD   0
 #endif
 
 /*********************************************************************
@@ -104,9 +99,9 @@ typedef struct {
   int   WriteProtectFlag; // Nonzero if the device is write protected.
   U16   VendorId;         // USB Vendor ID.
   U16   ProductId;        // USB Product ID.
-  char  acVendorName[9];  // Vendor identification string.
-  char  acProductName[17];// Product identification string.
-  char  acRevision[5];    // Revision string.
+  char  acVendorName[9];  // LUN's vendor identification string.
+  char  acProductName[17];// LUN's product identification string.
+  char  acRevision[5];    // LUN's revision string.
 } USBH_MSD_UNIT_INFO;
 
 /*********************************************************************
@@ -120,7 +115,6 @@ typedef struct {
   U8 * pBuffer; // Pointer to a buffer.
   U32  Size;    // Size of the buffer in bytes.
 } USBH_MSD_AHEAD_BUFFER;
-
 
 /*********************************************************************
 *

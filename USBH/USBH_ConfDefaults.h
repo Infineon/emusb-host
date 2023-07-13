@@ -3,7 +3,7 @@
 *                        The Embedded Experts                        *
 **********************************************************************
 *                                                                    *
-*       (c) 2003 - 2022     SEGGER Microcontroller GmbH              *
+*       (c) 2003 - 2023     SEGGER Microcontroller GmbH              *
 *                                                                    *
 *       www.segger.com     Support: www.segger.com/ticket            *
 *                                                                    *
@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Host version: V2.36.1                                  *
+*       emUSB-Host version: V2.36.3                                  *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -53,11 +53,11 @@ Contact to extend SUA:    sales@segger.com
 ----------------------------------------------------------------------
 File    : USBH_ConfDefaults.h
 Purpose : This file contains the default values for USB-Host
-          configuration paramteres. To allow easy updates please
+          configuration parameters. To allow easy updates please
           do not change the parameters here, but add them in the
           USBH_Conf.h file, the defines there will replace the default
           values.
---------------------------  END-OF-HEADER  ---------------------------
+-------------------------- END-OF-HEADER -----------------------------
 */
 
 #ifndef   USBH_CONFDEFAULTS_H
@@ -294,6 +294,17 @@ Purpose : This file contains the default values for USB-Host
 
 /*********************************************************************
 *
+*       USBH_ENABLE_V210_FEATURES
+*
+*  Description
+*    Enable USB version 2.10 features (e.g. BOS descriptor).
+*/
+#ifndef USBH_ENABLE_V210_FEATURES
+  #define USBH_ENABLE_V210_FEATURES  0
+#endif
+
+/*********************************************************************
+*
 *       USBH_MAX_INTERFACES_IN_IAD
 *
 *  Description
@@ -399,7 +410,7 @@ Purpose : This file contains the default values for USB-Host
 *  Description
 *    If not 0, queue URBs, when the driver reports USBH_STATUS_NO_CHANNEL
 *    and retry them later. The value gives the maximum number of URBs that
-*   can be queud. Only used for BULK transfers.
+*    can be queued. Only used for BULK transfers.
 */
 #ifndef USBH_URB_QUEUE_SIZE
   #define USBH_URB_QUEUE_SIZE         0u

@@ -3,7 +3,7 @@
 *                        The Embedded Experts                        *
 **********************************************************************
 *                                                                    *
-*       (c) 2003 - 2022     SEGGER Microcontroller GmbH              *
+*       (c) 2003 - 2023     SEGGER Microcontroller GmbH              *
 *                                                                    *
 *       www.segger.com     Support: www.segger.com/ticket            *
 *                                                                    *
@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Host version: V2.36.1                                  *
+*       emUSB-Host version: V2.36.3                                  *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -68,6 +68,12 @@ Purpose     : OS Layer for the emUSB-Host.
 #include "USBH_MEM.h"
 
 #include "cyabs_rtos.h"
+
+#if defined (COMPONENT_CAT1A) || defined (COMPONENT_CAT3)
+    /* Do nothing */
+#else
+    #error "Unsupported Device Family"
+#endif /* #if defined (COMPONENT_CAT1A) || defined (COMPONENT_CAT3) */
 
 /*********************************************************************
 *
@@ -127,7 +133,11 @@ static uint32_t int_state_cnt;
 */
 __WEAK void USBH_OS_DisableInterrupt(void)
 {
+#if defined (COMPONENT_CAT1A)
     int_state[int_state_cnt] = cyhal_system_critical_section_enter();
+#elif defined (COMPONENT_CAT3)
+    int_state[int_state_cnt] = XMC_EnterCriticalSection();
+#endif /* #if defined (COMPONENT_CAT1A) */
     int_state_cnt++;
 }
 
@@ -147,7 +157,11 @@ __WEAK void USBH_OS_EnableInterrupt(void)
     /* Check possibility of getting negative value for unsigned variable */
     CY_ASSERT(0U != int_state_cnt);
     int_state_cnt--;
+#if defined (COMPONENT_CAT1A)
     cyhal_system_critical_section_exit(int_state[int_state_cnt]);
+#elif defined (COMPONENT_CAT3)
+    XMC_ExitCriticalSection(int_state[int_state_cnt]);
+#endif /* #if defined (COMPONENT_CAT1A) */
 }
 
 /*********************************************************************

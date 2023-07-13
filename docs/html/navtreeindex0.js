@@ -2,6 +2,7 @@ var NAVTREEINDEX0 =
 {
 "index.html":[0],
 "index.html":[],
+"index.html#section_emusb_device_hw_dep_add_conf_cat3_stack":[0,2,0,3],
 "index.html#section_emusb_host_changelog":[0,4],
 "index.html#section_emusb_host_config_cons":[0,2],
 "index.html#section_emusb_host_debug_mes_out":[0,2,1],

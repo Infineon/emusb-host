@@ -41,6 +41,7 @@ Refer to [Release Notes](./RELEASE.md) for a list of supported toolchains.
 
 Device families supported by the Middleware:
 * CAT1A
+* CAT3
 
 ## More information
 
