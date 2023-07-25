@@ -69,11 +69,13 @@ Purpose     : OS Layer for the emUSB-Host.
 
 #include "cyabs_rtos.h"
 
-#if defined (COMPONENT_CAT1A) || defined (COMPONENT_CAT3)
+#if defined (COMPONENT_CAT1A)
     /* Do nothing */
+#elif defined (COMPONENT_CAT3)
+    #include "xmc_common.h"
 #else
     #error "Unsupported Device Family"
-#endif /* #if defined (COMPONENT_CAT1A) || defined (COMPONENT_CAT3) */
+#endif /* #if defined (COMPONENT_CAT1A) */
 
 /*********************************************************************
 *

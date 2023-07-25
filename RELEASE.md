@@ -4,9 +4,7 @@ Please refer to the [README.md](./README.md) and the [emUSB-Host API Reference G
 
 ## What's Included?
 
-* Provided support for CAT3 devices
-* Updated the emUSB-Device stack to 2.36.3
-* Other minor improvements
+* Bug fixing
 
 To view the full list of changes, refer to [Changelog section](https://infineon.github.io/emusb-host/html/index.html#section_emusb_host_changelog).
 
