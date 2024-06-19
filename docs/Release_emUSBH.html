@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Release notes for emUSB-Host V2.36.3         </title>
+<title>Release notes for emUSB-Host V2.40.0         </title>
 <meta name="robots" content="noindex,nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style type="text/css">
@@ -182,7 +182,7 @@ div.divider-global:nth-of-type(even) {
       <div class="claim">The Embedded Experts</div>
       <div class="head">
         <div class="container">
-          <h1>Release notes for emUSB-Host V2.36.3         </h1>
+          <h1>Release notes for emUSB-Host V2.40.0         </h1>
         </div>
       </div>
     </div>
@@ -190,6 +190,87 @@ div.divider-global:nth-of-type(even) {
   <!-- ****************************************************************** -->
   <!-- History                                                            -->
   <!-- ****************************************************************** -->
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.40.0 [19. Mar 2024]</h2>
+        <div>
+          <h3>Improvements</h3>
+          <ol>
+            <li>AUDIO: Changed API for easier use.</li>
+            <li>PSoC6 driver: Use plugin for DMA routines to enable support for different DMA controllers.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.36.7 [22. Feb 2024]</h2>
+        <div>
+          <h3>Improvements</h3>
+          <ol>
+            <li>LAN: IP config for emNet was updated to recognized newer RealTek 1G/2.5G ethernet adapter with more than 2 configuration descriptors.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>LAN: Updated the ASIX 179x adapter initialization. On some devices the LED configuration may fail. Fixed</li>
+            <li>LAN: ASIX PHY adaptation for emNet may call the ASIX178/179 reset initialization multiple times even when only one adapater is available. Fixed</li>
+            <li>LAN: ASIX RX callback for ASIX 179 devices did not check for busy status which may result in stopping RX transfers. Fixed</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.36.6 [23. Oct 2023]</h2>
+        <div>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>DWC2 (Synopsys) full-speed driver: USB controller was not initialized correctly and may not work.
+                This bug was introduced in version 2.36.5. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.36.5 [14. Oct 2023]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>PSoC6 driver: Support DMA for packet transfers.</li>
+            <li>OTG: Added driver for XMC4500 devices.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>STM32H5xx / STM32G0xx driver: Avoid race condition on USB control registers that may break data transfers.</li>
+            <li>LPC54/55xx HS driver: Setup request may not work after a stall. Fixed.</li>
+            <li>Enumeration: If V2.10 features are enabled, the stack sometimes tries to read the BOS descriptor for V2.00 devices. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.36.4 [29. Sep 2023]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>LAN module: Added new function: USBH_LAN_SetOnAddRemove().</li>
+            <li>DWC2 (Synopsys) DMA driver: Allow high bandwidth ISO transfers.</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>DWC2 (Synopsys) driver: Speed up controller recovery, if required after disconnecting device from root port.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>Increased robustness of the parser against malformed configuration descriptors that may be provided by broken devices.
+                The issue was reported by the <a href="https://cybersecurity.uga.edu">MCUSec lab at the University of Georgia</a>.</li>
+            <li>LAN module: When a device has been removed it was possible for the async completion callback to access the already freed device instance, which could result in a HardFault. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
     <div class="divider-global">
       <div class="container">
         <h2>Version 2.36.3 [21. Jun 2023]</h2>
@@ -923,7 +1004,7 @@ div.divider-global:nth-of-type(even) {
 <div class="footer">
   <div class="container">
     <div>
-      <p>Copyright 2003-2023 SEGGER Microcontroller GmbH. All rights reserved.<br>
+      <p>Copyright 2003-2024 SEGGER Microcontroller GmbH. All rights reserved.<br>
         For more information, please visit our website&nbsp;<a href="https://www.segger.com/" target="_blank">www.segger.com</a>&nbsp;or contact us via&nbsp;<a href="https://www.segger.com/ticket" target="_blank">www.segger.com/ticket</a>&nbsp;</p>
     </div>
   </div>

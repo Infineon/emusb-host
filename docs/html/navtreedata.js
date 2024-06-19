@@ -38,11 +38,13 @@ var NAVTREE =
           [ "USB Pins Configuration", "index.html#section_emusb_host_hw_dep_conf_pins", null ],
           [ "USB Clock Configuration", "index.html#section_emusb_host_hw_dep_conf_clock", null ],
           [ "USB Interrupt Configuration", "index.html#section_emusb_host_hw_dep_conf_int", null ],
-          [ "CAT3 Specific Configuration", "index.html#section_emusb_device_hw_dep_add_conf_cat3_stack", null ]
+          [ "CAT3 Specific Configuration", "index.html#section_emusb_host_hw_dep_add_conf_cat3_stack", null ],
+          [ "DMA driver for CAT1A device", "index.html#section_emusb_host_dma_cat1a", null ]
         ] ],
         [ "Debug Message Output", "index.html#section_emusb_host_debug_mes_out", null ],
         [ "Low Power Support", "index.html#section_emusb_host_low_power", null ],
         [ "Picking an emUSB-Host Library Variant", "index.html#section_emusb_host_pick_lib", null ],
+        [ "OTG support (Only for CAT3 device)", "index.html#section_emusb_host_otg", null ],
         [ "Using emUSB-Host in an RTOS Environment", "index.html#section_emusb_host_use_in_rtos", null ]
       ] ],
       [ "emUSB-Host Package Structure", "index.html#section_emusb_host_package_str", null ],

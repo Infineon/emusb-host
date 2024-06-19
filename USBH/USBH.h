@@ -3,7 +3,7 @@
 *                        The Embedded Experts                        *
 **********************************************************************
 *                                                                    *
-*       (c) 2003 - 2023     SEGGER Microcontroller GmbH              *
+*       (c) 2003 - 2024     SEGGER Microcontroller GmbH              *
 *                                                                    *
 *       www.segger.com     Support: www.segger.com/ticket            *
 *                                                                    *
@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Host version: V2.36.3                                  *
+*       emUSB-Host version: V2.40.0                                  *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -29,7 +29,7 @@ The source code of the emUSB Host software has been licensed to Cypress
 Semiconductor Corporation, whose registered office is 198 Champion
 Court, San Jose, CA 95134, USA including the 
 right to create and distribute the object code version of 
-the emUSB Host software for its Cortex M0, M0+ and M4 based devices.
+the emUSB Host software for its Cortex M0, M0+, M4, M33 and M55 based devices.
 The object code version can be used by Cypress customers under the 
 terms and conditions of the associated End User License Agreement.
 Support for the object code version is provided by Cypress, 
@@ -44,8 +44,8 @@ Licensed SEGGER software: emUSB-Host
 License number:           USBH-00303
 License model:            Cypress Services and License Agreement, signed November 17th/18th, 2010
                           and Amendment Number One, signed December 28th, 2020 and February 10th, 2021
-                          and Amendment Number Three, signed May 2nd, 2022 and May 5th, 2022
-Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4
+                          and Amendment Number Three, signed May 2nd, 2022 and May 5th, 2022 and Amendment Number Four, signed August 28th, 2023 
+Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4, M33 and M55
 ----------------------------------------------------------------------
 Support and Update Agreement (SUA)
 SUA period:               2022-05-12 - 2024-05-19
@@ -70,7 +70,7 @@ Purpose     : API of the USB host stack
 *
 **********************************************************************
 */
-#define USBH_VERSION   23603 // Format: Mmmrr. Example: 22404 is 2.24.4
+#define USBH_VERSION   24000 // Format: Mmmrr. Example: 22404 is 2.24.4
 
 /*********************************************************************
 *
@@ -405,7 +405,6 @@ typedef void (USBH_NOTIFICATION_FUNC)       (void * pContext, U8 DevIndex, USBH_
 *    This call is used to determine which configuration shall be used when
 *    the device has multiple configuration.
 *
-*
 *  Parameters
 *    pContext          : Pointer to a context passed by the user in the call to one
 *                        of the AddOnSetConfiguration function.
@@ -416,11 +415,6 @@ typedef void (USBH_NOTIFICATION_FUNC)       (void * pContext, U8 DevIndex, USBH_
 *
 *  Return value
 *    USBH_STATUS_SUCCESS on success or error code on failure.
-*
-*  Additional information
-*    If the function returns an error code (including USBH_STATUS_TIMEOUT) it already may
-*    have written part of the data. The number of bytes written successfully is always
-*    stored in the variable pointed to by pNumBytesWritten.
 */
 typedef USBH_STATUS (USBH_ONSETCONFIGURATION_FUNC)(void * pContext, const USBH_DEVICE_DESCRIPTOR * pDeviceDesc, const U8 * const * ppConfigDesc, unsigned NumConfigurations, U8 * pConfigValue);
 
@@ -460,7 +454,7 @@ typedef void (USBH_ON_SETPORTPOWER_FUNC)    (U32 HostControllerIndex, U8 Port, U
 *  Description
 *    Data structure that defines conditions to select USB interfaces.
 *    Can be used to register notifications. Members that are not selected
-*    with Mask need not be initialized.
+*    with Mask do not need to be initialized.
 */
 typedef struct {
   U16   Mask;              // Contains an OR combination of the following flags. If the flag is set
@@ -634,7 +628,7 @@ typedef struct {
 *       USBH_LPM_INFO
 *
 *  Description
-*    Information about the LPM capabilities of an USB device.
+*    Information about the LPM capabilities of a USB device.
 */
 typedef struct {
   U8   IsLPMCapable;              // Is != 0 if the device supports LPM.

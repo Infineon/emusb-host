@@ -3,7 +3,7 @@
 *                        The Embedded Experts                        *
 **********************************************************************
 *                                                                    *
-*       (c) 2003 - 2023     SEGGER Microcontroller GmbH              *
+*       (c) 2003 - 2024     SEGGER Microcontroller GmbH              *
 *                                                                    *
 *       www.segger.com     Support: www.segger.com/ticket            *
 *                                                                    *
@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Host version: V2.36.3                                  *
+*       emUSB-Host version: V2.40.0                                  *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -29,7 +29,7 @@ The source code of the emUSB Host software has been licensed to Cypress
 Semiconductor Corporation, whose registered office is 198 Champion
 Court, San Jose, CA 95134, USA including the 
 right to create and distribute the object code version of 
-the emUSB Host software for its Cortex M0, M0+ and M4 based devices.
+the emUSB Host software for its Cortex M0, M0+, M4, M33 and M55 based devices.
 The object code version can be used by Cypress customers under the 
 terms and conditions of the associated End User License Agreement.
 Support for the object code version is provided by Cypress, 
@@ -44,8 +44,8 @@ Licensed SEGGER software: emUSB-Host
 License number:           USBH-00303
 License model:            Cypress Services and License Agreement, signed November 17th/18th, 2010
                           and Amendment Number One, signed December 28th, 2020 and February 10th, 2021
-                          and Amendment Number Three, signed May 2nd, 2022 and May 5th, 2022
-Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4
+                          and Amendment Number Three, signed May 2nd, 2022 and May 5th, 2022 and Amendment Number Four, signed August 28th, 2023 
+Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4, M33 and M55
 ----------------------------------------------------------------------
 Support and Update Agreement (SUA)
 SUA period:               2022-05-12 - 2024-05-19
@@ -76,7 +76,7 @@ Purpose : This file contains the default values for USB-Host
 *    and should be switches off.
 *
 *    To output the messages, emUSB-Host uses the logging routines contained
-*    in \file{USBH_ConfigIO.c} which can be customizes.
+*    in \file{USBH_ConfigIO.c} which can be customized.
 *
 *    USBH_DEBUG can be set to the following values:
 *    * 0 - Used for release builds. Includes no debug options.
@@ -269,7 +269,7 @@ Purpose : This file contains the default values for USB-Host
 *    If USB devices are frequently connected and disconnected this may lead to
 *    fragmentation of the heap memory. If this options is set, a reorganization
 *    of all free memory areas in the heap is performed after each disconnection
-*    of an USB device.
+*    of a USB device.
 */
 #ifndef   USBH_REO_FREE_MEM_LIST
   #define USBH_REO_FREE_MEM_LIST        0

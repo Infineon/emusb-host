@@ -51,55 +51,128 @@ Support and Update Agreement (SUA)
 SUA period:               2022-05-12 - 2024-05-19
 Contact to extend SUA:    sales@segger.com
 ----------------------------------------------------------------------
-Purpose     : Header for the driver based on the CYPRESS USB controller
+Purpose : USB OTG stack API
 -------------------------- END-OF-HEADER -----------------------------
 */
 
-#ifndef USBH_HW_CYPRESS_PSOC_H_
-#define USBH_HW_CYPRESS_PSOC_H_
-
-#include "SEGGER.h"
+#ifndef USB_OTG_H__
+#define USB_OTG_H__
 
 /*********************************************************************
 *
-*       Types
+*       #include Section
 *
 **********************************************************************
 */
-typedef struct {
-  I8             Enable;
-  U8             Prio;
-  PTR_ADDR       DmaChAddr;
-  volatile U32 * RW1_DR;
-  volatile U32 * RW2_DR;
-  U32            DMADescr[6];
-} USBH_CYPRESS_PSoC_DMA_INFO;
+#include "SEGGER.h"
 
-
-typedef struct {
-  void (*pfSetupInDMA)(USBH_CYPRESS_PSoC_DMA_INFO *pDMA, U8 * pData, U32 NumBytes);
-  void (*pfSetupOutDMA)(USBH_CYPRESS_PSoC_DMA_INFO *pDMA, U8 * pData, U32 NumBytes);
-  void (*pfWaitDMA)(const USBH_CYPRESS_PSoC_DMA_INFO *pDMA);
-  void (*pfStopDMA)(const USBH_CYPRESS_PSoC_DMA_INFO *pDMA);
-} USBH_CYPRESS_PSoC_DMA_API;
-
-extern const USBH_CYPRESS_PSoC_DMA_API USBH_CYPRESS_PSoC_DMA;
+#if defined(__cplusplus)
+extern "C" {     /* Make sure we have C-declarations in C++ programs */
+#endif
 
 /*********************************************************************
 *
-*       Function prototypes
+*       Defines, configurable
+*
+**********************************************************************
 */
+
+/*********************************************************************
+*
+*       Defines, fixed
+*
+**********************************************************************
+*/
+#define USB_OTG_ID_PIN_STATE_IS_HOST          0
+#define USB_OTG_ID_PIN_STATE_IS_DEVICE        1
+#define USB_OTG_ID_PIN_STATE_IS_INVALID     (-1)
+
+/*********************************************************************
+*
+*       Types / structures
+*/
+
+/*********************************************************************
+*
+*       USB_OTG_IDPIN_FUNC
+*
+*  Description
+*    Returns the current state of the USB OTG ID pin.
+*
+*  Return value
+*     == 0  : ID pin is low
+*     == 1  : otherwise
+*/
+typedef int USB_OTG_IDPIN_FUNC (void);
+
+typedef struct {
+  void     (*pfInit)           (void);
+  int      (*pfGetSessionState)(void);
+  void     (*pfDeInit)         (void);
+} USB_OTG_HW_DRIVER;
+
+/*********************************************************************
+*
+*       Public API functions
+*
+*/
+void     USB_OTG_DeInit              (void);
+void     USB_OTG_Init                (void);
+int      USB_OTG_GetSessionState     (void);
+int      USB_OTG_GetIdPin            (void);
+void     USB_OTG_SetIdPinFunc        (USB_OTG_IDPIN_FUNC * pfGetIdPin);
+
+/*********************************************************************
+*
+*       Obsolete API functions
+*
+*/
+int      USB_OTG_GetIdState          (void);
+int      USB_OTG_GetVBUSState        (void);
+int      USB_OTG_IsSessionValid      (void);
+
+/*********************************************************************
+*
+*       Setting USB target driver
+*
+*/
+void USB_OTG_AddDriver(const USB_OTG_HW_DRIVER * pDriver);
+
+
+/*********************************************************************
+*
+*       Function that has to be supplied by the customer
+*
+*/
+void USB_OTG_X_Config(void);
+
+
+/*********************************************************************
+*
+*       Configurations for USB target driver
+*
+*/
+void USB_OTG_DRIVER_STM32F2xxFS_ConfigAddr(U32 BaseAddr);
+void USB_OTG_DRIVER_XMC4500_ConfigAddr(U32 BaseAddr);
+void USB_OTG_DRIVER_EHCI_ConfigAddr(U32 BaseAddr);
+
+/*********************************************************************
+*
+*       Available target USB drivers
+*
+*/
+
+extern const USB_OTG_HW_DRIVER USB_OTG_Driver_Renesas_RX62N;
+extern const USB_OTG_HW_DRIVER USB_OTG_Driver_Renesas_RX63N;
+extern const USB_OTG_HW_DRIVER USB_OTG_Driver_Renesas_RX72N;
+extern const USB_OTG_HW_DRIVER USB_OTG_Driver_ST_STM32F2xxFS;
+extern const USB_OTG_HW_DRIVER USB_OTG_Driver_ST_STM32F7xxFS;
+extern const USB_OTG_HW_DRIVER USB_OTG_Driver_ST_STM32L4xx;
+extern const USB_OTG_HW_DRIVER USB_OTG_Driver_XMC4500;
+extern const USB_OTG_HW_DRIVER USB_OTG_Driver_EHCI;
+
 #if defined(__cplusplus)
-  extern "C" {                 // Make sure we have C-declarations in C++ programs
+  }              /* Make sure we have C-declarations in C++ programs */
 #endif
 
-U32 USBH_Cypress_PSoC_Add(void);
-U32 USBH_Cypress_PSoC_DMA_Add(const USBH_CYPRESS_PSoC_DMA_API *pDMA_API, PTR_ADDR DMAChannelAddr, unsigned Priority);
-
-#if defined(__cplusplus)
-  }
-#endif
-
-#endif // USBH_HW_CYPRESS_PSOC_H_
-
-/*************************** End of file ****************************/
+#endif /* USB_OTG_H__ */
