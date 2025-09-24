@@ -40,8 +40,7 @@ Refer to [Release Notes](./RELEASE.md) for a list of supported toolchains.
 ## Supported Devices
 
 Device families supported by the Middleware:
-* CAT1A
-* CAT3
+* PSE84
 
 ## More information
 
@@ -53,4 +52,4 @@ For more information, refer to the following documents:
 * [Infineon Technologies AG](https://www.infineon.com)
 
 ---
-© 2022-2023, Cypress Semiconductor Corporation (an Infineon company) or an affiliate of Cypress Semiconductor Corporation.
+© 2022-2025, Cypress Semiconductor Corporation (an Infineon company) or an affiliate of Cypress Semiconductor Corporation.

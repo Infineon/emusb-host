@@ -3,7 +3,7 @@
 *                        The Embedded Experts                        *
 **********************************************************************
 *                                                                    *
-*       (c) 2003 - 2024     SEGGER Microcontroller GmbH              *
+*       (c) 2003 - 2025     SEGGER Microcontroller GmbH              *
 *                                                                    *
 *       www.segger.com     Support: www.segger.com/ticket            *
 *                                                                    *
@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Host version: V2.40.0                                  *
+*       emUSB-Host version: V2.48.0                                  *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -48,7 +48,7 @@ License model:            Cypress Services and License Agreement, signed Novembe
 Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4, M33 and M55
 ----------------------------------------------------------------------
 Support and Update Agreement (SUA)
-SUA period:               2022-05-12 - 2024-05-19
+SUA period:               2022-05-12 - 2026-05-19
 Contact to extend SUA:    sales@segger.com
 ----------------------------------------------------------------------
 Purpose     : API of the USB host stack
@@ -70,7 +70,7 @@ Purpose     : API of the USB host stack
 *
 **********************************************************************
 */
-#define USBH_VERSION   24000 // Format: Mmmrr. Example: 22404 is 2.24.4
+#define USBH_VERSION   24800 // Format: Mmmrr. Example: 22404 is 2.24.4
 
 /*********************************************************************
 *
@@ -244,8 +244,9 @@ typedef enum {
 #define USBH_MCAT_LAN            44u     // LAN class
 #define USBH_MCAT_FT260          45u     // FT260 module
 #define USBH_MCAT_VIDEO          46u     // VIDEO class
+#define USBH_MCAT_CH34X          47u     // WCH CH34x class
 
-#define USBH_MCAT_MAX            47u
+#define USBH_MCAT_MAX            48u
 
 
 /*********************************************************************
@@ -743,7 +744,7 @@ USBH_STATUS USBH_GetInterfaceDescriptor             (USBH_INTERFACE_HANDLE hInte
 USBH_STATUS USBH_GetMaxTransferSize                 (USBH_INTERFACE_HANDLE hInterface, U8 Endpoint, U32 *pMaxTransferSize);
 USBH_STATUS USBH_GetEndpointDescriptor              (USBH_INTERFACE_HANDLE hInterface, U8 AlternateSetting, const USBH_EP_MASK * pMask, U8 * pBuffer, unsigned * pBufferSize);
 USBH_STATUS USBH_GetDescriptor                      (USBH_INTERFACE_HANDLE hInterface, U8 AlternateSetting,   U8 Type, U8 * pBuffer, unsigned * pBufferSize);
-USBH_STATUS USBH_GetDescriptorEx                    (USBH_INTERFACE_HANDLE hInterface, U8 Type, U8 DescIndex, U16 LangID, U8 * pBuffer, unsigned * pBufferSize);
+USBH_STATUS USBH_GetDescriptorEx                    (USBH_INTERFACE_HANDLE hInterface, U8 Type, U8 DescIndex, U16 LangID, U8 * pBuffer, unsigned * pNumBytes);
 USBH_STATUS USBH_GetStringDescriptor                (USBH_INTERFACE_HANDLE hInterface, U8 StringIndex, U16 LangID, U8 * pBuffer, unsigned * pNumBytes);
 USBH_STATUS USBH_GetStringDescriptorASCII           (USBH_INTERFACE_HANDLE hInterface, U8 StringIndex, char * pBuffer, unsigned BufferSize);
 USBH_STATUS USBH_GetSpeed                           (USBH_INTERFACE_HANDLE hInterface, USBH_SPEED * pSpeed);
@@ -1167,7 +1168,13 @@ typedef struct {
 typedef enum {
   USBH_NORMAL_POWER, // The device is switched to normal operation.
   USBH_SUSPEND,      // The device is switched to USB suspend mode.
-  USBH_POWER_OFF     // The device is powered off.
+  USBH_POWER_OFF,    // The device is powered off.
+  USBH_TEST_MODE_J,
+  USBH_TEST_MODE_K,
+  USBH_TEST_MODE_SE0_NAK,
+  USBH_TEST_MODE_PACKET,
+  USBH_TEST_MODE_FORCE_ENABLE,
+  USBH_POWER_MODE_MAX
 } USBH_POWER_STATE;
 
 /*********************************************************************
@@ -1325,7 +1332,8 @@ void                USBH_OS_WaitEvent     (USBH_OS_EVENT_OBJ * pEvent);
 int                 USBH_OS_WaitEventTimed(USBH_OS_EVENT_OBJ * pEvent, U32 milliSeconds);
 
 //lint -esym(9058, _USBH_OS_EVENT_OBJ)  N:100
-//lint -sem(USBH_OS_GetTime32, pure)    N:100
+
+typedef void        USBH_ISR_HANDLER      (void);
 
 /*********************************************************************
 *

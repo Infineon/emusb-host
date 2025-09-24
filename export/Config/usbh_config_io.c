@@ -3,7 +3,7 @@
 *                        The Embedded Experts                        *
 **********************************************************************
 *                                                                    *
-*       (c) 2003 - 2024     SEGGER Microcontroller GmbH              *
+*       (c) 2003 - 2025     SEGGER Microcontroller GmbH              *
 *                                                                    *
 *       www.segger.com     Support: www.segger.com/ticket            *
 *                                                                    *
@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Host version: V2.40.0                                  *
+*       emUSB-Host version: V2.48.0                                  *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -48,7 +48,7 @@ License model:            Cypress Services and License Agreement, signed Novembe
 Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4, M33 and M55
 ----------------------------------------------------------------------
 Support and Update Agreement (SUA)
-SUA period:               2022-05-12 - 2024-05-19
+SUA period:               2022-05-12 - 2026-05-19
 Contact to extend SUA:    sales@segger.com
 ----------------------------------------------------------------------
 File        : usbh_config_io.c

@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Release notes for emUSB-Host V2.40.0         </title>
+<title>Release notes for emUSB-Host V2.48.0         </title>
 <meta name="robots" content="noindex,nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style type="text/css">
@@ -182,7 +182,7 @@ div.divider-global:nth-of-type(even) {
       <div class="claim">The Embedded Experts</div>
       <div class="head">
         <div class="container">
-          <h1>Release notes for emUSB-Host V2.40.0         </h1>
+          <h1>Release notes for emUSB-Host V2.48.0         </h1>
         </div>
       </div>
     </div>
@@ -190,6 +190,87 @@ div.divider-global:nth-of-type(even) {
   <!-- ****************************************************************** -->
   <!-- History                                                            -->
   <!-- ****************************************************************** -->
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.48.0 [12. Aug 2025]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Video class: Added new functions USBH_VIDEO_GetStreamState() and USBH_VIDEO_RestartStream() which allow dealing with packet level errors from error prone webcam devices.</li>
+            <li>FT232: Support baud rates up to 12MBaud for high-speed devices.</li>
+            <li>HID: Add function USBH_HID_SuspendResume().</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>Video: In rare cases when the underlying ISO transfer experienced a transfer error it was possible for the user data callback to not be called. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.46.0 [26. Jun 2025]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Support USB test mode for LPC55xxx devices.</li>
+            <li>Support Microship SAMD51 devices.</li>
+            <li>Add Support for WCH CH34X USB to RS232 converter.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>USBH_FT232_Exit could cause NULL pointer de-reference when USBH_FT232_AddCustomDeviceMask() is not used. Fixed.</li>
+            <li>Using the function USBH_FT232_Read with the STM32_NG driver could cause hardfault by interpreting data as valid. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.44.0 [25. Feb 2025]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Add support for STM32H7Sxx devices.</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>DWC2 (Synopsys) DMA: Ping protocol enabled.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.42.1 [12. Aug 2024]</h2>
+        <div>
+          <h3>Improvements</h3>
+          <ol>
+            <li>EHCI driver (iMX6,iMXRT10xx/11xx): Remove 250ms delay for HS disconnect detector enable.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.42.0 [26. Jun 2024]</h2>
+        <div>
+          <h3>Improvements</h3>
+          <ol>
+            <li>DWC2 (Synopsys): Improve critical section locking on transfer aborts.</li>
+          </ol>
+        </div>
+        <div>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>AUDIO: For devices with multiple streaming interfaces, some interfaces may not be detected. Fixed.</li>
+            <li>General: Reading a string descriptor did return illegal data if a timeout occurred during the control request. Fixed.</li>
+            <li>DWC2 (Synopsys) DMA: Missing initialization of the 'Aborted' flag may cause unwanted transfer aborts after recovery of stuck channels. Fixed.</li>
+            <li>DWC2 (Synopsys) DMA: High bandwidth ISO OUT transfers did not work correctly. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
     <div class="divider-global">
       <div class="container">
         <h2>Version 2.40.0 [19. Mar 2024]</h2>
@@ -1004,7 +1085,7 @@ div.divider-global:nth-of-type(even) {
 <div class="footer">
   <div class="container">
     <div>
-      <p>Copyright 2003-2024 SEGGER Microcontroller GmbH. All rights reserved.<br>
+      <p>Copyright 2003-2025 SEGGER Microcontroller GmbH. All rights reserved.<br>
         For more information, please visit our website&nbsp;<a href="https://www.segger.com/" target="_blank">www.segger.com</a>&nbsp;or contact us via&nbsp;<a href="https://www.segger.com/ticket" target="_blank">www.segger.com/ticket</a>&nbsp;</p>
     </div>
   </div>

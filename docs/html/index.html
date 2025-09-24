@@ -109,10 +109,10 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <li>Mass Storage Device (MSD) class</li>
 <li>MTP Device Driver</li>
 <li>Printer class</li>
+<li>Video Device Driver (Only for PSE84)</li>
 </ul>
 <p ><b>Device families supported by the Middleware:</b></p><ul>
-<li>CAT1A</li>
-<li>CAT3</li>
+<li>PSE84</li>
 </ul>
 <h1><a class="anchor" id="section_emusb_host_general"></a>
 General Description</h1>
@@ -130,21 +130,21 @@ General Description</h1>
 <tr>
 <th>Device family</th><th>Drivers</th><th>Function to add driver </th></tr>
 <tr>
-<td>CAT1A </td><td>Cypress PSoC 6 driver </td><td>USBH_Cypress_PSoC_Add() and USBH_Cypress_PSoC_DMA_Add()  </td></tr>
-<tr>
-<td>CAT3 </td><td>Synopsys DWC2 driver </td><td>USBH_XMC4xxx_FS_Add()  </td></tr>
+<td>PSE84 </td><td>PSoCE84 Driver </td><td>USBH_Infineon_PSOCE84_DMA_Add   </td></tr>
 </table>
 <dl class="section note"><dt>Note</dt><dd>For the function description, refer to the: <a href="./../UM10001_emUSBH.pdf"><b>SEGGER emUSB-Host User Guide &amp; Reference Manual</b></a> Host controller specifics chapter.</dd></dl>
-<p>The emUSB-Host is provided in the form of pre-build libraries. The pre-build library is selected automatically based on configuration of Application project.</p>
+<p>For the PSE84 device, the DMA engine of the USB IP block does not have access to all SRAM regions. For details, see the PSE84 Reference Manual. As a result, the memory pool for the PSE84 driver must be located only to the SRAM region with DMA access. An example of the allocation memory pool is in the usbd_config.c file.</p>
+<p >The emUSB-Host is provided in the form of pre-build libraries. The pre-build library is selected automatically based on configuration of Application project.</p>
 <p >The emUSB-Host includes an OS abstraction implemented by abstraction-rtos, so this Middleware can be used with any RTOSes supported by abstraction-rtos. The RTOS is required for the emUSB-Host operation.</p>
 <p >The hardware dependency files are presented in export/Config directory:</p><ul>
 <li>One common file responsible for the debug message output</li>
 <li>Device-specific files for the hardware configuration of each supported device family</li>
 </ul>
-<p >Also, the emUSB-Host/Device personality is present in the Device-configurator for simplify routine of configuration clocks and pins for USB IP block operation. The personality is a part of mtb-pdl-cat1 for CAT1A devices and mtb-xmclib-cat3 for CAT3 libraries.</p>
+<p >Also, the emUSB-Host/Device personality is present in the Device-configurator for simplify routine of configuration clocks and pins for USB IP block operation. The personality is a part of mtb-device-support-pse8xxgp for PSE84 devices.</p>
 <h1><a class="anchor" id="section_emusb_host_quick_start"></a>
 The Quick Start Guide</h1>
 <p >To set up emUSB-Host for Human Interface Devices (HID), follow the below- described steps. This code snippets will try to enumerate a connected mouse or keyboard and output data about a pressed key or mouse movements and clicks. The current snippet is based on SEGGER sample application.</p>
+<dl class="section note"><dt>Note</dt><dd>You can kickstart your project by using Code Examples from Project Creator app. Those contain already configured clocks and pins, you can take it as a basis for easy start.</dd></dl>
 <h2><a class="anchor" id="subsection_qsg_step1"></a>
 STEP 1: Add the emUSB-Host middleware.</h2>
 <ol type="1">
@@ -161,57 +161,43 @@ STEP 1: Add the emUSB-Host middleware.</h2>
 </ol>
 <h2><a class="anchor" id="subsection_qsg_step2"></a>
 STEP 2: Configure pins and clocks for emUSB-Host.</h2>
-<p ><b>CAT1A Devices:</b></p>
+<p ><b>PSE84 Devices:</b></p>
 <ol type="1">
 <li>Launch the ModusToolbox Device Configurator and switch to the Peripherals tab (#1.1).</li>
-<li>Enable the USB personality under Communication (#1.2) and select emUSB-Host/Device 1.0 personality (#1.3).</li>
-<li>Ensure that USB mode is Host (#1.4) and the Clock is connected to CLK_HF3 (#1.5). <div class="image">
-<img src="cat1a_emusb_host_peripherals_cfg.png" alt=""/>
+<li>Enable the USB personality under Communication (#1.2) and select the emUSB-Host/Device personality (#1.3).</li>
+<li>Select Host mode (#1.4) and connect available clocks (#1.5). <div class="image">
+<img src="pse84_emusb_host_peripherals_cfg.png" alt=""/>
 </div>
 </li>
 <li><p class="startli">Switch to the System tab (#2.1).</p>
 <dl class="section note"><dt>Note</dt><dd>The clocking system can be different between devices.</dd></dl>
 </li>
-<li>Enable the clock source which has the accuracy +/-0.05% (it could be ECO - case (#2.2)).</li>
-<li>If your device supports more than one PLL, select one. Enable the selected PLL and set a frequency of 48 MHz (#2.3). <dl class="section note"><dt>Note</dt><dd>Select the enabled source clock with accuracy +/-0.05% into the PATH_MUX section of the selected PLL (#2.4).</dd></dl>
-</li>
-<li>Select the CLK_HF3 USB clock (#2.5). Assign the source clock to the CLK_PATH connected to the configured previously PLL. <div class="image">
-<img src="cat1a_emusb_host_system_cfg.png" alt=""/>
+<li>Enable DPLL_HP (#2.2), Set Desired Frequency to 400 MHz (#2.3),</li>
+<li>Select CLK_PATH2 as the source clock for CLK_HF1 (#2.4). Ensure that CLK_HF1 has the frequency of 400 MHz (#2.5).</li>
+<li>Enable DPLL_LP1 (#2.6), set Desired Frequency to 200 MHz (#2.7) as a clock source. Use a clock with the accuracy of 0.05 % or better (#2.8).</li>
+<li>Select CLK_PATH0 or CLK_PATH1 as the source clock for CLK_HF8 (#2.9). Ensure that CLK_HF8 frequency is 50 MHz with accuracy 0.05 % or better (#2.10). <div class="image">
+<img src="pse84_emusb_host_system_cfg.png" alt=""/>
 </div>
 </li>
-<li>If the Power personality is enabled, the System Idle Power Mode option must be Active, or CPU Sleep. <div class="image">
-<img src="cat1a_emusb_host_power_cfg.png" alt=""/>
+<li>If the Power personality is enabled, the System Idle Power Mode must be Active or CPU Sleep, and the HP profile is selected for System Active Power Profile. <div class="image">
+<img src="pse84_emusb_host_power_cfg.png" alt=""/>
+</div>
+</li>
+<li>Under Clocks tab in the Peri1 Memory MappedIO (#3.1).</li>
+<li>Ensure APP_MMIO3 Divider is enabled and set to 4 in the Divider field (#3.2). <div class="image">
+<img src="pse84_emusb_host_peri_group_cfg.png" alt=""/>
 </div>
 </li>
 <li><p class="startli">Select File-&gt;Save to generate initialization code.</p>
-<dl class="section note"><dt>Note</dt><dd>Some boards must be additionally configured to select the USB-Host connector. Refer to applicable board User Guide. </dd>
-<dd>
-For example, for the CY8CKIT-062-WIFI-BT kit, set P13_2 to High level.</dd></dl>
-<p><b>CAT3 Devices:</b></p>
+<dl class="section note"><dt>Note</dt><dd>Configure some boards additionally to select the USB-Host connector. Refer to the applicable board user guide.</dd></dl>
 </li>
-</ol>
-<ol type="1">
-<li>Launch the ModusToolbox Device Configurator and switch to the Peripherals tab (#1.1).</li>
-<li>Enable the USB personality under Communication (#1.2).</li>
-<li>Select the USB mode as Host (#1.3).</li>
-<li>Select the Drive Bus connection (#1.4). <div class="image">
-<img src="cat3_emusb_host_peripherals_cfg.png" alt=""/>
-</div>
-</li>
-<li>Follow the instructions in the bottom window to set up the clock source for USB. The USB clock source configuration must look like the configuration on the image below. <div class="image">
-<img src="cat3_emusb_host_system_cfg.png" alt=""/>
-</div>
- <dl class="section note"><dt>Note</dt><dd>You can also use <em>System PLL</em> instead <em>USB PLL</em> as a source for <em>USBDIV</em>.</dd>
-<dd>
-Recommended: set the highest frequency of <em>System PLL Clock -&gt; CPU Clock</em> for proper work of USB functionality.</dd></dl>
-</li>
-<li>Select File-&gt;Save to generate initialization code.</li>
 </ol>
 <h2><a class="anchor" id="subsection_qsg_step3"></a>
 STEP 3: Write the code in main.c.</h2>
 <ol type="1">
 <li>Include headers to get access to the emUSB drivers, retarget-io and FreeRTOS. <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;cybsp.h&quot;</span></div>
 <div class="line"><span class="preprocessor">#include &quot;cy_retarget_io.h&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;mtb_hal.h&quot;</span></div>
 <div class="line"><span class="comment">/* Include emUSB-Host headers */</span></div>
 <div class="line"><span class="preprocessor">#include &quot;USBH.h&quot;</span></div>
 <div class="line"><span class="preprocessor">#include &quot;USBH_HID.h&quot;</span></div>
@@ -708,26 +694,36 @@ STEP 3: Write the code in main.c.</h2>
 <div class="line">}</div>
 </div><!-- fragment --></li>
 <li><p class="startli">Initialize retarget-io to use the debug UART port:</p>
-<p class="startli"><b> For CAT1A devices:</b></p>
-<div class="fragment"><div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> retarget_io_init(<span class="keywordtype">void</span>)</div>
+<p class="startli"><b> For PSE84 devices:</b> Open the Device Configurator, select the Peripherals tab and the desired SCB resource (#1.1), UART under Personality (#1.2), click OK (#1.3). </p><div class="image">
+<img src="pse84_emusb_device_uart_1.png" alt=""/>
+</div>
+<p> Select the desired name for the SCB (#2.1) and pins and clock for SCB (#2.2). The other UART options can be set by default, see the screenshot below. </p><div class="image">
+<img src="pse84_emusb_device_uart_2.png" alt=""/>
+</div>
+<p> The desired name for the SCB resource is important because the generated structures, defines, and variables bear the name prefix as you can see below: </p><div class="fragment"><div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> retarget_io_init(<span class="keywordtype">void</span>)</div>
 <div class="line">{</div>
-<div class="line">    <span class="comment">/* Configures the retarget_io pins */</span></div>
 <div class="line">    cy_rslt_t result;</div>
-<div class="line">    result = cy_retarget_io_init(CYBSP_DEBUG_UART_TX, CYBSP_DEBUG_UART_RX, CY_RETARGET_IO_BAUDRATE);</div>
-<div class="line">    <span class="keywordflow">if</span> (CY_RSLT_SUCCESS != result)</div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">static</span> cy_stc_scb_uart_context_t  CYBSP_DEBUG_UART_context;                </div>
+<div class="line">    <span class="keyword">static</span> mtb_hal_uart_t             CYBSP_DEBUG_UART_hal_obj;                </div>
+<div class="line">    result = (cy_rslt_t)Cy_SCB_UART_Init(CYBSP_DEBUG_UART_HW, &amp;CYBSP_DEBUG_UART_config, &amp;CYBSP_DEBUG_UART_context);</div>
+<div class="line">    <span class="keywordflow">if</span> (result != CY_RSLT_SUCCESS)</div>
 <div class="line">    {</div>
 <div class="line">        CY_ASSERT(0);</div>
 <div class="line">    }</div>
-<div class="line">}</div>
-</div><!-- fragment --><p class="startli"><b> For CAT3 devices:</b></p>
-<div class="fragment"><div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> retarget_io_init(<span class="keywordtype">void</span>)</div>
-<div class="line">{</div>
-<div class="line">    <span class="comment">/* Configures the retarget_io pins */</span></div>
-<div class="line">    cy_rslt_t result;</div>
-<div class="line">    result = cy_retarget_io_init(CYBSP_DEBUG_UART_HW);</div>
-<div class="line">    <span class="keywordflow">if</span> (CY_RSLT_SUCCESS != result)</div>
+<div class="line"> </div>
+<div class="line">    Cy_SCB_UART_Enable(CYBSP_DEBUG_UART_HW);</div>
+<div class="line"> </div>
+<div class="line">    result = mtb_hal_uart_setup(&amp;CYBSP_DEBUG_UART_hal_obj, &amp;CYBSP_DEBUG_UART_hal_config, &amp;CYBSP_DEBUG_UART_context, NULL);</div>
+<div class="line">    <span class="keywordflow">if</span> (result != CY_RSLT_SUCCESS)</div>
 <div class="line">    {</div>
-<div class="line">        XMC_ASSERT(0, <span class="stringliteral">&quot;cy_retarget_io_init returns error status&quot;</span>);</div>
+<div class="line">        CY_ASSERT(0);</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    result = cy_retarget_io_init(&amp;CYBSP_DEBUG_UART_hal_obj);</div>
+<div class="line">    <span class="keywordflow">if</span> (result != CY_RSLT_SUCCESS)</div>
+<div class="line">    {</div>
+<div class="line">        CY_ASSERT(0);</div>
 <div class="line">    }</div>
 <div class="line">}</div>
 </div><!-- fragment --></li>
@@ -752,53 +748,32 @@ Configuration Considerations</h1>
 <h2><a class="anchor" id="section_emusb_host_hw_dep_conf"></a>
 Hardware-dependent Configuration</h2>
 <p >The hardware resources (Pins, clocks, interrupts) required for USB must be configured before the start of USB operation before calling USBH_Init() or in USBH_X_Config(). Interrupts must be configured in the USBH_X_Config() function.</p>
-<p >For CAT1A devices, the USB hardware does not control the power on VBUS line. This feature is essential for some cases, so, the appropriate logic should be implemented on the Application side. For some evaluation boards, this logic is already implemented - typically, an additional MCU pin controls VBUS power. To allow emUSB-Host control power (enable or disable) on VBUS line, register a callback function by USBH_SetOnSetPortPower().</p>
-<p >For the CAT3 device, the power control on VBUS line is handled by the USB IP block through a special Drive VBUS pin. To drive the VBUS, it requires an external pump enabled through the output signal of the Drive VBUS pin. As a result, additional hardware configuration is required while the callback function registered by USBH_SetOnSetPortPower() is not needed. Typically, the Drive VBUS pin can be configured by the USB personality.</p>
+<p >For PSE84 devices, the USB hardware does not control the power on VBUS line. This feature is essential for some cases, so, the appropriate logic should be implemented on the Application side. For some evaluation boards, this logic is already implemented - typically, an additional MCU pin controls VBUS power. To allow emUSB-Host control power (enable or disable) on VBUS line, register a callback function by USBH_SetOnSetPortPower().</p>
 <p >The implementation template of USBH_X_Config() is provided for each device category in the Config directory under COMPONENT_CATx. This template is automatically copied into your project when middleware is added to project. This template does not include the configuration of clock and pins required for USB operation.</p>
 <p >The template file define USBH_ALLOC_SIZE macro for the size of the memory pool. The size of memory is selected to satisfy RAM usage of Driver and a few connected devices, to provide the best experience for running code examples and evaluating the emUSB-Host software for the widest range of boards. Update this value with the optimal memory pool size (strongly recommended) for the application to find the balance between the memory consumption and features support. For details on selecting the optimal memory pool size, refer to the <a href="./../UM10001_emUSBH.pdf"><b>SEGGER emUSB-Host User Guide &amp; Reference Manual</b></a> Memory pools chapter.</p>
-<dl class="section warning"><dt>Warning</dt><dd>For CAT1A, the template file also configures a pin responsible for enabling/disabling power to connected USB devices by the VBUS line. The default value of the pin number is selected only for the CY8CKIT-062-WIFI-BT kit (CAT1A) and must be modified for other boards.</dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>For PSE84, the template file also configures a pin responsible for enabling/disabling power to connected USB devices by the VBUS line. The default value of the pin number is selected only for the KIT_PSE84_EVK (PSE84) and must be modified for other boards.</dd></dl>
 <p>For details on Hardware Dependent Configuration, refer to the - <a href="./../UM10001_emUSBH.pdf"><b>SEGGER emUSB-Host User Guide &amp; Reference Manual</b></a>.</p>
 <h3><a class="anchor" id="section_emusb_host_hw_dep_conf_pins"></a>
 USB Pins Configuration</h3>
-<p ><b> CAT1A Devices Family </b></p>
-<p >The D+ and D- pins must be configured for USB operation. The emUSB-Host/Device personality in the Device Configurator allows for easy configuration of the pins. Otherwise, the pins can be configured manually by PDL APIs.</p>
-<p >The following snippet initializes GPIO pins for USB operation by <a href="https://github.com/Infineon/mtb-pdl-cat1"><b>mtb-pdl-cat1 APIs</b></a>.</p>
-<div class="fragment"><div class="line">    Cy_GPIO_Pin_FastInit(USBDP_PORT, USBDP_PIN, CY_GPIO_DM_ANALOG, 0U, USBDP_GPIO);</div>
-<div class="line">    Cy_GPIO_Pin_FastInit(USBDM_PORT, USBDM_PIN, CY_GPIO_DM_ANALOG, 0U, USBDM_GPIO);</div>
-</div><!-- fragment --><p ><b> CAT3 Devices </b></p>
-<p >The D+/D- pins are dedicated and do not require any configuration.</p>
+<p ><b> PSE84 Devices </b></p>
+<p >The D+/D- pins are dedicated and do not require configuration.</p>
 <h3><a class="anchor" id="section_emusb_host_hw_dep_conf_clock"></a>
 USB Clock Configuration</h3>
 <p >The USB 2.0 specification defines the required bit rate accuracy for the USB Host in section 7.1.11. Ensure that the clock sources for USB meet the requirements.</p>
-<p >The emUSB-Host/Device personality in the Device Configurator allows for easy configuration of the clocks for USB operation and also check if the clocks meet the requirements. Otherwise, the clocks can be configured manually by PDL/HAL APIs.</p>
-<p ><b> CAT1A Devices Family</b></p>
-<p >The USB Host requires one clock for operation:</p><ul>
-<li>Clock the main clock at 48 MHz with required bit rate accuracy according to the USB 2.0 specification. Typically, the main clock is CLK_HF3 output signal, but refer to the device datasheet to identify the clock source for USB for a specific device.</li>
+<p >The emUSB-Host/Device personality in the Device Configurator allows for easy configuration of the clocks for USB operation and also check if the clocks meet the requirements. Otherwise, the clocks can be configured manually by PDL/HAL Next APIs.</p>
+<p ><b> PSE84 Devices </b></p>
+<p >The USB Host requires two clocks for operation:</p><ul>
+<li>Phy Pll reference clock configured at 50 MHz with the required bit rate accuracy according to the USB 2.0 specification. Typically, this clock is the CLK_HF8 output signal, but refer to the device datasheet to identify the clock source for USB for a specific device.</li>
+<li>The main clock configured at 400 MHz. This clock does not have requirements for the bit rate accuracy. Typically, this clock is the CLK_HF1 output signal, but refer to the device datasheet to identify the clock source for USB for a specific device. In addition, set to 4 the Divider of Peri 1 Group 3 to generate 100 MHz signal after CLK_HF1 for the USB controller.</li>
 </ul>
-<p ><b> CAT3 Devices </b></p>
-<p >The USB Device requires two clocks for operation:</p><ul>
-<li>The USB Phy Clock output must be configured at 48 MHz frequency with required bit rate accuracy according to the USB 2.0 specification.</li>
-<li>The second USB clock is connected to CPU clock. The CPU clock should be set to highest frequency as possible according to application design. If the CPU clock will have too low frequency the some of USB functionality won't work properly. For more details, refer to the Reference Manual of your CAT3 device.</li>
-</ul>
+<p >Also, enable the corresponding Peri Group by the Cy_SysClk_PeriGroupSlaveInit() function from the SysClk driver of mtb-device-support-pse8xxgp.</p>
 <dl class="section note"><dt>Note</dt><dd>If the USB must operate during Deep Sleep, keep both clocks enabled.</dd></dl>
 <h3><a class="anchor" id="section_emusb_host_hw_dep_conf_int"></a>
 USB Interrupt Configuration</h3>
 <p >The interrupt is mandatory for the emUSB-Host Middleware operation. The interrupt priority selection is a part of Application level - the interrupt priority selected in the template files is not suitable for real project. For USB recommended setting the interrupt priority as high as possible.</p>
-<p ><b> CAT1A Devices Family</b></p>
-<p >emUSB-Host uses only one interrupt source from the three available in the IP USB block - usb_interrupt_med_IRQn. The emUSB-Host code can be executed on CM4 and CM0+ cores. For CM0+, the interrupt source of the USB IP block can be connected to one of CM0+ IRQs. Refer to the device datasheet and <a href="https://infineon.github.io/mtb-pdl-cat1/pdl_api_reference_manual/html/group__group__sysint.html"><b>SysInt (System Interrupt) Driver documentation</b></a> to find the available IRQs for CM0+.</p>
-<p >The following code snippet shows the interrupt configuration for both CM4 and CM0+ cores.</p>
-<dl class="section note"><dt>Note</dt><dd>The number of CM0+ interrupt vectors is different for different devices, so, this code snippet may not be suitable for all devices.</dd></dl>
-<div class="fragment"><div class="line"><span class="comment">/* Define the interrupt source */</span></div>
-<div class="line"><span class="preprocessor">#if (COMPONENT_CM0P)</span></div>
-<div class="line"><span class="comment">/* The number of CM0+ interrupt vectors is different for different devices,</span></div>
-<div class="line"><span class="comment"> * so, change the following macro for your selected device.</span></div>
-<div class="line"><span class="comment"> */</span></div>
-<div class="line"><span class="preprocessor">#define USBH_INTERRUPT_NUM                      (NvicMux7_IRQn)</span></div>
-<div class="line"><span class="preprocessor">#else</span></div>
-<div class="line"><span class="preprocessor">#define USBH_INTERRUPT_NUM                      (usb_interrupt_med_IRQn)</span></div>
-<div class="line"><span class="preprocessor">#endif </span><span class="comment">/* #if (COMPONENT_CM0P) */</span><span class="preprocessor"></span></div>
-<div class="line"> </div>
-<div class="line"><span class="comment">/* Define the interrupt priority */</span></div>
+<p ><b> PSE84 Devices </b></p>
+<p >emUSB-Host uses one interrupt source - usbhs_interrupt_usbhsctrl_IRQn. The emUSB-Host can be executed on the CM33 or CM55 core. The interrupt configuration is the same for both cores.</p>
+<p >The following code snippet shows the interrupt configuration for PSE84 devices: </p><div class="fragment"><div class="line"><span class="comment">/* Define the interrupt priority */</span></div>
 <div class="line"><span class="preprocessor">#define USBH_ISR_PRIO                           (3U)</span></div>
 <div class="line"> </div>
 <div class="line"> </div>
@@ -809,58 +784,26 @@ USB Interrupt Configuration</h3>
 <div class="line">}</div>
 <div class="line"> </div>
 <div class="line"> </div>
-<div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> config_interrupt_cat1a(<span class="keywordtype">void</span>)</div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> config_interrupt_pse84(<span class="keywordtype">void</span>)</div>
 <div class="line">{</div>
 <div class="line">    <span class="comment">/* Install the interrupt service routine */</span></div>
-<div class="line">    cy_rslt_t result;</div>
-<div class="line">    result = cyhal_system_set_isr(USBH_INTERRUPT_NUM, usb_interrupt_med_IRQn, USBH_ISR_PRIO, isr);</div>
-<div class="line">    CY_ASSERT(CY_RSLT_SUCCESS == result);</div>
-<div class="line">    (void) result; <span class="comment">/* To avoid the compiler warning in Release mode */</span></div>
+<div class="line">    cy_stc_sysint_t usb_int_cfg =</div>
+<div class="line">    {</div>
+<div class="line">        .intrSrc = usbhs_interrupt_usbhsctrl_IRQn,</div>
+<div class="line">        .intrPriority = USBH_ISR_PRIO</div>
+<div class="line">    };</div>
+<div class="line"> </div>
+<div class="line">    cy_en_sysint_status_t status;</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">/* Install the interrupt service routine */</span></div>
+<div class="line">    status = Cy_SysInt_Init(&amp;usb_int_cfg, isr);</div>
+<div class="line">    CY_ASSERT(CY_RSLT_SUCCESS == status);</div>
+<div class="line">    (void) status; <span class="comment">/* To avoid the compiler warning in Release mode */</span></div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">/* Enable USB interrupt */</span></div>
-<div class="line">    NVIC_EnableIRQ(USBH_INTERRUPT_NUM);</div>
+<div class="line">    NVIC_EnableIRQ(usbhs_interrupt_usbhsctrl_IRQn);</div>
 <div class="line">}</div>
-</div><!-- fragment --><p ><b> CAT3 Devices </b></p>
-<p >CAT3 devices have only one interrupt source in the IP USB block - USB0_0_IRQn.</p>
-<p >The following code snippet shows the interrupt configuration for CAT3 devices: </p><div class="fragment"><div class="line"><span class="comment">/* Define interrupt priority. In case of FreeRTOS ensure that</span></div>
-<div class="line"><span class="comment"> * configMAX_SYSCALL_INTERRUPT_PRIORITY in FreeRTOSConfig.h is</span></div>
-<div class="line"><span class="comment"> * configured in accordance to XMC4xxx interrupts configuration</span></div>
-<div class="line"><span class="comment"> */</span></div>
-<div class="line"><span class="preprocessor">#define USBH_ISR_PRIO                           (63U)</span></div>
-<div class="line"> </div>
-<div class="line"> </div>
-<div class="line"><span class="comment">/* USB Interrupt handler */</span></div>
-<div class="line"><span class="keywordtype">void</span> USB0_0_IRQHandler(<span class="keywordtype">void</span>)</div>
-<div class="line">{</div>
-<div class="line">    USBH_ServiceISR(0);</div>
-<div class="line">}</div>
-<div class="line"> </div>
-<div class="line"> </div>
-<div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> config_interrupt_cat3(<span class="keywordtype">void</span>)</div>
-<div class="line">{</div>
-<div class="line">    NVIC_SetPriority(USB0_0_IRQn, USBH_ISR_PRIO);</div>
-<div class="line">    NVIC_EnableIRQ(USB0_0_IRQn);</div>
-<div class="line">}</div>
-</div><!-- fragment --><h3><a class="anchor" id="section_emusb_host_hw_dep_add_conf_cat3_stack"></a>
-CAT3 Specific Configuration</h3>
-<p >Some of CAT3 devices features, which affect the USB functionality are implemented outside of USB IP block and can not be configured inside emUSB-Host middleware. These features include: enable/disable power to the USB IP block, enable/disable reset state for the USB IP block. All mentioned features can be configured by SCU driver from mtb-xmclib-cat3.</p>
-<p >Additional USB configuration steps for CAT3 devices: CAT3 devices need in additional USB configuration steps:</p><ol type="1">
-<li>Enable the power for USB by using <em>XMC_SCU_POWER_EnableUsb()</em>.</li>
-<li>De-assert Reset from USB controller by calling <em>XMC_SCU_RESET_DeassertPeripheralReset(XMC_SCU_PERIPHERAL_RESET_USB0)</em> for executing the USB functionality.</li>
-</ol>
-<p >Those steps are already implemented in usbd_config.c for CAT3 devices. You can use this file as reference.</p>
-<h3><a class="anchor" id="section_emusb_host_dma_cat1a"></a>
-DMA driver for CAT1A device</h3>
-<p >To use the driver with DMA support:</p><ol type="1">
-<li>Add USBH_ENABLE_DMA to the DEFINE variable in Makefile</li>
-<li>Connect USB EP1 to a DMA channel in the USB personality or manually using APIs for the TrigMux driver.</li>
-<li>Enable the DMA block before starting emUSB-Host by Cy_DMA_Enable()</li>
-<li>Call USBH_Cypress_PSoC_DMA_Add() instead of USBH_Cypress_PSoC_Add()</li>
-</ol>
-<p >Steps 3 and 4 are implemented in the usbh_config.c file.</p>
-<p >The emUSB-Host configures a DMA channel inside the USB driver, then no need to configure a DMA channel in the application code or in the DMA personality. Configuration of a DMA channel in the DMA personality is ignored, but the enable the resource for reservation and connecting USB EP1 with one of the available DMA channels.</p>
-<dl class="section note"><dt>Note</dt><dd>When DMA mode is enabled in the USB personality, the USB personality generates several macros used in the usbh_config.c file.</dd></dl>
-<h2><a class="anchor" id="section_emusb_host_debug_mes_out"></a>
+</div><!-- fragment --><h2><a class="anchor" id="section_emusb_host_debug_mes_out"></a>
 Debug Message Output</h2>
 <p >The debug builds of emUSB-Host allow using the debug message outputs. The template implementation of the message output functions is in export/Config/usbh_config_io.c file. This file is automatically copied into the ModusToolbox project when emUSB-Device middleware is added for the first time by the Library manager. Otherwise, copy this file manually. By default, <a href="https://github.com/Infineon/retarget-io"><b>retarget-io</b></a> is used for the message output, but message outputs can be redefined to any suitable output way. To disable the default message outputs, set USBH_DISABLE_STANDARD_OUTPUT=1 in the DEFINES variable in the application project Makefile. To provide a custom output method in addition to setting a variable add corresponding API under the #if (USBH_DISABLE_STANDARD_OUTPUT == 1U) condition inside the _puts() function.</p>
 <p >For details on Hardware Debug Message Output, refer to the - <a href="./../UM10001_emUSBH.pdf"><b>SEGGER emUSB-Host User Guide &amp; Reference Manual</b></a> Debugging chapter.</p>
@@ -873,85 +816,42 @@ Low Power Support</h2>
 <tr>
 <th>Device family</th><th>IP block power modes support </th></tr>
 <tr>
-<td>CAT1A </td><td>Active and Sleep  </td></tr>
-<tr>
-<td>CAT3 </td><td>Active, Sleep, and Deep Sleep  </td></tr>
+<td>PSE84 </td><td>Active and Sleep  </td></tr>
 </table>
-<p ><b> CAT1A Devices </b> The USB IP block operates in Active and Sleep modes without any limitations, but in Deep Sleep, the USB IP block is disabled. emUSB-Host does not support any operations in low-power modes, in which the USB IP block is disabled. Also, emUSB-Host does not support the preparing and restoring before/after low-power modes, in which the USB IP block is disabled. As a result, if the microcontroller goes into Deep Sleep, emUSB-Host must be shut down by the USBH_Exit() function before entering this mode, and after exiting, emUSB-Host must be reinitialized.</p>
-<p ><b> CAT3 Devices </b> The USB IP block operates in Active, Sleep, and Deep Sleep modes. For Deep Sleep mode, the clock configuration should remain the same as for Active and Sleep mode. emUSB-Host does not need any preparation or restoring before/after Deep Sleep mode. Note that emUSB-Host executes USBH_Task() or USBH_ISRTask() through periodic time periods. As a result, the time spending in Deep Sleep mode can be short-lived and depends on connected devices and other factors. Recommended to measure this time experimentally based on the use case.</p>
+<p ><b> PSE84 Devices </b> The USB IP block operates in Active and Sleep modes without any limitations, but in Deep Sleep, the USB IP block is disabled. emUSB-Host does not support any operations in low-power modes, in which the USB IP block is disabled. Also, emUSB-Host does not support the preparing and restoring before/after low-power modes, in which the USB IP block is disabled. As a result, if the microcontroller goes into Deep Sleep, emUSB-Host must be shut down by the USBH_Exit() function before entering this mode, and after exiting, emUSB-Host must be reinitialized.</p>
 <p ><b>The Suspended/Resume condition generation from emUSB-Host</b></p>
 <p >emUSB-Host can generate the Suspend/Resume condition for any connected device (directly or through the HUB). For more details, refer to the <a href="./../../Doc/UM10001_emUSBH.pdf"><b>SEGGER emUSB-Host User Guide &amp; Reference Manual</b></a> by keywords <em>Suspend</em> or <em>Resume</em>.</p>
-<p ><b> CAT3 Devices </b></p>
-<p >The following code snippet is an example of emUSB-Host generation the Suspended/Resume condition to the USB CDC device. </p><div class="fragment"><div class="line"><span class="comment">/* The state for the preparation for Suspend by USBH_CDC_SuspendResume() */</span></div>
-<div class="line"><span class="preprocessor">#define USB_SUSPEND_MODE_STATE       (0U)</span></div>
-<div class="line"><span class="comment">/* The state for the preparation for Resume by USBH_CDC_SuspendResume() */</span></div>
-<div class="line"><span class="preprocessor">#define USB_RESUME_MODE_STATE        (1U)</span></div>
-<div class="line"> </div>
-<div class="line"><span class="comment">/* The index of the host controller for USBH_SetRootPortPower() */</span></div>
-<div class="line"><span class="preprocessor">#define USB_HOST_INDEX               (0U)</span></div>
-<div class="line"><span class="comment">/* The port number of the roothub for USBH_SetRootPortPower() */</span></div>
-<div class="line"><span class="preprocessor">#define USB_PORT_NUM                 (0U)</span></div>
-</div><!-- fragment --> <div class="fragment"><div class="line">    <span class="comment">/* Checks if preparations for Suspend mode are successful */</span></div>
-<div class="line">    <span class="keywordflow">while</span>(USBH_STATUS_SUCCESS != USBH_CDC_SuspendResume(hDevice, USB_SUSPEND_MODE_STATE))</div>
-<div class="line">    {</div>
-<div class="line">        USBH_Logf_Application(<span class="stringliteral">&quot;Error occurred during providing the Suspended mode for emUSB-Device!&quot;</span>);</div>
-<div class="line">    }</div>
-<div class="line"> </div>
-<div class="line">    <span class="comment">/* Setting up Suspend power mode */</span></div>
-<div class="line">    USBH_SetRootPortPower(USB_HOST_INDEX, USB_PORT_NUM, USBH_SUSPEND);</div>
-<div class="line">    USBH_Logf_Application(<span class="stringliteral">&quot;emUSB-Host provides SUSPENDED mode for emUSB-Device&quot;</span>);</div>
-<div class="line"> </div>
-<div class="line">    <span class="comment">/* Put the device into suspend state for 1 second (as an example) */</span></div>
-<div class="line">    vTaskDelay(1000U);</div>
-<div class="line"> </div>
-<div class="line">    <span class="comment">/* Setting up Normal power mode */</span></div>
-<div class="line">    USBH_SetRootPortPower(USB_HOST_INDEX, USB_PORT_NUM, USBH_NORMAL_POWER);</div>
-<div class="line"> </div>
-<div class="line">    <span class="comment">/* Checks if the preparations for Resume mode are successful */</span></div>
-<div class="line">    <span class="keywordflow">if</span> (USBH_STATUS_SUCCESS != USBH_CDC_SuspendResume(hDevice, USB_RESUME_MODE_STATE))</div>
-<div class="line">    {</div>
-<div class="line">        USBH_Logf_Application(<span class="stringliteral">&quot;Error occurred during providing the Resume mode for emUSB-Device!&quot;</span>);</div>
-<div class="line">    }</div>
-<div class="line">    USBH_Logf_Application(<span class="stringliteral">&quot;emUSB-Host provides the RESUME mode for emUSB-Device&quot;</span>);</div>
-</div><!-- fragment --><h2><a class="anchor" id="section_emusb_host_pick_lib"></a>
+<h2><a class="anchor" id="section_emusb_host_pick_lib"></a>
 Picking an emUSB-Host Library Variant</h2>
 <p >The Middleware provides emUSB-Host as pre-build libraries. The pre-build libraries are selected automatically based on configurations of Makefile configurations. The table below shows the availability of the configuration options.</p>
 <table class="doxtable">
 <tr>
 <th>Configuration</th><th>Options</th><th>Make Variable </th></tr>
 <tr>
-<td>Device family </td><td>CAT1A, CAT3 </td><td>COMPONENTS  </td></tr>
+<td>Device family </td><td>PSE84 </td><td>COMPONENTS  </td></tr>
 <tr>
 <td>Build configuration </td><td>Debug, Release </td><td>CONFIG  </td></tr>
 <tr>
 <td>Core </td><td><ul>
-<li>CM0P, CM4 for CAT1A;</li>
-<li>CM4 for CAT3;  </li>
+<li>CM33, CM55 for PSE84;  </li>
 </ul>
 </td><td>CORE  </td></tr>
 <tr>
 <td>Floating point </td><td>hardfp, softfp </td><td>VFP_SELECT  </td></tr>
 <tr>
-<td>Toolchain </td><td>GCC_ARM, IAR, ARM </td><td>TOOLCHAIN  </td></tr>
+<td>Toolchain </td><td>GCC_ARM, IAR, ARM, LLVM-ARM </td><td>TOOLCHAIN  </td></tr>
 </table>
-<dl class="section warning"><dt>Warning</dt><dd>CAT3 device family supports only GCC_ARM compiler</dd></dl>
 <dl class="section note"><dt>Note</dt><dd>Typically, the device family and core are selected in BSP Makefile.</dd>
 <dd>
-CM0P supports only softfp.</dd></dl>
+CM55 LLVM-ARM supports only hardfp.</dd></dl>
 <p>The header file USBH_ConfDefaults.h under the USBH directory contains common configuration used in the libraries generation. Similarly, USBH_Conf.h under each COMPONENT_&lt;Device family&gt;/CONFIG_&lt; Build configuration&gt; directory contains configuration specific to the set of library variants.</p>
-<h2><a class="anchor" id="section_emusb_host_otg"></a>
-OTG support (Only for CAT3 device)</h2>
-<p >The emUSB-Host middleware support OTG (On-The-Go) for the CAT3 device. To enable OTG, add extra steps to the standard flow:</p><ul>
-<li>Add both emUSB-Host and emUSB-Device middleware to the same project.</li>
-<li>Configure emUSB-Device middleware, see <a href="https://infineon.github.io/emusb-device/html/index.html"><b>emUSB-Device documentation</b></a>.</li>
-<li>Add USBH_ENABLE_OTG=1 to the DEFINES variable in Makefile.</li>
-<li>In the USB personality, select OTG in Mode field and select one of the available pins in the ID field. <dl class="section note"><dt>Note</dt><dd>The 0.9 pin is used by default. To use other pins, update OTG_ID_PORT and OTG_ID_PIN_NUM in usbd_config.c</dd></dl>
-A complete description of the OTG support in emUSB-Host is part of USB On-The-Go (Add-On) chapter of <a href="./../UM10001_emUSBH.pdf"><b>SEGGER emUSB-Host User Guide &amp; Reference Manual</b></a>.</li>
-</ul>
+<h2><a class="anchor" id="section_emusb_host_emfile"></a>
+Integration with emFile</h2>
+<p >The MSD class is supplied with already implemented interface for <a href="https://github.com/Infineon/emfile"><b>emFile</b></a>. To enable this interface, provide the address of the USBH_MSD_FS_Driver structure to the FS_AddDevice() function. The implementation of USBH_MSD_FS_Driver is present in additional pre-build libraries. By default, these libraries are not added to the build, so, to enable them - add USBH_EMFILE to the COMPONENTS variable in Makefile. The additional pre-build libraries with emFile interface support the three different FAT sub types: FAT12, FAT16 and FAT32. The selection of a specific FAT type is the same as for the <a href="https://github.com/Infineon/emfile"><b>emFile</b></a> middleware - add EMFILE_FAT16 for FAT12/16 or EMFILE_FAT32 for supporting all three sub types to the COMPONENTS variable in Makefile.</p>
 <h2><a class="anchor" id="section_emusb_host_use_in_rtos"></a>
 Using emUSB-Host in an RTOS Environment</h2>
 <p >The emUSB-Host has been already implemented the Target OS Interface. The OS layer uses the <a href="https://github.com/Infineon/abstraction-rtos"><b>abstraction-rtos</b></a> library, so, emUSB-Device can be used with RTOSes supported by the <a href="https://github.com/Infineon/abstraction-rtos"><b>abstraction-rtos</b></a> library.</p>
-<p >USBH_OS_DisableInterrupt() and USBH_OS_EnableInterrupt() are the weak functions. The weak implementation of USBH_OS_DisableInterrupt() and USBH_OS_EnableInterrupt() uses the enter/exit critical section functions from mtb-hal-cat1 and mtb-xmclib-cat3 libraries. The implementation of USBH_OS_DisableInterrupt() and USBH_OS_EnableInterrupt() may by overridden in the user's code by providing a function with the same name. This allows you to provide a custom implementation that can better satisfy application requirements, for example doesn't disable all interrupts.</p>
+<p >USBH_OS_DisableInterrupt() and USBH_OS_EnableInterrupt() are the weak functions. The weak implementation of USBH_OS_DisableInterrupt() and USBH_OS_EnableInterrupt() uses the enter/exit critical section functions from mtb-dsl-pse8xxgp libraries. The implementation of USBH_OS_DisableInterrupt() and USBH_OS_EnableInterrupt() may by overridden in the user's code by providing a function with the same name. This allows you to provide a custom implementation that can better satisfy application requirements, for example doesn't disable all interrupts.</p>
 <dl class="section note"><dt>Note</dt><dd>The USBH_OS_DisableInterrupt() and USBH_OS_EnableInterrupt() functions must always disable the USB interrupts and task switching.</dd></dl>
 <p>The emUSB-Host middleware calls some functions of the OS layer from the USB interrupt. As a result, the USB interrupt priority must be aligned with the RTOS configuration. For example, for FreeRTOS, the USB interrupt must have a lower or equal priority to the MAX_API_CALL_INTERRUPT_PRIORITY macro.</p>
 <dl class="section note"><dt>Note</dt><dd>The emUSB-Host operation requires the RTOS.</dd></dl>
@@ -970,35 +870,119 @@ Changelog</h1>
 <tr>
 <th>Version</th><th>Changes</th><th>Reason for Change </th></tr>
 <tr>
-<td rowspan="4">1.3.0 </td><td>Add OTG support for CAT3 devices </td><td></td></tr>
+<td>2.1.0 </td><td><ul>
+<li>
+Updated the emUSB-Host stack to 2.48.0. </li>
+</ul>
+</td><td><ul>
+<li>
+New version is available </li>
+</ul>
+</td></tr>
 <tr>
-<td>Add new driver for PSoC 6 with DMA support </td><td></td></tr>
+<td>2.0.0 </td><td><ul>
+<li>
+Added LLVM compiler support. </li>
+<li>
+Migrated to HAL-Next. </li>
+<li>
+Updated the emUSB-Host stack to 2.42.1 </li>
+</ul>
+</td><td><ul>
+<li>
+Extending the supported features for emUSB-Device middleware </li>
+<li>
+New version is available </li>
+</ul>
+</td></tr>
 <tr>
-<td>Updated the emUSB-Host stack to 2.40.0 </td><td>New version is available  </td></tr>
+<td>1.4.0 </td><td><ul>
+<li>
+Add the interface for <a href="https://github.com/Infineon/emfile"><b>emFile</b></a> implemented by MSD class APIs. For more details, refer to the <a class="el" href="index.html#section_emusb_host_emfile">Integration with emFile</a>. </li>
+<li>
+Updated the emUSB-Host stack to 2.42.0 </li>
+</ul>
+</td><td><ul>
+<li>
+New version is available </li>
+</ul>
+</td></tr>
 <tr>
-<td>Minor documentation updates </td><td></td></tr>
+<td>1.3.0 </td><td><ul>
+<li>
+Add OTG support for XMC4000 devices </li>
+<li>
+Add new driver for PSoC 6 with DMA support </li>
+<li>
+Updated the emUSB-Host stack to 2.40.0 </li>
+<li>
+Minor documentation updates </li>
+</ul>
+</td><td><ul>
+<li>
+New version is available </li>
+</ul>
+</td></tr>
 <tr>
-<td>1.2.1 </td><td>Fixed the build warning in the OS layer, which was caused by the indirect including the xmc_common.h header file </td><td>Bug fixing  </td></tr>
+<td>1.2.1 </td><td><ul>
+<li>
+Fixed the build warning in the OS layer, which was caused by the indirect including the xmc_common.h header file </li>
+</ul>
+</td><td><ul>
+<li>
+Bug fixing </li>
+</ul>
+</td></tr>
 <tr>
-<td rowspan="3">1.2.0 </td><td>Provided support for CAT3 devices. </td><td></td></tr>
+<td>1.2.0 </td><td><ul>
+<li>
+Provided support for XMC4000 devices. </li>
+<li>
+Updated the emUSB-Host stack to 2.36.3 </li>
+<li>
+Minor documentation updates </li>
+</ul>
+</td><td><ul>
+<li>
+New version is available </li>
+</ul>
+</td></tr>
 <tr>
-<td>Updated the emUSB-Host stack to 2.36.3 </td><td>New version is available  </td></tr>
+<td>1.1.0 </td><td><ul>
+<li>
+Updated the emUSB-Host stack to 2.36.1 </li>
+<li>
+The OS layer uses abstraction-rtos APIs instead of FreeRTOS. This means that emUSB-Device can be used with RTOS supported by abstraction-rtos included FreeRTOS </li>
+<li>
+Added the functionality in the usbh_config.c file to control enabling/disabling power on VBUS line </li>
+<li>
+Updated the implementation of Debug Message Output. The usbh_config_io.c file became more friendly for updating and a USBH_DISABLE_STANDARD_OUTPUT macro was added. For details, refer to <a class="el" href="index.html#section_emusb_host_debug_mes_out">Debug Message Output</a> </li>
+<li>
+Minor documentation updates </li>
+</ul>
+</td><td><ul>
+<li>
+New version is available </li>
+<li>
+Extend the number of supported RTOS </li>
+<li>
+The changes allow to support the correct reinitialization of emUSB-Host </li>
+<li>
+Improved the usability of Debug Message Output </li>
+</ul>
+</td></tr>
 <tr>
-<td>Minor documentation updates </td><td></td></tr>
+<td>1.0.1 </td><td><ul>
+<li>
+Updating the LICENSE file </li>
+</ul>
+</td><td></td></tr>
 <tr>
-<td rowspan="5">1.1.0 </td><td>Updated the emUSB-Host stack to 2.36.1 </td><td>New version is available  </td></tr>
-<tr>
-<td>The OS layer uses abstraction-rtos APIs instead of FreeRTOS. This means that emUSB-Device can be used with RTOS supported by abstraction-rtos included FreeRTOS  </td><td>Extend the number of supported RTOS  </td></tr>
-<tr>
-<td>Added the functionality in the usbh_config.c file to control enabling/disabling power on VBUS line </td><td>The changes allow to support the correct reinitialization of emUSB-Host  </td></tr>
-<tr>
-<td>Updated the implementation of Debug Message Output. The usbh_config_io.c file became more friendly for updating and a USBH_DISABLE_STANDARD_OUTPUT macro was added. For details, refer to <a class="el" href="index.html#section_emusb_host_debug_mes_out">Debug Message Output</a>  </td><td>Improved the usability of Debug Message Output  </td></tr>
-<tr>
-<td>Minor documentation updates </td><td></td></tr>
-<tr>
-<td>1.0.1 </td><td>Updating the LICENSE file </td><td></td></tr>
-<tr>
-<td>1.0.0 </td><td>Initial release of emUSB-Host stack 2.36.0 </td><td></td></tr>
+<td>1.0.0 </td><td><ul>
+<li>
+Initial release of emUSB-Host stack 2.36.0 </li>
+</ul>
+</td><td></td></tr>
 </table>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
