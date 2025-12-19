@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Host version: V2.48.0                                  *
+*       emUSB-Host version: V2.48.1                                  *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -185,6 +185,7 @@ USBH_STATUS       USBH_FT232_SetLatencyTimer          (USBH_FT232_HANDLE hDevice
 USBH_STATUS       USBH_FT232_GetLatencyTimer          (USBH_FT232_HANDLE hDevice, U8 * pLatency);
 USBH_STATUS       USBH_FT232_SetBitMode               (USBH_FT232_HANDLE hDevice, U8   Mask, U8 Enable);
 USBH_STATUS       USBH_FT232_GetBitMode               (USBH_FT232_HANDLE hDevice, U8 * pMode);
+USBH_STATUS       USBH_FT232_ConfigurePollDelay       (USBH_FT232_HANDLE hDevice, unsigned PollDelay);
 
 #if defined(__cplusplus)
   }

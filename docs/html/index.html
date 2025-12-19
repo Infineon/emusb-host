@@ -130,10 +130,10 @@ General Description</h1>
 <tr>
 <th>Device family</th><th>Drivers</th><th>Function to add driver </th></tr>
 <tr>
-<td>PSE84 </td><td>PSoCE84 Driver </td><td>USBH_Infineon_PSOCE84_DMA_Add   </td></tr>
+<td>PSE84 </td><td>PSoCE84 Driver </td><td>USBH_Infineon_PSOCE84_DMA_Add  </td></tr>
 </table>
 <dl class="section note"><dt>Note</dt><dd>For the function description, refer to the: <a href="./../UM10001_emUSBH.pdf"><b>SEGGER emUSB-Host User Guide &amp; Reference Manual</b></a> Host controller specifics chapter.</dd></dl>
-<p>For the PSE84 device, the DMA engine of the USB IP block does not have access to all SRAM regions. For details, see the PSE84 Reference Manual. As a result, the memory pool for the PSE84 driver must be located only to the SRAM region with DMA access. An example of the allocation memory pool is in the usbd_config.c file.</p>
+<p>For the PSE84 device, the DMA engine of the USB IP block does not have access to all SRAM regions. For details, see the PSE84 Reference Manual. As a result, all the memory used by USB including the memory pool for the PSE84 driver must be located only to the SRAM/SoCMEM region with DMA access, Other memory allocations can adversely affect the performance. An example of the allocation memory pool is in the usbd_config.c file.</p>
 <p >The emUSB-Host is provided in the form of pre-build libraries. The pre-build library is selected automatically based on configuration of Application project.</p>
 <p >The emUSB-Host includes an OS abstraction implemented by abstraction-rtos, so this Middleware can be used with any RTOSes supported by abstraction-rtos. The RTOS is required for the emUSB-Host operation.</p>
 <p >The hardware dependency files are presented in export/Config directory:</p><ul>
@@ -175,7 +175,7 @@ STEP 2: Configure pins and clocks for emUSB-Host.</h2>
 <li>Enable DPLL_HP (#2.2), Set Desired Frequency to 400 MHz (#2.3),</li>
 <li>Select CLK_PATH2 as the source clock for CLK_HF1 (#2.4). Ensure that CLK_HF1 has the frequency of 400 MHz (#2.5).</li>
 <li>Enable DPLL_LP1 (#2.6), set Desired Frequency to 200 MHz (#2.7) as a clock source. Use a clock with the accuracy of 0.05 % or better (#2.8).</li>
-<li>Select CLK_PATH0 or CLK_PATH1 as the source clock for CLK_HF8 (#2.9). Ensure that CLK_HF8 frequency is 50 MHz with accuracy 0.05 % or better (#2.10). <div class="image">
+<li>Select CLK_PATH0 or CLK_PATH1 as the source clock for CLK_HF8 (#2.9). Ensure that CLK_HF8 frequency is 50 MHz or 24 MHz with accuracy 0.05 % or better (#2.10). <div class="image">
 <img src="pse84_emusb_host_system_cfg.png" alt=""/>
 </div>
 </li>
@@ -183,7 +183,7 @@ STEP 2: Configure pins and clocks for emUSB-Host.</h2>
 <img src="pse84_emusb_host_power_cfg.png" alt=""/>
 </div>
 </li>
-<li>Under Clocks tab in the Peri1 Memory MappedIO (#3.1).</li>
+<li>Under Clocks tab in the Peri1 select Memory MappedIO (#3.1).</li>
 <li>Ensure APP_MMIO3 Divider is enabled and set to 4 in the Divider field (#3.2). <div class="image">
 <img src="pse84_emusb_host_peri_group_cfg.png" alt=""/>
 </div>
@@ -832,10 +832,7 @@ Picking an emUSB-Host Library Variant</h2>
 <tr>
 <td>Build configuration </td><td>Debug, Release </td><td>CONFIG  </td></tr>
 <tr>
-<td>Core </td><td><ul>
-<li>CM33, CM55 for PSE84;  </li>
-</ul>
-</td><td>CORE  </td></tr>
+<td>Core </td><td>CM33, CM55 </td><td>CORE  </td></tr>
 <tr>
 <td>Floating point </td><td>hardfp, softfp </td><td>VFP_SELECT  </td></tr>
 <tr>
@@ -869,6 +866,18 @@ Changelog</h1>
 <table class="doxtable">
 <tr>
 <th>Version</th><th>Changes</th><th>Reason for Change </th></tr>
+<tr>
+<td>2.2.0 </td><td><ul>
+<li>
+Updated the emUSB-Host stack to 2.48.1. </li>
+<li>
+Support PHY Ref Clk selection to 24 or 50 MHz. </li>
+</ul>
+</td><td><ul>
+<li>
+New version is available </li>
+</ul>
+</td></tr>
 <tr>
 <td>2.1.0 </td><td><ul>
 <li>

@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Host version: V2.48.0                                  *
+*       emUSB-Host version: V2.48.1                                  *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -67,6 +67,7 @@ Purpose     : USB host driver for PSOCE84
 U32  USBH_Infineon_PSOCE84_Add             (void * pBase);
 U32  USBH_Infineon_PSOCE84_DMA_Add         (void * pBase);
 void USBH_Infineon_PSOCE84_SetCheckAddress (USBH_CHECK_ADDRESS_FUNC * pfCheckValidDMAAddress);
+void USBH_Infineon_PSOCE84_DMA_SetPLLRefClock(U32 MHz);
 
 #if defined(__cplusplus)
   }

@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Release notes for emUSB-Host V2.48.0         </title>
+<title>Release notes for emUSB-Host V2.48.1         </title>
 <meta name="robots" content="noindex,nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style type="text/css">
@@ -182,7 +182,7 @@ div.divider-global:nth-of-type(even) {
       <div class="claim">The Embedded Experts</div>
       <div class="head">
         <div class="container">
-          <h1>Release notes for emUSB-Host V2.48.0         </h1>
+          <h1>Release notes for emUSB-Host V2.48.1         </h1>
         </div>
       </div>
     </div>
@@ -190,6 +190,26 @@ div.divider-global:nth-of-type(even) {
   <!-- ****************************************************************** -->
   <!-- History                                                            -->
   <!-- ****************************************************************** -->
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 2.48.1 [29. Sep 2025]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>FT232: Added function USBH_FT232_ConfigurePollDelay().</li>
+          </ol>
+          <h3>Improvements</h3>
+          <ol>
+            <li>VIDEO: Added a workaround for cameras that do not have 'alternate setting' initialized after startup.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>HID: Fix return value of function USBH_HID_SuspendResume().</li>
+            <li>FT232: Fix timeout handling in USBH_FT232_Read().</li>
+          </ol>
+        </div>
+      </div>
+    </div>
     <div class="divider-global">
       <div class="container">
         <h2>Version 2.48.0 [12. Aug 2025]</h2>

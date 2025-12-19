@@ -7,7 +7,6 @@ Please refer to the [README.md](./README.md) and the [emUSB-Host API Reference G
 To view the full list of changes, refer to [Changelog section](https://infineon.github.io/emusb-host/html/index.html#section_emusb_host_changelog).
 
 ## Known Issues and Limitations
-Unable to stream video with Logitech C615 video camera.
 
 ## Supported Software and Tools
 
@@ -16,7 +15,7 @@ This version of the emUSB-Host was validated for the compatibility with the foll
 | Software and Tools                                      | Version |
 | :---                                                    | :----:  |
 | ModusToolbox Software Environment                       | 3.6     |
-| MTB Device Support Library for PSE84                    | 1.0.0   |
+| MTB Device Support Library for PSE84                    | 1.2.0   |
 | RTOS Abstraction                                        | 1.11.0  |
 | Retarget IO                                             | 1.8.0   |
 | GCC Compiler                                            | 14.2.1  |

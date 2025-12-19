@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Host version: V2.48.0                                  *
+*       emUSB-Host version: V2.48.1                                  *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -27,12 +27,12 @@ may only be used in accordance with the following terms:
 
 The source code of the emUSB Host software has been licensed to Cypress
 Semiconductor Corporation, whose registered office is 198 Champion
-Court, San Jose, CA 95134, USA including the 
-right to create and distribute the object code version of 
+Court, San Jose, CA 95134, USA including the
+right to create and distribute the object code version of
 the emUSB Host software for its Cortex M0, M0+, M4, M33 and M55 based devices.
-The object code version can be used by Cypress customers under the 
+The object code version can be used by Cypress customers under the
 terms and conditions of the associated End User License Agreement.
-Support for the object code version is provided by Cypress, 
+Support for the object code version is provided by Cypress,
 full source code is available at: www.segger.com
 
 We appreciate your understanding and fairness.
@@ -44,7 +44,7 @@ Licensed SEGGER software: emUSB-Host
 License number:           USBH-00303
 License model:            Cypress Services and License Agreement, signed November 17th/18th, 2010
                           and Amendment Number One, signed December 28th, 2020 and February 10th, 2021
-                          and Amendment Number Three, signed May 2nd, 2022 and May 5th, 2022 and Amendment Number Four, signed August 28th, 2023 
+                          and Amendment Number Three, signed May 2nd, 2022 and May 5th, 2022 and Amendment Number Four, signed August 28th, 2023
 Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4, M33 and M55
 ----------------------------------------------------------------------
 Support and Update Agreement (SUA)
@@ -263,6 +263,9 @@ static int check_valid_dma_address(const void *mem_addr)
 */
 void USBH_X_Config(void)
 {
+    mtb_hal_hf_clock_t hf_clk8;
+    U32 usb_ref_clk;
+
     init_power_control_pin();
 
     /* Assigning memory */
@@ -282,6 +285,18 @@ void USBH_X_Config(void)
 
     /* Set cache configuration for USBH stack. */
     USBH_SetCacheConfig(&cache_config, sizeof(cache_config));
+    /* check usb phy ref clk (CLK_HF8) freq and set */
+    hf_clk8.inst_num = (U32)8;
+    usb_ref_clk = mtb_hal_clock_get_hf_clock_freq(&hf_clk8);
+    /*we support 24 and 50Mhz ref clk only, default is 50Mhz*/
+    if(usb_ref_clk == (U32)24000000)
+    {
+        USBH_Infineon_PSOCE84_DMA_SetPLLRefClock((U32)24);
+    }
+    else
+    {
+        USBH_Infineon_PSOCE84_DMA_SetPLLRefClock((U32)50);
+    }
 
     USBH_Infineon_PSOCE84_DMA_Add((void*)0x44900000UL);
     USBH_Infineon_PSOCE84_SetCheckAddress(check_valid_dma_address);
