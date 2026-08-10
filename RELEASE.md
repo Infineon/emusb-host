@@ -8,6 +8,20 @@ To view the full list of changes, refer to [Changelog section](https://infineon.
 
 ## Known Issues and Limitations
 
+The Host suspend and resume for PSC3M6 devices does not work because the controller cannot generate the correct signaling on the USB bus.
+Possible workarounds include:
+
+- Reset the device with the USB application. For example:
+
+```
+USBH_URB Urb;
+Urb.Header.Function = USBH_FUNCTION_RESET_DEVICE;
+USBH_SubmitUrb(USBH_CDC_GetInterfaceHandle(CDC_Handle), &Urb);
+USBH_CDC_Close(CDC_Handle);
+```
+
+- Physically unplug the device, and then plug it back in.
+
 ## Supported Software and Tools
 
 This version of the emUSB-Host was validated for the compatibility with the following Software and Tools:
@@ -15,7 +29,7 @@ This version of the emUSB-Host was validated for the compatibility with the foll
 | Software and Tools                                      | Version |
 | :---                                                    | :----:  |
 | ModusToolbox Software Environment                       | 3.6     |
-| MTB Device Support Library for PSE84                    | 1.2.0   |
+| MTB Device Support Library for PSE84                    | 1.1.0   |
 | RTOS Abstraction                                        | 1.11.0  |
 | Retarget IO                                             | 1.8.0   |
 | GCC Compiler                                            | 14.2.1  |

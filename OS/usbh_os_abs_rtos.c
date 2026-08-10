@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Host version: V2.48.1                                  *
+*       emUSB-Host version: V2.48.3                                  *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -69,13 +69,13 @@ Purpose     : OS Layer for the emUSB-Host.
 
 #include "cyabs_rtos.h"
 
-#if defined (COMPONENT_CAT1A) || defined (COMPONENT_CAT1B) || defined (COMPONENT_PSE84)
+#if defined (COMPONENT_CAT1A) || defined (COMPONENT_PSC3M6) || defined (COMPONENT_PSE84)
     #include "mtb_hal.h"
 #elif defined (COMPONENT_CAT3)
     #include "xmc_common.h"
 #else
     #error "Unsupported Device Family"
-#endif /* #if defined (COMPONENT_CAT1A) || defined (COMPONENT_CAT1B) || defined (COMPONENT_PSE84) */
+#endif /* #if defined (COMPONENT_CAT1A) || defined (COMPONENT_PSC3M6) || defined (COMPONENT_PSE84) */
 
 /*********************************************************************
 *
@@ -135,11 +135,11 @@ static uint32_t int_state_cnt;
 */
 __WEAK void USBH_OS_DisableInterrupt(void)
 {
-#if defined (COMPONENT_CAT1A) || defined (COMPONENT_CAT1B) || defined (COMPONENT_PSE84)
+#if defined (COMPONENT_CAT1A) || defined (COMPONENT_PSC3M6) || defined (COMPONENT_PSE84)
     int_state[int_state_cnt] = mtb_hal_system_critical_section_enter();
 #elif defined (COMPONENT_CAT3)
     int_state[int_state_cnt] = XMC_EnterCriticalSection();
-#endif /* #if defined (COMPONENT_CAT1A) || defined (COMPONENT_CAT1B) || defined (COMPONENT_PSE84) */
+#endif /* #if defined (COMPONENT_CAT1A) || defined (COMPONENT_PSC3M6) || defined (COMPONENT_PSE84) */
     int_state_cnt++;
 }
 
@@ -159,11 +159,11 @@ __WEAK void USBH_OS_EnableInterrupt(void)
     /* Check possibility of getting negative value for unsigned variable */
     CY_ASSERT(0U != int_state_cnt);
     int_state_cnt--;
-#if defined (COMPONENT_CAT1A) || defined (COMPONENT_CAT1B) || defined (COMPONENT_PSE84)
+#if defined (COMPONENT_CAT1A) || defined (COMPONENT_PSC3M6) || defined (COMPONENT_PSE84)
     mtb_hal_system_critical_section_exit(int_state[int_state_cnt]);
 #elif defined (COMPONENT_CAT3)
     XMC_ExitCriticalSection(int_state[int_state_cnt]);
-#endif /* #if defined (COMPONENT_CAT1A) || defined (COMPONENT_CAT1B) || defined (COMPONENT_PSE84) */
+#endif /* #if defined (COMPONENT_CAT1A) || defined (COMPONENT_PSC3M6) || defined (COMPONENT_PSE84) */
 }
 
 /*********************************************************************

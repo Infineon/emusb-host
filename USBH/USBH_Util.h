@@ -3,7 +3,7 @@
 *                        The Embedded Experts                        *
 **********************************************************************
 *                                                                    *
-*       (c) 2003 - 2025     SEGGER Microcontroller GmbH              *
+*       (c) 2003 - 2026     SEGGER Microcontroller GmbH              *
 *                                                                    *
 *       www.segger.com     Support: www.segger.com/ticket            *
 *                                                                    *
@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Host version: V2.48.1                                  *
+*       emUSB-Host version: V3.2.0                                   *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -48,7 +48,7 @@ License model:            Cypress Services and License Agreement, signed Novembe
 Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4, M33 and M55
 ----------------------------------------------------------------------
 Support and Update Agreement (SUA)
-SUA period:               2022-05-12 - 2026-05-19
+SUA period:               2022-05-12 - 2027-05-19
 Contact to extend SUA:    sales@segger.com
 ----------------------------------------------------------------------
 File        : USBH_Util.h
@@ -166,6 +166,7 @@ void          USBH_DLIST_MoveList      (const USBH_DLIST * pSrcHead,    USBH_DLI
 
 const char  * USBH_Basename            (const char *pPath);
 void          USBH_LogHexDump          (U32 Type, U32 Len, const void *pvData);
+void          USBH_LogAndDump          (U32 Type, const char *pTxt, U32 Len, const void *pvData);
 void          USBH_XXLog               (unsigned Tag, unsigned Data);
 
 #if defined(__cplusplus)

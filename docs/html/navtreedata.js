@@ -37,7 +37,8 @@ var NAVTREE =
         [ "Hardware-dependent Configuration", "index.html#section_emusb_host_hw_dep_conf", [
           [ "USB Pins Configuration", "index.html#section_emusb_host_hw_dep_conf_pins", null ],
           [ "USB Clock Configuration", "index.html#section_emusb_host_hw_dep_conf_clock", null ],
-          [ "USB Interrupt Configuration", "index.html#section_emusb_host_hw_dep_conf_int", null ]
+          [ "USB Interrupt Configuration", "index.html#section_emusb_host_hw_dep_conf_int", null ],
+          [ "DMA driver for PSC3M6 devices", "index.html#section_emusb_host_dma_cat1a_b", null ]
         ] ],
         [ "Debug Message Output", "index.html#section_emusb_host_debug_mes_out", null ],
         [ "Low Power Support", "index.html#section_emusb_host_low_power", null ],

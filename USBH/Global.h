@@ -3,21 +3,17 @@
 *                        The Embedded Experts                        *
 **********************************************************************
 *                                                                    *
-*       (c) 2003 - 2025     SEGGER Microcontroller GmbH              *
+*       (c) 2003 - 2026     SEGGER Microcontroller GmbH              *
 *                                                                    *
 *       www.segger.com     Support: www.segger.com/ticket            *
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Host * USB Host stack for embedded applications        *
-*                                                                    *
-*       Please note: Knowledge of this file may under no             *
-*       circumstances be used to write a similar product.            *
-*       Thank you for your fairness !                                *
+*       SEGGER-Lib * Helper library for SEGGER middleware            *
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Host version: V2.48.1                                  *
+*       SEGGER-Lib version: V2.12.0                                  *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -48,7 +44,7 @@ License model:            Cypress Services and License Agreement, signed Novembe
 Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4, M33 and M55
 ----------------------------------------------------------------------
 Support and Update Agreement (SUA)
-SUA period:               2022-05-12 - 2026-05-19
+SUA period:               2022-05-12 - 2027-05-19
 Contact to extend SUA:    sales@segger.com
 -------------------------- END-OF-HEADER -----------------------------
 
@@ -58,7 +54,7 @@ Purpose : Global types
           merge the files. In order to use Segger code, the types
           U8, U16, U32, I8, I16, I32 need to be defined in Global.h;
           additional definitions do not hurt.
-Revision: $Rev: 32989 $
+Revision: $Rev: 48995 $
 */
 
 #ifndef GLOBAL_H            // Guard against multiple inclusion
@@ -68,7 +64,9 @@ Revision: $Rev: 32989 $
 #define I8    signed char
 #define U16   unsigned short
 #define I16   signed short
-#if defined(__x86_64__) || defined(__aarch64__)
+// _M_AMD64 is defined by the MSVC compiler for compilations targetting x64 processors
+// https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-170
+#if defined(__x86_64__) || defined(__aarch64__) || defined(_M_AMD64) || (defined(__riscv) && __riscv_xlen == 64)
 #define U32   unsigned int
 #define I32   int
 #else
@@ -77,11 +75,10 @@ Revision: $Rev: 32989 $
 #endif
 
 //
-// CC_NO_LONG_SUPPORT can be defined to compile test
-// without long support for compilers that do not
-// support C99 and its long type.
+// SEGGER_NO_U64_SUPPORT can be defined if the
+// compiler does not have support for a 64-bit integer data type
 //
-#ifdef CC_NO_LONG_SUPPORT
+#ifdef SEGGER_NO_U64_SUPPORT
   #define PTR_ADDR  U32
 #else  // Supports long type.
   #if defined(_MSC_VER)
@@ -116,7 +113,7 @@ Revision: $Rev: 32989 $
   #else
     #define PTR_ADDR  U32
   #endif
-#endif  // Supports long type.
+#endif  // Supports U64 type.
 
 #endif                      // Avoid multiple inclusion
 

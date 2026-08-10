@@ -113,6 +113,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </ul>
 <p ><b>Device families supported by the Middleware:</b></p><ul>
 <li>PSE84</li>
+<li>PSC3M6</li>
 </ul>
 <h1><a class="anchor" id="section_emusb_host_general"></a>
 General Description</h1>
@@ -131,9 +132,11 @@ General Description</h1>
 <th>Device family</th><th>Drivers</th><th>Function to add driver </th></tr>
 <tr>
 <td>PSE84 </td><td>PSoCE84 Driver </td><td>USBH_Infineon_PSOCE84_DMA_Add  </td></tr>
+<tr>
+<td>PSC3M6 </td><td>Infineon PSC3M6 driver </td><td>USBH_Infineon_PSC3M6_Add() and USBH_Infineon_PSC3M6_DMA_Add()  </td></tr>
 </table>
 <dl class="section note"><dt>Note</dt><dd>For the function description, refer to the: <a href="./../UM10001_emUSBH.pdf"><b>SEGGER emUSB-Host User Guide &amp; Reference Manual</b></a> Host controller specifics chapter.</dd></dl>
-<p>For the PSE84 device, the DMA engine of the USB IP block does not have access to all SRAM regions. For details, see the PSE84 Reference Manual. As a result, all the memory used by USB including the memory pool for the PSE84 driver must be located only to the SRAM/SoCMEM region with DMA access, Other memory allocations can adversely affect the performance. An example of the allocation memory pool is in the usbd_config.c file.</p>
+<p>For the PSE84 device, the DMA engine of the USB IP block does not have access to all SRAM regions. For details, see the PSE84 Reference Manual. As a result, all the memory used by USB including the memory pool for the PSE84 driver must be located only to the SRAM/SoCMEM region with DMA access, other memory allocations can adversely affect the performance. An example of the allocation memory pool is in the usbd_config.c file.</p>
 <p >The emUSB-Host is provided in the form of pre-build libraries. The pre-build library is selected automatically based on configuration of Application project.</p>
 <p >The emUSB-Host includes an OS abstraction implemented by abstraction-rtos, so this Middleware can be used with any RTOSes supported by abstraction-rtos. The RTOS is required for the emUSB-Host operation.</p>
 <p >The hardware dependency files are presented in export/Config directory:</p><ul>
@@ -175,7 +178,7 @@ STEP 2: Configure pins and clocks for emUSB-Host.</h2>
 <li>Enable DPLL_HP (#2.2), Set Desired Frequency to 400 MHz (#2.3),</li>
 <li>Select CLK_PATH2 as the source clock for CLK_HF1 (#2.4). Ensure that CLK_HF1 has the frequency of 400 MHz (#2.5).</li>
 <li>Enable DPLL_LP1 (#2.6), set Desired Frequency to 200 MHz (#2.7) as a clock source. Use a clock with the accuracy of 0.05 % or better (#2.8).</li>
-<li>Select CLK_PATH0 or CLK_PATH1 as the source clock for CLK_HF8 (#2.9). Ensure that CLK_HF8 frequency is 50 MHz or 24 MHz with accuracy 0.05 % or better (#2.10). <div class="image">
+<li>Select CLK_PATH0 or CLK_PATH1 as the source clock for CLK_HF8 (#2.9). Ensure that CLK_HF8 frequency is 50 MHz with accuracy 0.05 % or better (#2.10). <div class="image">
 <img src="pse84_emusb_host_system_cfg.png" alt=""/>
 </div>
 </li>
@@ -191,6 +194,45 @@ STEP 2: Configure pins and clocks for emUSB-Host.</h2>
 <li><p class="startli">Select File-&gt;Save to generate initialization code.</p>
 <dl class="section note"><dt>Note</dt><dd>Configure some boards additionally to select the USB-Host connector. Refer to the applicable board user guide.</dd></dl>
 </li>
+</ol>
+<ul>
+<li><b>PSC3M6 Devices:</b></li>
+</ul>
+<ol type="1">
+<li>Launch the ModusToolbox Device Configurator and switch to the Peripherals tab (#1.1).</li>
+<li>Enable the USB personality under Communication (#1.2) and select emUSB-Host/Device 1.0 personality (#1.3).</li>
+<li>Ensure that USB mode is Host (#1.4) and the Clock is connected to CLK_HF3 (#1.5). <div class="image">
+<img src="psc3m6_emusb_host_peripherals_cfg.png" alt=""/>
+</div>
+</li>
+<li>Switch to the Clocks tab.</li>
+</ol>
+<div class="image">
+<img src="psc3m6_emusb_host_clocks_tab_cfg.png" alt=""/>
+</div>
+<dl class="section note"><dt>Note</dt><dd>The clocking system can be different between devices.</dd></dl>
+<ol type="1">
+<li>Enable the clock source which has the accuracy +/-0.05% (it could be ECO - case). <div class="image">
+<img src="psc3m6_emusb_host_eco_cfg.png" alt=""/>
+</div>
+</li>
+<li>Enable DPLL if it is not enabled, and select an output frequency that is a multiple of 48 MHz. <div class="image">
+<img src="psc3m6_emusb_host_dpll_cfg.png" alt=""/>
+</div>
+ <dl class="section note"><dt>Note</dt><dd>Select the enabled source clock with accuracy +/-0.05% into the PATH_MUX section of the selected DPLL. <div class="image">
+<img src="psc3m6_emusb_host_path_mux_cfg.png" alt=""/>
+</div>
+</dd></dl>
+</li>
+<li>Select the CLK_HF3 USB clock. Assign the source clock to the CLK_PATH connected to the configured previously DPLL. <div class="image">
+<img src="psc3m6_emusb_host_clk_hf3_cfg.png" alt=""/>
+</div>
+</li>
+<li>If the Power personality is enabled, the System Idle Power Mode option must be Active, or CPU Sleep. <div class="image">
+<img src="psc3m6_emusb_host_power_cfg.png" alt=""/>
+</div>
+</li>
+<li>Select File-&gt;Save to generate initialization code.</li>
 </ol>
 <h2><a class="anchor" id="subsection_qsg_step3"></a>
 STEP 3: Write the code in main.c.</h2>
@@ -694,7 +736,7 @@ STEP 3: Write the code in main.c.</h2>
 <div class="line">}</div>
 </div><!-- fragment --></li>
 <li><p class="startli">Initialize retarget-io to use the debug UART port:</p>
-<p class="startli"><b> For PSE84 devices:</b> Open the Device Configurator, select the Peripherals tab and the desired SCB resource (#1.1), UART under Personality (#1.2), click OK (#1.3). </p><div class="image">
+<p class="startli"><b> For PSC3M6 and PSE84 devices:</b> Open the Device Configurator, select the Peripherals tab and the desired SCB resource (#1.1), UART under Personality (#1.2), click OK (#1.3). </p><div class="image">
 <img src="pse84_emusb_device_uart_1.png" alt=""/>
 </div>
 <p> Select the desired name for the SCB (#2.1) and pins and clock for SCB (#2.2). The other UART options can be set by default, see the screenshot below. </p><div class="image">
@@ -748,19 +790,28 @@ Configuration Considerations</h1>
 <h2><a class="anchor" id="section_emusb_host_hw_dep_conf"></a>
 Hardware-dependent Configuration</h2>
 <p >The hardware resources (Pins, clocks, interrupts) required for USB must be configured before the start of USB operation before calling USBH_Init() or in USBH_X_Config(). Interrupts must be configured in the USBH_X_Config() function.</p>
-<p >For PSE84 devices, the USB hardware does not control the power on VBUS line. This feature is essential for some cases, so, the appropriate logic should be implemented on the Application side. For some evaluation boards, this logic is already implemented - typically, an additional MCU pin controls VBUS power. To allow emUSB-Host control power (enable or disable) on VBUS line, register a callback function by USBH_SetOnSetPortPower().</p>
+<p >For PSC3M6 and PSE84 devices, the USB hardware does not control the power on VBUS line. This feature is essential for some cases, so, the appropriate logic should be implemented on the Application side. For some evaluation boards, this logic is already implemented - typically, an additional MCU pin controls VBUS power. To allow emUSB-Host control power (enable or disable) on VBUS line, register a callback function by USBH_SetOnSetPortPower().</p>
 <p >The implementation template of USBH_X_Config() is provided for each device category in the Config directory under COMPONENT_CATx. This template is automatically copied into your project when middleware is added to project. This template does not include the configuration of clock and pins required for USB operation.</p>
 <p >The template file define USBH_ALLOC_SIZE macro for the size of the memory pool. The size of memory is selected to satisfy RAM usage of Driver and a few connected devices, to provide the best experience for running code examples and evaluating the emUSB-Host software for the widest range of boards. Update this value with the optimal memory pool size (strongly recommended) for the application to find the balance between the memory consumption and features support. For details on selecting the optimal memory pool size, refer to the <a href="./../UM10001_emUSBH.pdf"><b>SEGGER emUSB-Host User Guide &amp; Reference Manual</b></a> Memory pools chapter.</p>
-<dl class="section warning"><dt>Warning</dt><dd>For PSE84, the template file also configures a pin responsible for enabling/disabling power to connected USB devices by the VBUS line. The default value of the pin number is selected only for the KIT_PSE84_EVK (PSE84) and must be modified for other boards.</dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>For PSE84, the template file also configures a pin responsible for enabling/disabling power to connected USB devices by the VBUS line. The default value of the pin number is selected only for the KIT_PSE84_EVK (PSE84), KIT_PSC3M6_EVAL (PSC3M6) and must be modified for other boards.</dd></dl>
 <p>For details on Hardware Dependent Configuration, refer to the - <a href="./../UM10001_emUSBH.pdf"><b>SEGGER emUSB-Host User Guide &amp; Reference Manual</b></a>.</p>
 <h3><a class="anchor" id="section_emusb_host_hw_dep_conf_pins"></a>
 USB Pins Configuration</h3>
-<p ><b> PSE84 Devices </b></p>
+<p ><b> PSC3M6 Devices Family </b></p>
+<p >The D+ and D- pins must be configured for USB operation. The emUSB-Host/Device personality in the Device Configurator allows for easy configuration of the pins. Otherwise, the pins can be configured manually by PDL APIs.</p>
+<p >The following snippet initializes GPIO pins for USB operation.</p>
+<p >For PSC3M6: </p><div class="fragment"><div class="line">    Cy_GPIO_Pin_FastInit(USBDP_PORT, USBDP_PIN, CY_GPIO_DM_ANALOG, 0U, USBDP_GPIO);</div>
+<div class="line">    Cy_GPIO_Pin_FastInit(USBDM_PORT, USBDM_PIN, CY_GPIO_DM_ANALOG, 0U, USBDM_GPIO);</div>
+</div><!-- fragment --><p ><b> PSE84 Devices </b></p>
 <p >The D+/D- pins are dedicated and do not require configuration.</p>
 <h3><a class="anchor" id="section_emusb_host_hw_dep_conf_clock"></a>
 USB Clock Configuration</h3>
 <p >The USB 2.0 specification defines the required bit rate accuracy for the USB Host in section 7.1.11. Ensure that the clock sources for USB meet the requirements.</p>
 <p >The emUSB-Host/Device personality in the Device Configurator allows for easy configuration of the clocks for USB operation and also check if the clocks meet the requirements. Otherwise, the clocks can be configured manually by PDL/HAL Next APIs.</p>
+<p ><b> PSC3M6 Devices Family</b></p>
+<p >The USB Host requires one clock for operation:</p><ul>
+<li>Clock the main clock at 48 MHz with required bit rate accuracy according to the USB 2.0 specification. Typically, the main clock is CLK_HF3 output signal, but refer to the device datasheet to identify the clock source for USB for a specific device.</li>
+</ul>
 <p ><b> PSE84 Devices </b></p>
 <p >The USB Host requires two clocks for operation:</p><ul>
 <li>Phy Pll reference clock configured at 50 MHz with the required bit rate accuracy according to the USB 2.0 specification. Typically, this clock is the CLK_HF8 output signal, but refer to the device datasheet to identify the clock source for USB for a specific device.</li>
@@ -771,7 +822,42 @@ USB Clock Configuration</h3>
 <h3><a class="anchor" id="section_emusb_host_hw_dep_conf_int"></a>
 USB Interrupt Configuration</h3>
 <p >The interrupt is mandatory for the emUSB-Host Middleware operation. The interrupt priority selection is a part of Application level - the interrupt priority selected in the template files is not suitable for real project. For USB recommended setting the interrupt priority as high as possible.</p>
-<p ><b> PSE84 Devices </b></p>
+<p ><b> PSC3M6 Devices Family</b></p>
+<p >emUSB-Host uses only one interrupt source from the three available in the IP USB block - usb_0_interrupt_med_IRQn.</p>
+<p >The following code snippet shows the interrupt configuration for CM33 core.</p>
+<div class="fragment"><div class="line"><span class="preprocessor">#define USBH_INTERRUPT_NUM                      (usb_0_interrupt_med_IRQn)</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment">/* Define the interrupt priority */</span></div>
+<div class="line"><span class="preprocessor">#define USBH_ISR_PRIO                           (3U)</span></div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"><span class="comment">/* USB Interrupt handler */</span></div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> isr(<span class="keywordtype">void</span>)</div>
+<div class="line">{</div>
+<div class="line">    USBH_ServiceISR(0);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> config_interrupt_psc3m6(<span class="keywordtype">void</span>)</div>
+<div class="line">{</div>
+<div class="line">    <span class="comment">/* Install the interrupt service routine */</span></div>
+<div class="line">    cy_stc_sysint_t usb_int_cfg =</div>
+<div class="line">    {</div>
+<div class="line">        .intrSrc = USBH_INTERRUPT_NUM,</div>
+<div class="line">        .intrPriority = USBH_ISR_PRIO</div>
+<div class="line">    };</div>
+<div class="line"> </div>
+<div class="line">    cy_en_sysint_status_t status;</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">/* Install the interrupt service routine */</span></div>
+<div class="line">    status = Cy_SysInt_Init(&amp;usb_int_cfg, isr);</div>
+<div class="line">    CY_ASSERT(CY_RSLT_SUCCESS == status);</div>
+<div class="line">    (void) status; <span class="comment">/* To avoid the compiler warning in Release mode */</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">/* Enable USB interrupt */</span></div>
+<div class="line">    NVIC_EnableIRQ(USBH_INTERRUPT_NUM);</div>
+<div class="line">}</div>
+</div><!-- fragment --><p ><b> PSE84 Devices </b></p>
 <p >emUSB-Host uses one interrupt source - usbhs_interrupt_usbhsctrl_IRQn. The emUSB-Host can be executed on the CM33 or CM55 core. The interrupt configuration is the same for both cores.</p>
 <p >The following code snippet shows the interrupt configuration for PSE84 devices: </p><div class="fragment"><div class="line"><span class="comment">/* Define the interrupt priority */</span></div>
 <div class="line"><span class="preprocessor">#define USBH_ISR_PRIO                           (3U)</span></div>
@@ -803,7 +889,18 @@ USB Interrupt Configuration</h3>
 <div class="line">    <span class="comment">/* Enable USB interrupt */</span></div>
 <div class="line">    NVIC_EnableIRQ(usbhs_interrupt_usbhsctrl_IRQn);</div>
 <div class="line">}</div>
-</div><!-- fragment --><h2><a class="anchor" id="section_emusb_host_debug_mes_out"></a>
+</div><!-- fragment --><h3><a class="anchor" id="section_emusb_host_dma_cat1a_b"></a>
+DMA driver for PSC3M6 devices</h3>
+<p >To use the driver with DMA support:</p><ol type="1">
+<li>Add USBH_ENABLE_DMA to the DEFINE variable in Makefile</li>
+<li>Connect USB EP1 to a DMA channel in the USB personality or manually using APIs for the TrigMux driver.</li>
+<li>Enable the DMA block before starting emUSB-Host by Cy_DMA_Enable()</li>
+<li>Call USBH_Infineon_PSC3M6_DMA_Add() instead of USBH_Infineon_PSC3M6_Add() in case of PSC3M6.</li>
+</ol>
+<p >Steps 3 and 4 are implemented in the usbh_config.c file.</p>
+<p >The emUSB-Host configures a DMA channel inside the USB driver, then no need to configure a DMA channel in the application code or in the DMA personality. Configuration of a DMA channel in the DMA personality is ignored, but the enable the resource for reservation and connecting USB EP1 with one of the available DMA channels.</p>
+<dl class="section note"><dt>Note</dt><dd>When DMA mode is enabled in the USB personality, the USB personality generates several macros used in the usbh_config.c file.</dd></dl>
+<h2><a class="anchor" id="section_emusb_host_debug_mes_out"></a>
 Debug Message Output</h2>
 <p >The debug builds of emUSB-Host allow using the debug message outputs. The template implementation of the message output functions is in export/Config/usbh_config_io.c file. This file is automatically copied into the ModusToolbox project when emUSB-Device middleware is added for the first time by the Library manager. Otherwise, copy this file manually. By default, <a href="https://github.com/Infineon/retarget-io"><b>retarget-io</b></a> is used for the message output, but message outputs can be redefined to any suitable output way. To disable the default message outputs, set USBH_DISABLE_STANDARD_OUTPUT=1 in the DEFINES variable in the application project Makefile. To provide a custom output method in addition to setting a variable add corresponding API under the #if (USBH_DISABLE_STANDARD_OUTPUT == 1U) condition inside the _puts() function.</p>
 <p >For details on Hardware Debug Message Output, refer to the - <a href="./../UM10001_emUSBH.pdf"><b>SEGGER emUSB-Host User Guide &amp; Reference Manual</b></a> Debugging chapter.</p>
@@ -817,8 +914,10 @@ Low Power Support</h2>
 <th>Device family</th><th>IP block power modes support </th></tr>
 <tr>
 <td>PSE84 </td><td>Active and Sleep  </td></tr>
+<tr>
+<td>PSC3M6 </td><td>Active and Sleep  </td></tr>
 </table>
-<p ><b> PSE84 Devices </b> The USB IP block operates in Active and Sleep modes without any limitations, but in Deep Sleep, the USB IP block is disabled. emUSB-Host does not support any operations in low-power modes, in which the USB IP block is disabled. Also, emUSB-Host does not support the preparing and restoring before/after low-power modes, in which the USB IP block is disabled. As a result, if the microcontroller goes into Deep Sleep, emUSB-Host must be shut down by the USBH_Exit() function before entering this mode, and after exiting, emUSB-Host must be reinitialized.</p>
+<p ><b> PSE84/PSC3M6 Devices </b> The USB IP block operates in Active and Sleep modes without any limitations, but in Deep Sleep, the USB IP block is disabled. emUSB-Host does not support any operations in low-power modes, in which the USB IP block is disabled. Also, emUSB-Host does not support the preparing and restoring before/after low-power modes, in which the USB IP block is disabled. As a result, if the microcontroller goes into Deep Sleep, emUSB-Host must be shut down by the USBH_Exit() function before entering this mode, and after exiting, emUSB-Host must be reinitialized.</p>
 <p ><b>The Suspended/Resume condition generation from emUSB-Host</b></p>
 <p >emUSB-Host can generate the Suspend/Resume condition for any connected device (directly or through the HUB). For more details, refer to the <a href="./../../Doc/UM10001_emUSBH.pdf"><b>SEGGER emUSB-Host User Guide &amp; Reference Manual</b></a> by keywords <em>Suspend</em> or <em>Resume</em>.</p>
 <h2><a class="anchor" id="section_emusb_host_pick_lib"></a>
@@ -828,11 +927,15 @@ Picking an emUSB-Host Library Variant</h2>
 <tr>
 <th>Configuration</th><th>Options</th><th>Make Variable </th></tr>
 <tr>
-<td>Device family </td><td>PSE84 </td><td>COMPONENTS  </td></tr>
+<td>Device family </td><td>PSE84, PSC3M6 </td><td>COMPONENTS  </td></tr>
 <tr>
 <td>Build configuration </td><td>Debug, Release </td><td>CONFIG  </td></tr>
 <tr>
-<td>Core </td><td>CM33, CM55 </td><td>CORE  </td></tr>
+<td>Core </td><td><ul>
+<li>CM33, CM55 for PSE84;</li>
+<li>CM33 for PSC3M6;  </li>
+</ul>
+</td><td>CORE  </td></tr>
 <tr>
 <td>Floating point </td><td>hardfp, softfp </td><td>VFP_SELECT  </td></tr>
 <tr>
@@ -867,131 +970,51 @@ Changelog</h1>
 <tr>
 <th>Version</th><th>Changes</th><th>Reason for Change </th></tr>
 <tr>
-<td>2.2.0 </td><td><ul>
-<li>
-Updated the emUSB-Host stack to 2.48.1. </li>
-<li>
-Support PHY Ref Clk selection to 24 or 50 MHz. </li>
-</ul>
-</td><td><ul>
-<li>
-New version is available </li>
-</ul>
-</td></tr>
+<td rowspan="1">2.3.0 </td><td>Updated the emUSB-Host stack to 2.48.3. </td><td>New version is available  </td></tr>
 <tr>
-<td>2.1.0 </td><td><ul>
-<li>
-Updated the emUSB-Host stack to 2.48.0. </li>
-</ul>
-</td><td><ul>
-<li>
-New version is available </li>
-</ul>
-</td></tr>
+<td rowspan="1">2.2.0 </td><td>Updated the emUSB-Host stack to 2.48.1. </td><td>New version is available  </td></tr>
 <tr>
-<td>2.0.0 </td><td><ul>
-<li>
-Added LLVM compiler support. </li>
-<li>
-Migrated to HAL-Next. </li>
-<li>
-Updated the emUSB-Host stack to 2.42.1 </li>
-</ul>
-</td><td><ul>
-<li>
-Extending the supported features for emUSB-Device middleware </li>
-<li>
-New version is available </li>
-</ul>
-</td></tr>
+<td rowspan="1">2.1.0 </td><td>Updated the emUSB-Host stack to 2.48.0. </td><td>New version is available  </td></tr>
 <tr>
-<td>1.4.0 </td><td><ul>
-<li>
-Add the interface for <a href="https://github.com/Infineon/emfile"><b>emFile</b></a> implemented by MSD class APIs. For more details, refer to the <a class="el" href="index.html#section_emusb_host_emfile">Integration with emFile</a>. </li>
-<li>
-Updated the emUSB-Host stack to 2.42.0 </li>
-</ul>
-</td><td><ul>
-<li>
-New version is available </li>
-</ul>
-</td></tr>
+<td rowspan="3">2.0.0 </td><td>Added LLVM compiler support. </td><td rowspan="2">Extending the supported features for emUSB-Device middleware  </td></tr>
 <tr>
-<td>1.3.0 </td><td><ul>
-<li>
-Add OTG support for XMC4000 devices </li>
-<li>
-Add new driver for PSoC 6 with DMA support </li>
-<li>
-Updated the emUSB-Host stack to 2.40.0 </li>
-<li>
-Minor documentation updates </li>
-</ul>
-</td><td><ul>
-<li>
-New version is available </li>
-</ul>
-</td></tr>
+<td>Migrated to HAL-Next.  </td></tr>
 <tr>
-<td>1.2.1 </td><td><ul>
-<li>
-Fixed the build warning in the OS layer, which was caused by the indirect including the xmc_common.h header file </li>
-</ul>
-</td><td><ul>
-<li>
-Bug fixing </li>
-</ul>
-</td></tr>
+<td>Updated the emUSB-Host stack to 2.42.1 </td><td>New version is available  </td></tr>
 <tr>
-<td>1.2.0 </td><td><ul>
-<li>
-Provided support for XMC4000 devices. </li>
-<li>
-Updated the emUSB-Host stack to 2.36.3 </li>
-<li>
-Minor documentation updates </li>
-</ul>
-</td><td><ul>
-<li>
-New version is available </li>
-</ul>
-</td></tr>
+<td rowspan="2">1.4.0 </td><td>Add the interface for <a href="https://github.com/Infineon/emfile"><b>emFile</b></a> implemented by MSD class APIs. For more details, refer to the <a class="el" href="index.html#section_emusb_host_emfile">Integration with emFile</a>. </td><td></td></tr>
 <tr>
-<td>1.1.0 </td><td><ul>
-<li>
-Updated the emUSB-Host stack to 2.36.1 </li>
-<li>
-The OS layer uses abstraction-rtos APIs instead of FreeRTOS. This means that emUSB-Device can be used with RTOS supported by abstraction-rtos included FreeRTOS </li>
-<li>
-Added the functionality in the usbh_config.c file to control enabling/disabling power on VBUS line </li>
-<li>
-Updated the implementation of Debug Message Output. The usbh_config_io.c file became more friendly for updating and a USBH_DISABLE_STANDARD_OUTPUT macro was added. For details, refer to <a class="el" href="index.html#section_emusb_host_debug_mes_out">Debug Message Output</a> </li>
-<li>
-Minor documentation updates </li>
-</ul>
-</td><td><ul>
-<li>
-New version is available </li>
-<li>
-Extend the number of supported RTOS </li>
-<li>
-The changes allow to support the correct reinitialization of emUSB-Host </li>
-<li>
-Improved the usability of Debug Message Output </li>
-</ul>
-</td></tr>
+<td>Updated the emUSB-Host stack to 2.42.0 </td><td>New version is available  </td></tr>
 <tr>
-<td>1.0.1 </td><td><ul>
-<li>
-Updating the LICENSE file </li>
-</ul>
-</td><td></td></tr>
+<td rowspan="4">1.3.0 </td><td>Add OTG support for XMC4000 devices </td><td></td></tr>
 <tr>
-<td>1.0.0 </td><td><ul>
-<li>
-Initial release of emUSB-Host stack 2.36.0 </li>
-</ul>
-</td><td></td></tr>
+<td>Add new driver for PSoC 6 with DMA support </td><td></td></tr>
+<tr>
+<td>Updated the emUSB-Host stack to 2.40.0 </td><td>New version is available  </td></tr>
+<tr>
+<td>Minor documentation updates </td><td></td></tr>
+<tr>
+<td>1.2.1 </td><td>Fixed the build warning in the OS layer, which was caused by the indirect including the xmc_common.h header file </td><td>Bug fixing  </td></tr>
+<tr>
+<td rowspan="3">1.2.0 </td><td>Provided support for XMC4000 devices. </td><td></td></tr>
+<tr>
+<td>Updated the emUSB-Host stack to 2.36.3 </td><td>New version is available  </td></tr>
+<tr>
+<td>Minor documentation updates </td><td></td></tr>
+<tr>
+<td rowspan="5">1.1.0 </td><td>Updated the emUSB-Host stack to 2.36.1 </td><td>New version is available  </td></tr>
+<tr>
+<td>The OS layer uses abstraction-rtos APIs instead of FreeRTOS. This means that emUSB-Device can be used with RTOS supported by abstraction-rtos included FreeRTOS  </td><td>Extend the number of supported RTOS  </td></tr>
+<tr>
+<td>Added the functionality in the usbh_config.c file to control enabling/disabling power on VBUS line </td><td>The changes allow to support the correct reinitialization of emUSB-Host  </td></tr>
+<tr>
+<td>Updated the implementation of Debug Message Output. The usbh_config_io.c file became more friendly for updating and a USBH_DISABLE_STANDARD_OUTPUT macro was added. For details, refer to <a class="el" href="index.html#section_emusb_host_debug_mes_out">Debug Message Output</a>  </td><td>Improved the usability of Debug Message Output  </td></tr>
+<tr>
+<td>Minor documentation updates </td><td></td></tr>
+<tr>
+<td>1.0.1 </td><td>Updating the LICENSE file </td><td></td></tr>
+<tr>
+<td>1.0.0 </td><td>Initial release of emUSB-Host stack 2.36.0 </td><td></td></tr>
 </table>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->

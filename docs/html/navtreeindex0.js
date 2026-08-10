@@ -5,6 +5,7 @@ var NAVTREEINDEX0 =
 "index.html#section_emusb_host_changelog":[0,4],
 "index.html#section_emusb_host_config_cons":[0,2],
 "index.html#section_emusb_host_debug_mes_out":[0,2,1],
+"index.html#section_emusb_host_dma_cat1a_b":[0,2,0,3],
 "index.html#section_emusb_host_emfile":[0,2,4],
 "index.html#section_emusb_host_general":[0,0],
 "index.html#section_emusb_host_hw_dep_conf":[0,2,0],

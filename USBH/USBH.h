@@ -3,7 +3,7 @@
 *                        The Embedded Experts                        *
 **********************************************************************
 *                                                                    *
-*       (c) 2003 - 2025     SEGGER Microcontroller GmbH              *
+*       (c) 2003 - 2026     SEGGER Microcontroller GmbH              *
 *                                                                    *
 *       www.segger.com     Support: www.segger.com/ticket            *
 *                                                                    *
@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Host version: V2.48.1                                  *
+*       emUSB-Host version: V3.2.0                                   *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -48,7 +48,7 @@ License model:            Cypress Services and License Agreement, signed Novembe
 Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4, M33 and M55
 ----------------------------------------------------------------------
 Support and Update Agreement (SUA)
-SUA period:               2022-05-12 - 2026-05-19
+SUA period:               2022-05-12 - 2027-05-19
 Contact to extend SUA:    sales@segger.com
 ----------------------------------------------------------------------
 Purpose     : API of the USB host stack
@@ -70,7 +70,7 @@ Purpose     : API of the USB host stack
 *
 **********************************************************************
 */
-#define USBH_VERSION   24801 // Format: Mmmrr. Example: 22404 is 2.24.4
+#define USBH_VERSION   30200 // Format: Mmmrr. Example: 22404 is 2.24.4
 
 /*********************************************************************
 *
@@ -1005,7 +1005,6 @@ typedef enum {
                                    // The request uses the data structure
                                    // USBH_SET_POWER_STATE. After the enumeration
                                    // the device is in normal power state.
-  USBH_FUNCTION_CONFIGURE_EPS
 } USBH_FUNCTION;
 
 typedef struct _USBH_URB USBH_URB;

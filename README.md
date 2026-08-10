@@ -41,6 +41,7 @@ Refer to [Release Notes](./RELEASE.md) for a list of supported toolchains.
 
 Device families supported by the Middleware:
 * PSE84
+* PSOC&trade; Control C3 P6/M6
 
 ## More information
 
