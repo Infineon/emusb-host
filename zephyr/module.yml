@@ -1,0 +1,4 @@
+name: emusb-host
+build:
+  cmake-ext: True
+  kconfig-ext: True
